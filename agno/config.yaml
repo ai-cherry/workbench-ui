@@ -1,0 +1,182 @@
+# Agno AI Framework Configuration
+# For workspace-ui repository ONLY
+# https://github.com/agno-agi/agno
+
+version: "1.0"
+name: "Sophia Workspace UI Agent System"
+description: "AI-powered development agents for workspace-ui"
+
+# Core Configuration
+core:
+  base_url: "http://localhost:3200"
+  log_level: "info"
+  max_concurrent_agents: 5
+  agent_timeout: 300  # seconds
+  retry_policy:
+    max_attempts: 3
+    backoff_multiplier: 2
+    initial_delay: 1
+
+# MCP Server Connections
+mcp_servers:
+  memory:
+    url: "http://localhost:8081"
+    protocol: "http"
+    health_check_interval: 30
+  filesystem:
+    url: "http://localhost:8082"
+    protocol: "http"
+    health_check_interval: 30
+  git:
+    url: "http://localhost:8084"
+    protocol: "http"
+    health_check_interval: 30
+  vector:
+    url: "http://localhost:8085"
+    protocol: "http"
+    health_check_interval: 30
+
+# Agent Definitions
+agents:
+  architect:
+    name: "Workspace Architect"
+    model: "claude-opus-4.1"
+    description: "Plans and designs workspace features"
+    capabilities:
+      - "feature_planning"
+      - "architecture_design"
+      - "code_review"
+    mcp_access:
+      - "memory"
+      - "filesystem"
+      - "git"
+    max_tokens: 4096
+    temperature: 0.2
+
+  coder:
+    name: "Implementation Agent"
+    model: "grok-5"
+    description: "Implements features and fixes bugs"
+    capabilities:
+      - "code_generation"
+      - "bug_fixing"
+      - "refactoring"
+    mcp_access:
+      - "filesystem"
+      - "git"
+      - "vector"
+    max_tokens: 8192
+    temperature: 0.3
+
+  reviewer:
+    name: "Code Reviewer"
+    model: "deepseek-v3"
+    description: "Reviews code for quality and security"
+    capabilities:
+      - "code_review"
+      - "security_audit"
+      - "performance_analysis"
+    mcp_access:
+      - "filesystem"
+      - "git"
+    max_tokens: 4096
+    temperature: 0.1
+
+  tester:
+    name: "Test Engineer"
+    model: "llama-scout-4"
+    description: "Creates and runs tests"
+    capabilities:
+      - "test_generation"
+      - "test_execution"
+      - "coverage_analysis"
+    mcp_access:
+      - "filesystem"
+      - "git"
+      - "memory"
+    max_tokens: 4096
+    temperature: 0.2
+
+# Workflow Definitions
+workflows:
+  feature_development:
+    description: "Complete feature development workflow"
+    steps:
+      - agent: "architect"
+        action: "plan_feature"
+      - agent: "coder"
+        action: "implement_feature"
+      - agent: "tester"
+        action: "generate_tests"
+      - agent: "reviewer"
+        action: "review_code"
+      - agent: "coder"
+        action: "apply_feedback"
+    
+  bug_fix:
+    description: "Bug fixing workflow"
+    steps:
+      - agent: "coder"
+        action: "diagnose_issue"
+      - agent: "coder"
+        action: "fix_bug"
+      - agent: "tester"
+        action: "verify_fix"
+      - agent: "reviewer"
+        action: "approve_fix"
+
+  refactoring:
+    description: "Code refactoring workflow"
+    steps:
+      - agent: "architect"
+        action: "plan_refactor"
+      - agent: "coder"
+        action: "refactor_code"
+      - agent: "tester"
+        action: "regression_test"
+      - agent: "reviewer"
+        action: "validate_refactor"
+
+# Tool Integrations
+tools:
+  roo_code:
+    enabled: true
+    socket_port: 9001
+    auto_connect: true
+  
+  cline_bot:
+    enabled: true
+    socket_port: 9002
+    enhanced_mode: true
+  
+  cursor:
+    enabled: true
+    auto_sync: true
+
+# Security Configuration
+security:
+  api_key_required: true
+  rate_limiting:
+    enabled: true
+    max_requests_per_minute: 100
+  audit_logging:
+    enabled: true
+    log_path: "/logs/agno_audit.log"
+
+# Performance Settings
+performance:
+  cache:
+    enabled: true
+    ttl: 300
+    max_size: 1000
+  connection_pool:
+    min_size: 2
+    max_size: 10
+    timeout: 30
+
+# Monitoring
+monitoring:
+  metrics_enabled: true
+  metrics_port: 9090
+  health_check_endpoint: "/health"
+  prometheus_enabled: true

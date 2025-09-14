@@ -1,0 +1,159 @@
+{
+  "features.autonomousMode": false,
+  "features.docs": true,
+  "features.chat": true,
+  "features.edit": true,
+  "features.generate": true,
+  "features.vision": true,
+  "features.codebase": true,
+  "features.review": true,
+  "features.apply": true,
+  "features.composer.enabled": true,
+  "features.notificationCenter": true,
+  "features.autocomplete.enabled": true,
+  "features.inlineEdit.enabled": true,
+  "features.debugMode.enabled": false,
+  "cursor.cpp.disableIndexing": false,
+  "cursor.indexing.disabled": false,
+  "cursor.chat.alwaysSearchWeb": false,
+  "cursor.chat.premiumModels.o1-mini.enabled": true,
+  "cursor.chat.premiumModels.o1-preview.enabled": true,
+  "cursor.chat.premiumModels.claude-3-5-sonnet-20241022.enabled": true,
+  "cursor.chat.showSuggestedFiles": true,
+  "cursor.general.experimental": true,
+  "cursor.general.beta": true,
+  "cursor.cpp.enablePartialResultsWarning": false,
+  "cursor.autocomplete.minEditDistance": 20,
+  "cursor.autocomplete.debounceDelay": 150,
+  
+  "mcp.enabled": true,
+  "mcp.servers": {
+    "memory": {
+      "command": "python",
+      "args": [
+        "../sophia-intel-ai/mcp/memory_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "../sophia-intel-ai",
+        "MCP_PORT": "8081",
+        "MCP_HOST": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "filesystem": {
+      "command": "python",
+      "args": [
+        "../sophia-intel-ai/mcp/filesystem/server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "../sophia-intel-ai",
+        "MCP_PORT": "8082",
+        "MCP_HOST": "127.0.0.1",
+        "ALLOWED_DIRECTORIES": "../sophia-intel-ai,../workbench-ui",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "analytics": {
+      "command": "python",
+      "args": [
+        "../sophia-intel-ai/mcp/analytics/server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "../sophia-intel-ai",
+        "MCP_PORT": "8083",
+        "MCP_HOST": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "git": {
+      "command": "python",
+      "args": [
+        "../sophia-intel-ai/mcp/git/server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "../sophia-intel-ai",
+        "MCP_PORT": "8084",
+        "MCP_HOST": "127.0.0.1",
+        "GIT_REPO_PATH": "../workbench-ui",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "unified": {
+      "command": "python",
+      "args": [
+        "../sophia-intel-ai/mcp/unified/server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "../sophia-intel-ai",
+        "MCP_PORT": "8085",
+        "MCP_HOST": "127.0.0.1",
+        "MEMORY_PORT": "8081",
+        "FILESYSTEM_PORT": "8082",
+        "ANALYTICS_PORT": "8083",
+        "GIT_PORT": "8084",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  },
+  
+  "workbench.projectType": "frontend",
+  "workbench.primaryLanguage": "typescript",
+  "workbench.framework": "nextjs",
+  "workbench.mcpIntegration": true,
+  "workbench.sophiaBackend": "../sophia-intel-ai",
+  
+  "ai.defaultModel": "claude-3-5-sonnet-20241022",
+  "ai.temperature": 0.7,
+  "ai.maxTokens": 4096,
+  
+  "files.exclude": {
+    "**/.git": true,
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/out": true,
+    "**/.turbo": true,
+    "**/coverage": true
+  },
+  
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/out": true,
+    "**/coverage": true,
+    "**/.git": true
+  },
+  
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
