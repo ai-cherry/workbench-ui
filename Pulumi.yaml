@@ -1,0 +1,40 @@
+name: sophia-workbench-ui
+runtime: nodejs
+description: Sophia Intel AI Workspace UI with Agno Framework
+
+config:
+  # ESC Environment Configuration
+  pulumi:tags:
+    value:
+      project: sophia-intel-ai
+      environment: development
+      repository: workspace-ui
+      framework: agno-v2
+
+  # Workspace UI Configuration
+  workbench:project: sophia-workbench-ui
+  workbench:port: 3201
+  workbench:apiUrl: http://localhost:8000
+
+  # MCP Server Endpoints
+  mcp:memoryServer: http://localhost:8081
+  mcp:filesystemServer: http://localhost:8082
+  mcp:gitServer: http://localhost:8084
+  mcp:vectorServer: http://localhost:8085
+
+  # Portkey Virtual Keys (loaded from ESC)
+  portkey:apiKey:
+    secret: true
+  portkey:anthropicVk:
+    secret: true
+  portkey:openaiVk:
+    secret: true
+  portkey:googleVk:
+    secret: true
+  portkey:grokVk:
+    secret: true
+
+# ESC Environment Import
+environments:
+  - sophia-intel-ai/workspace-ui
+  - sophia-intel-ai/shared-secrets
