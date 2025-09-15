@@ -9,9 +9,18 @@ import { getBackendUrl, backendJson, backendJsonAuth } from '@/lib/backend';
 import { readSSE } from '@/lib/sse';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import { Activity, Play, StopCircle, Server, Shield, Terminal } from 'lucide-react';
+import { Activity, Play, StopCircle, Server, Shield, Terminal, RotateCw } from 'lucide-react';
 
 type AgentType = 'orchestrator' | 'developer' | 'infrastructure' | 'monitor' | 'team';
+type RunEntry = {
+  id: string;
+  type: 'agent' | 'workflow';
+  timestamp: number;
+  agent?: AgentType;
+  prompt?: string;
+  workflow?: string;
+  final?: string;
+};
 
 export default function AgentsDashboard() {
   const backend = getBackendUrl();
@@ -33,6 +42,7 @@ export default function AgentsDashboard() {
   const [lastRun, setLastRun] = useState<{ type: 'agent' | 'workflow'; workflow?: string } | null>(null);
   const [currentStep, setCurrentStep] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const [runs, setRuns] = useState<RunEntry[]>([]);
 
   const isAuthed = !!token;
 
@@ -63,6 +73,22 @@ export default function AgentsDashboard() {
     setToken('');
     setLog([]);
   };
+
+  // Load/save recent runs (local-only)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('agents_runs');
+      if (raw) setRuns(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  const saveRun = useCallback((entry: RunEntry) => {
+    try {
+      const next = [entry, ...runs].slice(0, 20);
+      setRuns(next);
+      localStorage.setItem('agents_runs', JSON.stringify(next));
+    } catch {}
+  }, [runs]);
 
   const runAgent = useCallback(async () => {
     if (!isAuthed) return toast.error('Login first');
@@ -132,8 +158,10 @@ export default function AgentsDashboard() {
       setPaused(false);
       if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
       abortRef.current = null;
+      // Save run
+      saveRun({ id: `${Date.now()}`, type: 'agent', timestamp: Date.now(), agent, prompt, final: lastFinalRef.current });
     }
-  }, [appendLog, backend, token, prompt, agent, isAuthed, streaming, paused]);
+  }, [appendLog, backend, token, prompt, agent, isAuthed, streaming, paused, saveRun]);
 
   const stopRun = () => {
     abortRef.current?.abort();
@@ -213,6 +241,15 @@ export default function AgentsDashboard() {
   useEffect(() => { fetchWorkflows(); }, [fetchWorkflows]);
 
   const services = useMemo(() => Object.entries(health?.services || {}), [health]);
+  const overallHealth = useMemo(() => {
+    const list: any[] = services.map(([, s]) => s);
+    if (!list.length) return 'unknown';
+    const status = (x: any) => String(x?.status || '').toLowerCase();
+    const healthy = list.every((s) => /online|healthy/.test(status(s)));
+    if (healthy) return 'healthy';
+    const any = list.some((s) => /online|healthy|degraded/.test(status(s)));
+    return any ? 'degraded' : 'unhealthy';
+  }, [services]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-6">
@@ -231,12 +268,17 @@ export default function AgentsDashboard() {
             })}
           </div>
         </div>
+        {/* Overall MCP health banner */}
+        <div className={`w-full rounded p-2 text-sm ${overallHealth==='healthy' ? 'bg-green-900/40 border border-green-700' : overallHealth==='degraded' ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-red-900/40 border border-red-700'}`}>
+          MCP status: {overallHealth}
+        </div>
 
         <Tabs defaultValue="control">
           <TabsList className="bg-gray-800">
             <TabsTrigger value="control">Control</TabsTrigger>
             <TabsTrigger value="health">Health</TabsTrigger>
             <TabsTrigger value="log">Trace</TabsTrigger>
+            <TabsTrigger value="runs">Runs</TabsTrigger>
             <TabsTrigger value="workflows">Workflows</TabsTrigger>
           </TabsList>
 
@@ -483,6 +525,53 @@ export default function AgentsDashboard() {
                     ))
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="runs" className="mt-4">
+            <Card className="bg-gray-800/60 border-gray-700">
+              <CardHeader>
+                <CardTitle>Recent Runs</CardTitle>
+                <CardDescription>Replay recent agent or workflow runs</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {runs.length === 0 ? (
+                  <p className="text-gray-500">No runs yet.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {runs.map((r) => (
+                      <div key={r.id} className="p-3 rounded border border-gray-700 bg-black/30 flex items-center justify-between gap-3">
+                        <div className="text-sm">
+                          <div className="font-medium">{r.type === 'agent' ? `Agent: ${r.agent}` : `Workflow: ${r.workflow}`}</div>
+                          <div className="text-gray-400">{new Date(r.timestamp).toLocaleString()}</div>
+                          {r.prompt && <div className="text-gray-300 mt-1">Prompt: {r.prompt}</div>}
+                          {r.final && <div className="text-gray-300 mt-1 truncate">Final: {r.final.slice(0, 120)}{r.final.length>120?'…':''}</div>}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            className="bg-indigo-600 hover:bg-indigo-700"
+                            onClick={async () => {
+                              if (streaming) return;
+                              if (r.type === 'agent' && r.agent) {
+                                setAgent(r.agent);
+                                setPrompt(r.prompt || prompt);
+                                await runAgent();
+                              } else if (r.type === 'workflow' && r.workflow) {
+                                setSelectedWorkflow(r.workflow);
+                                // Trigger workflow via retry mechanism: set lastRun then retry
+                                setLastRun({ type: 'workflow', workflow: r.workflow });
+                                await retryRun();
+                              }
+                            }}
+                          >
+                            <RotateCw className="w-4 h-4 mr-1" /> Replay
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
