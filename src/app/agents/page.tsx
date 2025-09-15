@@ -21,6 +21,10 @@ export default function AgentsDashboard() {
   const [agent, setAgent] = useState<AgentType>('orchestrator');
   const [prompt, setPrompt] = useState('Summarize system health and next steps.');
   const [streaming, setStreaming] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastFinalRef = useRef<string>('');
   const [log, setLog] = useState<Array<{ type: string; text: string }>>([]);
   const logRef = useRef<HTMLDivElement | null>(null);
   const [health, setHealth] = useState<any>(null);
@@ -60,7 +64,11 @@ export default function AgentsDashboard() {
     if (!isAuthed) return toast.error('Login first');
     if (streaming) return;
     setStreaming(true);
+    setPaused(false);
     setLog([]);
+    setElapsed(0);
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -83,18 +91,29 @@ export default function AgentsDashboard() {
         throw new Error(`Execute failed: ${res.status} ${t}`);
       }
       for await (const msg of readSSE(res.body)) {
+        if (paused) continue;
         if (msg.event === 'thinking' && msg.data) {
           appendLog('thinking', msg.data);
         } else if (msg.event === 'tool_start' && msg.data) {
           appendLog('tool', `START ${msg.data}`);
         } else if (msg.event === 'tool_end' && msg.data) {
           appendLog('tool', `END ${msg.data}`);
+        } else if (msg.event === 'open') {
+          appendLog('data', 'Connection opened');
+        } else if (msg.event === 'hb') {
+          // optional: render subtle heartbeat
+        } else if (msg.event === 'done') {
+          appendLog('data', 'Run complete');
+          break;
         } else if (msg.data) {
           // tokens or final content
           try {
             const parsed = JSON.parse(msg.data);
             if (parsed.token) appendLog('token', parsed.token);
-            if (parsed.content) appendLog('final', parsed.content);
+            if (parsed.content) {
+              lastFinalRef.current = parsed.content;
+              appendLog('final', parsed.content);
+            }
           } catch {
             appendLog('data', msg.data);
           }
@@ -105,13 +124,17 @@ export default function AgentsDashboard() {
       toast.error('Agent run failed');
     } finally {
       setStreaming(false);
+      setPaused(false);
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
       abortRef.current = null;
     }
-  }, [appendLog, backend, token, prompt, agent, isAuthed, streaming]);
+  }, [appendLog, backend, token, prompt, agent, isAuthed, streaming, paused]);
 
   const stopRun = () => {
     abortRef.current?.abort();
     setStreaming(false);
+    setPaused(false);
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
   // Auto-scroll logs to bottom on new entries
@@ -216,15 +239,20 @@ export default function AgentsDashboard() {
                       />
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button onClick={runAgent} disabled={!isAuthed || streaming} className="bg-blue-600 hover:bg-blue-700">
-                      <Play className="w-4 h-4 mr-2" />Run
-                    </Button>
-                    <Button onClick={stopRun} disabled={!streaming} className="bg-gray-600 hover:bg-gray-700">
-                      <StopCircle className="w-4 h-4 mr-2" />Stop
-                    </Button>
-                    {streaming && <Badge className="bg-yellow-600">Running…</Badge>}
-                  </div>
+                <div className="flex gap-2 items-center flex-wrap">
+                  <Button onClick={runAgent} disabled={!isAuthed || streaming} className="bg-blue-600 hover:bg-blue-700">
+                    <Play className="w-4 h-4 mr-2" />Run
+                  </Button>
+                  <Button onClick={stopRun} disabled={!streaming} className="bg-gray-600 hover:bg-gray-700">
+                    <StopCircle className="w-4 h-4 mr-2" />Stop
+                  </Button>
+                  <Button onClick={() => setPaused((p) => !p)} disabled={!streaming} className="bg-amber-600 hover:bg-amber-700">
+                    {paused ? 'Resume' : 'Pause'}
+                  </Button>
+                  <Button onClick={() => setLog([])} className="bg-slate-600 hover:bg-slate-700" disabled={streaming}>Clear</Button>
+                  <Button onClick={() => { if (lastFinalRef.current) { navigator.clipboard.writeText(lastFinalRef.current); toast.success('Copied'); } }} className="bg-emerald-600 hover:bg-emerald-700" disabled={!lastFinalRef.current}>Copy Final</Button>
+                  {streaming && <Badge className="bg-yellow-600">Running… {elapsed}s</Badge>}
+                </div>
                 <div ref={logRef} className="h-64 overflow-auto rounded border border-gray-700 bg-black/40 p-3 font-mono text-sm">
                   {log.length === 0 ? (
                     <p className="text-gray-500">No output yet. Run an agent to stream output.</p>

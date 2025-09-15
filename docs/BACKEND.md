@@ -7,14 +7,17 @@ Backend provides authentication, agent execution with SSE streaming, MCP server 
 - `POST /auth/login` → `{ access_token }`. Body: `{ username, password }`.
 - `GET /health` → `{ status, timestamp, services: { memory|filesystem|git|vector: { status, url, ... } } }`.
 - `POST /agent/execute` (SSE if `stream: true`): Body `{ agent, messages, stream, tools?, context? }`.
-  - SSE events:
-    - `event: thinking` + `data: { text: string }`
-    - `data: { token: string }` (streamed tokens)
-    - `event: tool_start` + `data: {...}`
-    - `event: tool_end` + `data: {...}`
-    - `data: { content: string }` (final)
-    - `event: error` + `data: { error: string }`
-    - `event: end` + `data: [DONE]`
+  - SSE events (minimal schema):
+    - `event: open` + `data: {}` — connection opened
+    - `event: thinking` + `data: { text: string }` — initial status
+    - `event: hb` + `data: {}` — heartbeat
+    - `data: { token: string }` — token chunk (zero or more)
+    - `event: tool_start` + `data: { ... }` — tool started
+    - `event: tool_end` + `data: { ... }` — tool finished
+    - `data: { content: string }` — final content
+    - `event: done` + `data: {}` — run complete (graceful terminal)
+    - `event: error` + `data: { error: string }` — error
+    - `event: end` + `data: [DONE]` — legacy end sentinel
 - `POST /deploy` → deploy service (see code for inputs `{ target, service, version?, rollback? }`).
 - `POST /command` → execute allowlisted repo commands.
 - `GET /mcp/{service}/{path}` and `POST /mcp/{service}/{path}` → proxy to MCP services with validation.
@@ -75,4 +78,3 @@ python -m pytest -q tests
 
 - Command agent defaults to safe policies; use env toggles cautiously in production.
 - MCP servers expected at localhost ports (memory 8081, filesystem 8082, git 8084, vector 8085).
-

@@ -206,12 +206,19 @@ async def execute_agent(
         
         agent = get_agent(request.agent)
         
+        # Connection opened
+        yield "event: open\n"
+        yield "data: {}\n\n"
+
         # Emit initial thinking/reasoning
         yield "event: thinking\n"
         yield f"data: {json.dumps({'text': f'Analyzing request with {request.agent} agent...'})}\n\n"
         
         # Process with agent
         try:
+            # Heartbeat prior to long-running work
+            yield "event: hb\n"
+            yield "data: {}\n\n"
             # Get the last user message
             user_message = request.messages[-1].content if request.messages else ""
             
@@ -244,6 +251,8 @@ async def execute_agent(
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
         
         # End stream
+        yield "event: done\n"
+        yield "data: {}\n\n"
         yield "event: end\n"
         yield "data: [DONE]\n\n"
     
