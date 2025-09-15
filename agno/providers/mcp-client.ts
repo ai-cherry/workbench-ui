@@ -102,6 +102,7 @@ export class MCPClientPool extends EventEmitter {
       const pool: AxiosInstance[] = [];
       const baseURL = `${config.url}:${config.port}`;
       
+      const authToken = process.env.MCP_TOKEN || process.env.NEXT_PUBLIC_MCP_TOKEN;
       for (let i = 0; i < this.poolSize; i++) {
         const client = axios.create({
           baseURL,
@@ -115,6 +116,13 @@ export class MCPClientPool extends EventEmitter {
         
         // Add request interceptor for logging
         client.interceptors.request.use((request) => {
+          // Inject Authorization header for MCP servers if token is available
+          if (authToken) {
+            request.headers = {
+              ...(request.headers || {}),
+              Authorization: `Bearer ${authToken}`
+            } as any;
+          }
           logger.debug({
             server: key,
             method: request.method,

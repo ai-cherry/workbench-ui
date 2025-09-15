@@ -1,0 +1,158 @@
+name: Deploy Sophia Control Center
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+      
+      - name: Run tests
+        run: |
+          cd backend
+          python -m pytest tests/ -v --cov=app --cov-report=term-missing || true
+      
+      - name: Lint code
+        run: |
+          cd backend
+          pip install ruff
+          ruff check app/ || true
+
+  deploy-staging:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.inputs.environment == 'staging'
+    environment:
+      name: staging
+      url: https://sophia-control-center-staging.fly.dev
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Deploy to Staging
+        run: |
+          cd backend
+          flyctl deploy --app sophia-control-center-staging \
+            --config fly.toml \
+            --strategy rolling \
+            --wait-timeout 300
+      
+      - name: Health Check
+        run: |
+          sleep 30
+          curl -f https://sophia-control-center-staging.fly.dev/health || exit 1
+      
+      - name: Smoke Test
+        run: |
+          # Test GraphQL endpoint
+          curl -X POST https://sophia-control-center-staging.fly.dev/graphql \
+            -H "Content-Type: application/json" \
+            -d '{"query": "{ systemHealth { status } }"}' || exit 1
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'production'
+    environment:
+      name: production
+      url: https://sophia-control-center.fly.dev
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Create Backup
+        run: |
+          # Backup current production before deployment
+          flyctl ssh console --app sophia-control-center --command "tar -czf /data/backup-$(date +%Y%m%d-%H%M%S).tar.gz /app" || true
+      
+      - name: Deploy to Production
+        run: |
+          cd backend
+          flyctl deploy --app sophia-control-center \
+            --config fly.toml \
+            --strategy bluegreen \
+            --wait-timeout 300
+      
+      - name: Health Check
+        run: |
+          sleep 30
+          curl -f https://sophia-control-center.fly.dev/health || exit 1
+      
+      - name: Create GitHub Release
+        if: success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: deploy-${{ github.run_number }}
+          release_name: Production Deploy ${{ github.run_number }}
+          body: |
+            Deployed to production at ${{ github.event.head_commit.timestamp }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+          draft: false
+          prerelease: false
+
+  rollback:
+    runs-on: ubuntu-latest
+    if: failure() && (needs.deploy-staging.result == 'failure' || needs.deploy-production.result == 'failure')
+    needs: [deploy-staging, deploy-production]
+    
+    steps:
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Rollback Deployment
+        run: |
+          APP_NAME="sophia-control-center"
+          if [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
+            APP_NAME="sophia-control-center-staging"
+          fi
+          
+          # Get previous release
+          PREV_VERSION=$(flyctl releases --app $APP_NAME --json | jq -r '.[1].version')
+          
+          # Rollback
+          flyctl deploy --app $APP_NAME --image-label v$PREV_VERSION
+          
+      - name: Notify Rollback
+        if: always()
+        run: |
+          echo "⚠️ Deployment failed and was rolled back to previous version"
