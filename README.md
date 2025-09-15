@@ -159,6 +159,16 @@ Notes:
 - `.env.local` and `.roo/mcp.json` are gitignored; keep secrets there locally.
 - For managed tokens or GitHub App, see `docs/GITHUB_APP_SETUP_GUIDE.md` (optional).
 
+## 🔑 Secrets & Keys (Simple)
+
+- Local dev:
+  - Put secrets in `.env.local` (gitignored). See `.env.example`.
+  - Generate local MCP config: `./scripts/mcp-config-generate.sh` → writes `.roo/mcp.json` (gitignored).
+  - Quick check for missing keys: `./scripts/secrets-check.sh` (non-blocking).
+- Cloud:
+  - Use provider secrets (Fly: `fly secrets set …`, GitHub Actions secrets).
+- See `docs/SECRETS_AND_KEYS.md` for the full, low‑friction plan.
+
  
 
 ### Using Cursor with MCP
