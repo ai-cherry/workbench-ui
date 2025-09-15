@@ -31,5 +31,5 @@ pyyaml==6.0.1
 agentops==0.3.0
 
 # Tools for agents
-duckduckgo-search==6.2.11
+duckduckgo-search==6.2.13
 yfinance==0.2.40

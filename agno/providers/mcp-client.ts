@@ -84,7 +84,7 @@ export class MCPClientPool extends EventEmitter {
   private pools: Map<string, AxiosInstance[]> = new Map();
   private currentIndex: Map<string, number> = new Map();
   private healthStatus: Map<string, boolean> = new Map();
-  private healthCheckIntervals: Map<string, NodeJS.Timer> = new Map();
+  private healthCheckIntervals: Map<string, NodeJS.Timeout> = new Map();
   private queue: PQueue;
   
   constructor(private poolSize: number = 3) {

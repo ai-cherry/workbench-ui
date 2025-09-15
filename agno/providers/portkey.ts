@@ -167,19 +167,20 @@ export class PortkeyProvider {
     try {
       const startTime = Date.now();
       
-      const response = await this.portkey.completions.create({
-        messages: params.messages,
-        model: params.model,
-        virtualKey,
-        temperature: params.temperature || 0.7,
-        max_tokens: params.maxTokens || 4096,
-        stream: params.stream || false,
-        metadata: {
-          ...params.metadata,
-          ...this.config.tags,
-          timestamp: new Date().toISOString()
-        }
-      });
+      const response = await this.portkey.chat.completions.create(
+        {
+          messages: params.messages,
+          model: params.model,
+          temperature: params.temperature || 0.7,
+          max_tokens: params.maxTokens || 4096,
+          metadata: {
+            ...params.metadata,
+            ...this.config.tags,
+            timestamp: new Date().toISOString()
+          }
+        },
+        { virtualKey }
+      );
       
       const duration = Date.now() - startTime;
       
@@ -218,19 +219,21 @@ export class PortkeyProvider {
     }, 'Creating streaming completion');
     
     try {
-      const stream = await this.portkey.completions.create({
-        messages: params.messages,
-        model: params.model,
-        virtualKey,
-        temperature: params.temperature || 0.7,
-        max_tokens: params.maxTokens || 4096,
-        stream: true,
-        metadata: {
-          ...params.metadata,
-          ...this.config.tags,
-          timestamp: new Date().toISOString()
-        }
-      });
+      const stream = await this.portkey.chat.completions.create(
+        {
+          messages: params.messages,
+          model: params.model,
+          temperature: params.temperature || 0.7,
+          max_tokens: params.maxTokens || 4096,
+          stream: true,
+          metadata: {
+            ...params.metadata,
+            ...this.config.tags,
+            timestamp: new Date().toISOString()
+          }
+        },
+        { virtualKey }
+      );
       
       for await (const chunk of stream) {
         yield chunk;

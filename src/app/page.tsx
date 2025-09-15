@@ -252,7 +252,7 @@ export default function HomePage() {
                     Sync GitHub Repos
                   </Button>
                   <Button 
-                    onClick={() => toast.info('Opening terminal...')}
+                    onClick={() => toast('Opening terminal...', { icon: <Terminal className="h-4 w-4" /> })}
                     className="w-full bg-gray-600 hover:bg-gray-700"
                   >
                     <Terminal className="mr-2 h-4 w-4" />

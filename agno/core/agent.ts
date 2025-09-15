@@ -367,23 +367,28 @@ export class WorkspaceAgent extends EventEmitter {
         }
       });
       
-      // Extract assistant message
-      const assistantMessage = response.choices[0].message;
-      
+      // Extract assistant message safely and normalize content to string
+      const assistantMessage = response.choices[0]?.message;
+      const normalizedContent = typeof assistantMessage?.content === 'string'
+        ? assistantMessage.content
+        : Array.isArray(assistantMessage?.content)
+          ? assistantMessage!.content.map((c: any) => (typeof c === 'string' ? c : c?.text ?? '')).join('')
+          : '';
+
       // Add to message history
       this.state.messages.push({
         role: 'assistant',
-        content: assistantMessage.content || '',
-        function_call: assistantMessage.function_call
+        content: normalizedContent,
+        function_call: assistantMessage?.function_call
       });
       
       // Update token usage
-      if (response.usage) {
+      if (response.usage?.total_tokens) {
         this.state.tokensUsed += response.usage.total_tokens;
       }
       
       // Handle function calls if present
-      if (assistantMessage.function_call) {
+      if (assistantMessage?.function_call) {
         const functionResult = await this.executeTool(
           assistantMessage.function_call.name,
           JSON.parse(assistantMessage.function_call.arguments)
@@ -408,10 +413,10 @@ export class WorkspaceAgent extends EventEmitter {
       this.emit('message-processed', {
         agentId: this.config.id,
         userMessage,
-        response: assistantMessage.content
+        response: normalizedContent
       });
       
-      return assistantMessage.content || '';
+      return normalizedContent;
     } catch (error) {
       logger.error({
         agentId: this.config.id,
@@ -459,10 +464,15 @@ export class WorkspaceAgent extends EventEmitter {
       });
       
       for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content;
-        if (content) {
-          fullResponse += content;
-          yield content;
+        const deltaContent = chunk.choices[0]?.delta?.content as any;
+        const toAppend = typeof deltaContent === 'string'
+          ? deltaContent
+          : Array.isArray(deltaContent)
+            ? deltaContent.map((c: any) => (typeof c === 'string' ? c : c?.text ?? '')).join('')
+            : '';
+        if (toAppend) {
+          fullResponse += toAppend;
+          yield toAppend;
         }
       }
       

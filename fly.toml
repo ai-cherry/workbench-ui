@@ -1,15 +1,16 @@
-# fly.toml app configuration file generated for sophia-control-center-staging on 2025-09-14T23:04:06-07:00
+# fly.toml app configuration file generated for agno-frontend-staging-red-leaf-9622 on 2025-09-14T23:06:27-07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'sophia-control-center-staging'
+app = 'agno-frontend-staging-red-leaf-9622'
 primary_region = 'sjc'
 
 [build]
+  dockerfile = 'Dockerfile.frontend'
 
 [http_service]
-  internal_port = 8000
+  internal_port = 3000
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
