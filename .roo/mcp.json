@@ -1,7 +1,6 @@
 {
   "mcpServers": {
     "// Internal MCP Servers for workbench-ui project": "",
-    
     "// GitHub - Repository management, issues, PRs, and GitHub API operations": "",
     "github": {
       "command": "docker",
@@ -18,30 +17,76 @@
         "ghcr.io/github/github-mcp-server"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "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",
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}",
         "GITHUB_TOOLSETS": "",
         "GITHUB_READ_ONLY": ""
       },
       "alwaysAllow": [
-        "get_me"
+        "*"
       ]
     },
-    
     "// Memory - Persistent knowledge graph for maintaining context across conversations": "",
     "memory": {
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-memory"
+      ],
+      "alwaysAllow": [
+        "*"
       ]
     },
-    
     "// Sequential Thinking - Structured problem-solving with step-by-step analysis": "",
     "sequentialthinking": {
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "alwaysAllow": [
+        "*"
+      ]
+    },
+    "// Apify - Web scraping and automation platform": "",
+    "apify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@apify/actors-mcp-server"
+      ],
+      "env": {
+        "APIFY_API_TOKEN": "${APIFY_API_TOKEN}"
+      },
+      "alwaysAllow": [
+        "*"
+      ]
+    },
+    "// Brave Search - Privacy-focused web search": "",
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "alwaysAllow": [
+        "*"
+      ]
+    },
+    "// Exa - AI-powered search engine": "",
+    "exa": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "exa-mcp-server"
+      ],
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      },
+      "alwaysAllow": [
+        "*"
       ]
     }
   }

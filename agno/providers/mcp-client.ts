@@ -35,7 +35,7 @@ export interface MCPServerConfig {
   maxRetries?: number;
 }
 
-// Default MCP servers
+// Default MCP servers - All 4 servers configured
 export const MCP_SERVERS: Record<string, MCPServerConfig> = {
   memory: {
     name: 'Memory Server',
@@ -394,12 +394,22 @@ export class MCPClientPool extends EventEmitter {
     return this.execute('vector', 'POST', '/search', { query, limit });
   }
   
+  async vectorIndex(content: string, metadata?: any, path?: string): Promise<void> {
+    const payload: any = { content, metadata };
+    if (path) payload.path = path;
+    await this.execute('vector', 'POST', '/index', payload);
+  }
+  
   async vectorStore(id: string, text: string, metadata?: any): Promise<void> {
     await this.execute('vector', 'POST', '/store', { id, text, metadata });
   }
   
   async vectorDelete(id: string): Promise<void> {
     await this.execute('vector', 'DELETE', `/delete/${encodeURIComponent(id)}`);
+  }
+  
+  async vectorStats(): Promise<any> {
+    return this.execute('vector', 'GET', '/stats');
   }
   
   /**

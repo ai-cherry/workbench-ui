@@ -1,5 +1,5 @@
 # Workbench UI Setup Guide
-## Complete Setup Instructions for Cursor, Cline, and Sophia CLI Integration
+## Complete Setup Instructions for Cursor and Cline Integration
 
 ---
 
@@ -83,26 +83,7 @@ The `.cline/mcp_settings.json` is pre-configured. To activate:
 3. Click "Load from File" and select `.cline/mcp_settings.json`
 4. Restart VS Code
 
-### 4. Setup Sophia CLI
-
-```bash
-# Navigate to sophia-intel-ai
-cd ../sophia-intel-ai
-
-# Install Sophia CLI globally
-pip install -e .
-
-# Verify installation
-sophia --version
-
-# Configure API keys
-sophia config set ANTHROPIC_API_KEY "your_key"
-sophia config set OPENAI_API_KEY "your_key"
-sophia config set PORTKEY_API_KEY "your_key"
-
-# Test the CLI
-sophia chat "Hello, test connection"
-```
+ 
 
 ---
 
@@ -156,64 +137,7 @@ curl -X POST http://localhost:8082/read \
 
 ---
 
-## 💻 Sophia CLI Usage
-
-### Basic Commands
-
-```bash
-# Interactive chat
-sophia chat "Explain the MCP architecture"
-
-# Generate a plan
-sophia plan "Create a dashboard component"
-
-# Generate code
-sophia code "Write a React hook for MCP connection"
-
-# Apply changes
-sophia apply changes.diff
-
-# Use specific model
-sophia chat --model gpt-4 "Your prompt"
-
-# Stream response
-sophia chat --stream "Long technical explanation"
-```
-
-### Advanced Features
-
-```bash
-# Use with context file
-sophia chat --context ./docs/requirements.md "Implement this feature"
-
-# Save conversation
-sophia chat --save conversation.json "Discussion topic"
-
-# Load previous conversation
-sophia chat --load conversation.json "Continue from here"
-
-# Use custom temperature
-sophia chat --temperature 0.3 "Precise technical answer"
-
-# Set max tokens
-sophia chat --max-tokens 2000 "Detailed explanation"
-```
-
-### MCP Integration with CLI
-
-```bash
-# Store context in MCP
-sophia mcp store --key "project_context" --value "Dashboard project"
-
-# Retrieve from MCP
-sophia mcp get --key "project_context"
-
-# Search MCP memories
-sophia mcp search --query "dashboard"
-
-# List all stored contexts
-sophia mcp list
-```
+ 
 
 ---
 
@@ -250,18 +174,7 @@ npm run dev
 3. MCP integration provides automatic context
 4. Use `/mcp` prefix for MCP-specific commands
 
-### 4. Using Sophia CLI
-
-```bash
-# For quick code generation
-sophia code "Create a TypeScript interface for user data"
-
-# For architecture decisions
-sophia plan "Design a scalable component structure"
-
-# For debugging
-sophia chat "Why is this React hook causing re-renders?"
-```
+ 
 
 ---
 
@@ -291,23 +204,7 @@ pkill -f "mcp.*server.py"
 3. Restart Cursor completely
 4. Check console for errors (View → Toggle Developer Tools)
 
-### Sophia CLI Issues
-
-```bash
-# Reinstall Sophia CLI
-cd ../sophia-intel-ai
-pip uninstall sophia-cli
-pip install -e .
-
-# Check configuration
-sophia config list
-
-# Reset configuration
-sophia config reset
-
-# Verbose mode for debugging
-sophia --verbose chat "Test"
-```
+ 
 
 ### Port Conflicts
 
@@ -330,13 +227,11 @@ MCP_FILESYSTEM_PORT=9082
 
 ### Documentation
 - [MCP Protocol Specification](../sophia-intel-ai/docs/MCP_PROTOCOL.md)
-- [Sophia CLI Documentation](../sophia-intel-ai/docs/SOPHIA_CLI.md)
 - [Cursor Integration Guide](./docs/CURSOR_INTEGRATION.md)
 - [Cline Setup Guide](./docs/CLINE_SETUP.md)
 
 ### Examples
 - [MCP Client Examples](./examples/mcp-client/)
-- [Sophia CLI Scripts](./examples/sophia-scripts/)
 - [Cursor Workflows](./examples/cursor-workflows/)
 
 ### Support
@@ -354,7 +249,6 @@ MCP_FILESYSTEM_PORT=9082
 - [ ] MCP servers running (ports 8081-8085)
 - [ ] Cursor configured with MCP
 - [ ] Cline configured with MCP
-- [ ] Sophia CLI installed and working
 - [ ] Can run `npm run dev` successfully
 - [ ] Can access http://localhost:3000
 - [ ] MCP health endpoints responding
@@ -366,8 +260,7 @@ MCP_FILESYSTEM_PORT=9082
 1. **Explore the UI**: Navigate to http://localhost:3000
 2. **Test MCP Integration**: Try the MCP dashboard at /mcp
 3. **Use AI Assistants**: Test Cursor and Cline with your code
-4. **Try Sophia CLI**: Generate some code or get assistance
-5. **Build Features**: Start developing your application!
+4. **Build Features**: Start developing your application!
 
 ---
 

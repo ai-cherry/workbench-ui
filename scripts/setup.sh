@@ -140,23 +140,7 @@ else
     print_warning "MCP servers may not work without sophia-intel-ai backend"
 fi
 
-# Install Sophia CLI
-print_status "Setting up Sophia CLI..."
-if [ -d "$SOPHIA_PATH" ]; then
-    cd "$SOPHIA_PATH"
-    pip3 install -e . --quiet
-    cd - > /dev/null
-    print_success "Sophia CLI installed"
-    
-    # Test Sophia CLI
-    if command_exists sophia; then
-        print_success "Sophia CLI is available"
-    else
-        print_warning "Sophia CLI installed but not in PATH. You may need to restart your terminal."
-    fi
-else
-    print_warning "Cannot install Sophia CLI - sophia-intel-ai directory not found"
-fi
+# Removed Sophia CLI installation and checks
 
 # Create basic Next.js files if they don't exist
 print_status "Creating basic application files..."

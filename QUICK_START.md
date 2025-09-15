@@ -26,7 +26,6 @@ I've created all the necessary files and configurations for your workbench-ui re
 
 ### Scripts
 - **scripts/setup.sh** - Automated setup script
-- **scripts/setup-sophia-cli.sh** - Sophia CLI configuration
 
 ---
 
@@ -54,19 +53,13 @@ cp .env.example .env.local
 # - PORTKEY_API_KEY
 ```
 
-### 4. Setup Sophia CLI
-```bash
-chmod +x scripts/setup-sophia-cli.sh
-./scripts/setup-sophia-cli.sh
-```
-
-### 5. Start MCP Servers (in sophia-intel-ai)
+### 4. Start MCP Servers (in sophia-intel-ai)
 ```bash
 cd ../sophia-intel-ai
 ./startup.sh
 ```
 
-### 6. Open in Cursor
+### 5. Open in Cursor
 ```bash
 cd ../workbench-ui
 cursor .
@@ -74,7 +67,7 @@ cursor .
 - MCP servers will auto-connect
 - Check View → Output → MCP for connection status
 
-### 7. Start Development
+### 6. Start Development
 ```bash
 npm run dev
 # Open http://localhost:3000
@@ -96,17 +89,7 @@ npm run dev
 - MCP integration provides enhanced context
 - Use `/mcp` prefix for MCP commands
 
-### Sophia CLI (Terminal)
-```bash
-# Quick examples
-sophia chat "How do I create a dashboard?"
-sophia code "Generate a user authentication hook"
-sophia plan "Design a notification system"
-
-# With MCP
-sophia mcp store --key "context" --value "Building dashboard"
-sophia mcp search --query "dashboard"
-```
+ 
 
 ---
 
@@ -155,17 +138,7 @@ npm run test         # Run tests
 npm run format       # Format with Prettier
 ```
 
-### Sophia CLI Shortcuts (after sourcing aliases)
-```bash
-source scripts/sophia-aliases.sh
-
-sc "Quick chat"              # sophia chat
-scode "Generate code"         # sophia code  
-splan "Create plan"          # sophia plan
-smcp-store "key" "value"     # Store in MCP
-smcp-get "key"               # Retrieve from MCP
-smcp-search "query"          # Search MCP
-```
+ 
 
 ---
 
@@ -187,15 +160,7 @@ pkill -f "mcp.*server.py"
 2. Restart Cursor completely
 3. Check View → Output → MCP for errors
 
-### Sophia CLI Not Working
-```bash
-# Reinstall
-cd ../sophia-intel-ai
-pip install -e . --user
-
-# Add to PATH
-export PATH="$HOME/.local/bin:$PATH"
-```
+ 
 
 ---
 
@@ -213,7 +178,6 @@ export PATH="$HOME/.local/bin:$PATH"
 Your workbench-ui is now:
 - ✅ Configured with MCP servers
 - ✅ Integrated with Cursor IDE
-- ✅ Connected to Sophia CLI
 - ✅ Ready for Next.js development
 - ✅ Linked to sophia-intel-ai backend
 
@@ -229,7 +193,7 @@ Start by:
 
 1. **Always start MCP servers first** before opening Cursor
 2. **Use Cursor for heavy coding** - it has the best MCP integration
-3. **Use Sophia CLI for quick generations** and planning
+3. Keep .env.local updated with valid API keys
 4. **Keep .env.local updated** with valid API keys
 5. **Check MCP health endpoints** if things aren't working
 
@@ -239,7 +203,6 @@ Start by:
 
 - GitHub Issues: [workbench-ui/issues](https://github.com/ai-cherry/workbench-ui/issues)
 - Documentation: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
-- Sophia CLI Help: `sophia --help`
 
 ---
 

@@ -58,11 +58,6 @@ This project integrates with 5 MCP servers from sophia-intel-ai:
 - MCP-enabled for enhanced AI assistance
 - Configuration in `.cline/mcp_settings.json`
 
-### Sophia CLI
-- Command-line AI assistant
-- Direct integration with Portkey
-- Install: `cd ../sophia-intel-ai && pip install -e .`
-
 ## 📦 Installation
 
 ### Prerequisites
@@ -103,18 +98,7 @@ npm run test       # Run tests
 npm run format     # Format code with Prettier
 ```
 
-### Using Sophia CLI
-
-```bash
-# Basic usage
-sophia chat "How do I create a new component?"
-sophia code "Generate a React hook for API calls"
-sophia plan "Design a dashboard layout"
-
-# With MCP integration
-sophia mcp store --key "context" --value "Working on dashboard"
-sophia mcp search --query "dashboard"
-```
+ 
 
 ### Using Cursor with MCP
 
@@ -157,7 +141,6 @@ SOPHIA_API_URL=http://localhost:8000
 - [Setup Guide](./SETUP_GUIDE.md) - Detailed setup instructions
 - [MCP Integration](./docs/MCP_INTEGRATION.md) - MCP server details
 - [Cursor Workflows](./docs/CURSOR_WORKFLOWS.md) - Cursor usage patterns
-- [Sophia CLI Guide](./docs/SOPHIA_CLI.md) - CLI commands reference
 
 ## 🐛 Troubleshooting
 
@@ -172,15 +155,7 @@ pkill -f "mcp.*server.py"
 ./startup.sh
 ```
 
-### Sophia CLI Not Found
-```bash
-# Reinstall
-cd ../sophia-intel-ai
-pip install -e .
-
-# Add to PATH
-export PATH="$HOME/.local/bin:$PATH"
-```
+ 
 
 ### Cursor MCP Issues
 1. Check `.cursor/settings.json` exists
