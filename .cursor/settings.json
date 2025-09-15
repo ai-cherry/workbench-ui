@@ -31,66 +31,86 @@
     "memory": {
       "command": "python",
       "args": [
-        "../sophia-intel-ai/mcp/memory_server.py"
+        "-m",
+        "uvicorn",
+        "mcp.memory_server:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8081"
       ],
       "env": {
         "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8081",
+        "WORKSPACE_PATH": "../workbench-ui",
         "MCP_HOST": "127.0.0.1",
+        "MCP_PORT": "8081",
+        "MCP_TOKEN": "dev-token",
+        "MCP_DEV_BYPASS": "0",
         "LOG_LEVEL": "INFO"
       }
     },
     "filesystem": {
       "command": "python",
       "args": [
-        "../sophia-intel-ai/mcp/filesystem/server.py"
+        "-m",
+        "uvicorn",
+        "mcp.filesystem.server:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8082"
       ],
       "env": {
         "PYTHONPATH": "../sophia-intel-ai",
+        "WORKSPACE_PATH": "../workbench-ui",
+        "MCP_HOST": "127.0.0.1",
         "MCP_PORT": "8082",
-        "MCP_HOST": "127.0.0.1",
         "ALLOWED_DIRECTORIES": "../sophia-intel-ai,../workbench-ui",
-        "LOG_LEVEL": "INFO"
-      }
-    },
-    "analytics": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/analytics/server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8083",
-        "MCP_HOST": "127.0.0.1",
+        "MCP_TOKEN": "dev-token",
+        "MCP_DEV_BYPASS": "0",
         "LOG_LEVEL": "INFO"
       }
     },
     "git": {
       "command": "python",
       "args": [
-        "../sophia-intel-ai/mcp/git/server.py"
+        "-m",
+        "uvicorn",
+        "mcp.git.server:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8084"
       ],
       "env": {
         "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8084",
+        "WORKSPACE_PATH": "../workbench-ui",
         "MCP_HOST": "127.0.0.1",
+        "MCP_PORT": "8084",
         "GIT_REPO_PATH": "../workbench-ui",
+        "MCP_TOKEN": "dev-token",
+        "MCP_DEV_BYPASS": "0",
         "LOG_LEVEL": "INFO"
       }
     },
-    "unified": {
+    "vector": {
       "command": "python",
       "args": [
-        "../sophia-intel-ai/mcp/unified/server.py"
+        "-m",
+        "uvicorn",
+        "mcp.vector.server:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8085"
       ],
       "env": {
         "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8085",
+        "WORKSPACE_PATH": "../workbench-ui",
         "MCP_HOST": "127.0.0.1",
-        "MEMORY_PORT": "8081",
-        "FILESYSTEM_PORT": "8082",
-        "ANALYTICS_PORT": "8083",
-        "GIT_PORT": "8084",
+        "MCP_PORT": "8085",
+        "MCP_TOKEN": "dev-token",
+        "MCP_DEV_BYPASS": "0",
         "LOG_LEVEL": "INFO"
       }
     }
