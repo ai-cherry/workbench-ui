@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Activity, GitBranch, Server, Terminal, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 export default function HomePage() {
@@ -27,13 +28,15 @@ export default function HomePage() {
       if (mcpData.servers) {
         const statusMap: Record<string, boolean> = {};
         Object.entries(mcpData.servers).forEach(([key, value]: [string, any]) => {
-          statusMap[key] = value.status === 'connected';
+          // Treat healthy boolean or ok/healthy/online statuses as connected
+          const healthy = value?.healthy === true || ['ok', 'healthy', 'online', 'connected'].includes(String(value?.status || '').toLowerCase());
+          statusMap[key] = healthy;
         });
         setMcpStatus(statusMap);
       }
 
       // Check GitHub connection
-      setGithubConnected(!!process.env.NEXT_PUBLIC_GITHUB_PAT);
+      setGithubConnected(Boolean(process.env.NEXT_PUBLIC_GITHUB_PAT));
       
       toast.success('System status updated');
     } catch (error) {
@@ -258,6 +261,12 @@ export default function HomePage() {
                     <Terminal className="mr-2 h-4 w-4" />
                     Open Terminal
                   </Button>
+                  <Link href="/agents" className="w-full">
+                    <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                      <Server className="mr-2 h-4 w-4" />
+                      Open Agents Dashboard
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

@@ -22,6 +22,18 @@ from dotenv import load_dotenv
 # Load environment
 load_dotenv()
 
+# Testing toggle (affects external checks in health)
+TESTING = os.getenv("TESTING", "false").lower() in ("1", "true", "yes")
+RESTRICT_MCP_PROXY = os.getenv("RESTRICT_MCP_PROXY", "false").lower() in ("1", "true", "yes")
+
+# Optional allowlist of MCP proxy path prefixes when restriction is enabled
+ALLOWED_MCP_PATHS = {
+    "memory": {"health", "store", "retrieve", "search", "delete"},
+    "filesystem": {"health", "read", "write", "list", "delete"},
+    "git": {"health", "status", "diff", "log", "symbols"},
+    "vector": {"health", "embed", "search", "index", "store", "delete", "stats"},
+}
+
 # App initialization
 app = FastAPI(
     title="Sophia Intel AI Control Center",
@@ -39,16 +51,28 @@ app.add_middleware(
 )
 
 # Security (minimal for single user)
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "sophia-intel-ai-control-center-key-2025")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 30  # Long-lived for internal use
+ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", "7"))
+
+# Fail-fast for missing secrets in production
+if ENVIRONMENT == "production":
+    if SECRET_KEY == "sophia-intel-ai-control-center-key-2025":
+        raise RuntimeError("JWT_SECRET_KEY must be set in production")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
 # Single user auth (CEO)
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "ceo")
-ADMIN_PASSWORD_HASH = pwd_context.hash(os.getenv("ADMIN_PASSWORD", "payready2025"))
+# Prefer hashed password via env, fallback to hashing provided plaintext
+ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
+if not ADMIN_PASSWORD_HASH:
+    admin_pw = os.getenv("ADMIN_PASSWORD", "payready2025")
+    if ENVIRONMENT == "production" and admin_pw == "payready2025":
+        raise RuntimeError("ADMIN_PASSWORD must be set in production")
+    ADMIN_PASSWORD_HASH = pwd_context.hash(admin_pw)
 
 # MCP Server connections
 MCP_SERVERS = {
@@ -128,22 +152,31 @@ async def health_check():
         "services": {}
     }
     
-    # Check MCP servers
-    async with httpx.AsyncClient(timeout=5.0) as client:
+    if TESTING:
+        # Fast path for tests: don't call external services
         for service_id, config in MCP_SERVERS.items():
-            try:
-                response = await client.get(f"{config['url']}/health")
-                health_status["services"][service_id] = {
-                    "name": config["name"],
-                    "status": "online" if response.status_code == 200 else "degraded",
-                    "url": config["url"]
-                }
-            except Exception as e:
-                health_status["services"][service_id] = {
-                    "name": config["name"],
-                    "status": "offline",
-                    "error": str(e)
-                }
+            health_status["services"][service_id] = {
+                "name": config["name"],
+                "status": "offline",
+                "url": config["url"]
+            }
+    else:
+        # Check MCP servers
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            for service_id, config in MCP_SERVERS.items():
+                try:
+                    response = await client.get(f"{config['url']}/health")
+                    health_status["services"][service_id] = {
+                        "name": config["name"],
+                        "status": "online" if response.status_code == 200 else "degraded",
+                        "url": config["url"]
+                    }
+                except Exception as e:
+                    health_status["services"][service_id] = {
+                        "name": config["name"],
+                        "status": "offline",
+                        "error": str(e)
+                    }
     
     return JSONResponse(health_status)
 
@@ -270,11 +303,21 @@ async def proxy_mcp_request(
     """Proxy requests to MCP servers"""
     if service not in MCP_SERVERS:
         raise HTTPException(status_code=404, detail=f"Service {service} not found")
-    
-    async with httpx.AsyncClient() as client:
+    # Basic path validation to prevent traversal/SSRFi
+    if ".." in path or path.startswith("http") or path.startswith("//"):
+        raise HTTPException(status_code=400, detail="Invalid path")
+
+    # Enforce optional allowlist of path prefixes
+    if RESTRICT_MCP_PROXY:
+        first = path.split("?")[0].lstrip("/").split("/", 1)[0]
+        if first not in ALLOWED_MCP_PATHS.get(service, set()):
+            raise HTTPException(status_code=403, detail="Endpoint not allowed")
+
+    async with httpx.AsyncClient(timeout=httpx.Timeout(5.0)) as client:
         try:
             response = await client.get(f"{MCP_SERVERS[service]['url']}/{path}")
-            return JSONResponse(response.json())
+            # Pass through JSON, include status code
+            return JSONResponse(response.json(), status_code=response.status_code)
         except Exception as e:
             raise HTTPException(status_code=502, detail=str(e))
 
@@ -288,14 +331,21 @@ async def proxy_mcp_post(
     """Proxy POST requests to MCP servers"""
     if service not in MCP_SERVERS:
         raise HTTPException(status_code=404, detail=f"Service {service} not found")
-    
-    async with httpx.AsyncClient() as client:
+    if ".." in path or path.startswith("http") or path.startswith("//"):
+        raise HTTPException(status_code=400, detail="Invalid path")
+
+    if RESTRICT_MCP_PROXY:
+        first = path.split("?")[0].lstrip("/").split("/", 1)[0]
+        if first not in ALLOWED_MCP_PATHS.get(service, set()):
+            raise HTTPException(status_code=403, detail="Endpoint not allowed")
+
+    async with httpx.AsyncClient(timeout=httpx.Timeout(5.0)) as client:
         try:
             response = await client.post(
                 f"{MCP_SERVERS[service]['url']}/{path}",
                 json=body
             )
-            return JSONResponse(response.json())
+            return JSONResponse(response.json(), status_code=response.status_code)
         except Exception as e:
             raise HTTPException(status_code=502, detail=str(e))
 

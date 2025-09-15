@@ -152,84 +152,80 @@ export function HealthDashboard() {
       if (response.ok) {
         const data = await response.json();
         
-        // Transform API data to component format
+        // Transform /api/mcp/health into component format
+        const servers = data.servers || {};
+        const toStatus = (s: any) => {
+          if (s?.healthy === true) return 'healthy';
+          const v = String(s?.status || '').toLowerCase();
+          if (['ok', 'healthy', 'online', 'connected'].includes(v)) return 'healthy';
+          if (['degraded'].includes(v)) return 'degraded';
+          if (['offline', 'error', 'unhealthy'].includes(v)) return 'unhealthy';
+          return 'unknown';
+        };
         const serviceData: ServiceHealth[] = [
-          {
-            id: 'redis',
-            name: 'Redis Cache',
-            type: 'redis',
-            status: data.redis?.status || 'unknown',
-            uptime: Date.now() - new Date(data.redis?.startTime || Date.now()).getTime(),
-            responseTime: data.redis?.responseTime || 0,
-            errorRate: 0,
-            throughput: 0,
-            lastCheck: new Date().toISOString(),
-            endpoint: 'localhost',
-            port: 6379
-          },
           {
             id: 'memory',
             name: 'Memory Service',
             type: 'memory',
-            status: data.services?.memory?.status || 'unknown',
-            uptime: Date.now() - new Date(data.services?.memory?.startTime || Date.now()).getTime(),
-            responseTime: data.services?.memory?.responseTime || 0,
+            status: toStatus(servers.memory),
+            uptime: 0,
+            responseTime: servers.memory?.responseTime || 0,
             errorRate: 0,
             throughput: 0,
             lastCheck: new Date().toISOString(),
             endpoint: 'localhost',
             port: 8081,
-            details: data.services?.memory?.details
+            details: servers.memory?.details
           },
           {
             id: 'filesystem',
             name: 'Filesystem Service',
             type: 'filesystem',
-            status: data.services?.filesystem?.status || 'unknown',
-            uptime: Date.now() - new Date(data.services?.filesystem?.startTime || Date.now()).getTime(),
-            responseTime: data.services?.filesystem?.responseTime || 0,
+            status: toStatus(servers.filesystem),
+            uptime: 0,
+            responseTime: servers.filesystem?.responseTime || 0,
             errorRate: 0,
             throughput: 0,
             lastCheck: new Date().toISOString(),
             endpoint: 'localhost',
             port: 8082,
-            details: data.services?.filesystem?.details
+            details: servers.filesystem?.details
           },
           {
             id: 'git',
             name: 'Git Service',
             type: 'git',
-            status: data.services?.git?.status || 'unknown',
-            uptime: Date.now() - new Date(data.services?.git?.startTime || Date.now()).getTime(),
-            responseTime: data.services?.git?.responseTime || 0,
+            status: toStatus(servers.git),
+            uptime: 0,
+            responseTime: servers.git?.responseTime || 0,
             errorRate: 0,
             throughput: 0,
             lastCheck: new Date().toISOString(),
             endpoint: 'localhost',
             port: 8084,
-            details: data.services?.git?.details
+            details: servers.git?.details
           },
           {
             id: 'vector',
             name: 'Vector Service',
             type: 'vector',
-            status: data.services?.vector?.status || 'unknown',
-            uptime: Date.now() - new Date(data.services?.vector?.startTime || Date.now()).getTime(),
-            responseTime: data.services?.vector?.responseTime || 0,
+            status: toStatus(servers.vector),
+            uptime: 0,
+            responseTime: servers.vector?.responseTime || 0,
             errorRate: 0,
             throughput: 0,
             lastCheck: new Date().toISOString(),
             endpoint: 'localhost',
             port: 8085,
-            details: data.services?.vector?.details
+            details: servers.vector?.details
           },
           {
             id: 'ui',
             name: 'UI Service',
             type: 'ui',
             status: 'healthy',
-            uptime: Date.now() - new Date(data.startTime || Date.now()).getTime(),
-            responseTime: data.responseTime || 0,
+            uptime: Date.now() - new Date(data.timestamp || Date.now()).getTime(),
+            responseTime: 0,
             errorRate: 0,
             throughput: 0,
             lastCheck: new Date().toISOString(),
@@ -248,8 +244,8 @@ export function HealthDashboard() {
         setMetrics({
           totalRequests: data.totalRequests || 0,
           totalErrors: data.totalErrors || 0,
-          avgResponseTime: serviceData.reduce((acc, s) => acc + s.responseTime, 0) / serviceData.length,
-          uptime: Date.now() - new Date(data.startTime || Date.now()).getTime(),
+          avgResponseTime: serviceData.reduce((acc, s) => acc + (s.responseTime || 0), 0) / Math.max(serviceData.length, 1),
+          uptime: Date.now() - new Date(data.timestamp || Date.now()).getTime(),
           services: {
             total: serviceData.length,
             healthy: healthyCount,

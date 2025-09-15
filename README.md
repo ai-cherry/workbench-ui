@@ -98,6 +98,20 @@ npm run test       # Run tests
 npm run format     # Format code with Prettier
 ```
 
+## 🧭 Agents Dashboard (Real, No Mocks)
+
+Control live agents via the backend FastAPI controller with streaming output.
+
+- Open the UI route `/agents` or click “Open Agents Dashboard” on the home page.
+- Configure the backend URL via `NEXT_PUBLIC_BACKEND_URL` (defaults to `http://localhost:8000`).
+- Login with backend admin credentials (see backend ENV: `ENVIRONMENT`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`/`ADMIN_PASSWORD_HASH`).
+- Choose an agent (orchestrator/developer/infrastructure/monitor/team), enter a prompt, and run.
+- The Trace panel shows thinking, tool start/end events, tokens, and final content streamed via SSE.
+
+Backend notes:
+- CORS allows `http://localhost:3000` by default.
+- In production, set secrets and consider enabling `RESTRICT_MCP_PROXY` and `SAFE_COMMANDS_ONLY`.
+
  
 
 ### Using Cursor with MCP

@@ -16,6 +16,10 @@ class CommandAgent:
     def __init__(self):
         self.sophia_repo = "../sophia-intel-ai"
         self.github_token = os.getenv("GITHUB_TOKEN")
+        # Gate dangerous commands behind an env flag in all environments
+        self.allow_full_privileges = os.getenv("ALLOW_FULL_PRIVILEGE_COMMANDS", "false").lower() in ("1", "true", "yes")
+        # Optional safe mode to restrict commands to allowlists
+        self.safe_commands_only = os.getenv("SAFE_COMMANDS_ONLY", "false").lower() in ("1", "true", "yes")
         self.allowed_commands = {
             "test": self._run_tests,
             "lint": self._run_lint,
@@ -339,7 +343,15 @@ echo "✅ Restore complete from $BACKUP_DIR"
     
     async def _git_operation(self, command: str, service: str, args: Dict) -> Dict:
         """Execute git operations"""
-        
+        if self.safe_commands_only:
+            unsafe_tokens = [";", "&&", "||", "`", "$()"]
+            if any(tok in command for tok in unsafe_tokens):
+                return {"status": "forbidden", "command": command, "service": service, "error": "Chaining and shell metacharacters are not allowed in safe mode"}
+            # Allowlist basic git subcommands
+            allowed = ("git status", "git log", "git diff", "git add", "git commit", "git push", "git pull", "git checkout", "git branch")
+            if not command.strip().startswith(allowed):
+                return {"status": "forbidden", "command": command, "service": service, "error": "Git command not allowed in safe mode"}
+
         git_script = f"""#!/bin/bash
 set -e
 cd {self.sophia_repo}
@@ -363,7 +375,14 @@ echo "✅ Git operation complete!"
     
     async def _docker_operation(self, command: str, service: str, args: Dict) -> Dict:
         """Execute Docker operations"""
-        
+        if self.safe_commands_only:
+            unsafe_tokens = [";", "&&", "||", "`", "$()"]
+            if any(tok in command for tok in unsafe_tokens):
+                return {"status": "forbidden", "command": command, "service": service, "error": "Chaining and shell metacharacters are not allowed in safe mode"}
+            allowed = ("docker build", "docker images", "docker ps", "docker run", "docker tag", "docker push")
+            if not command.strip().startswith(allowed):
+                return {"status": "forbidden", "command": command, "service": service, "error": "Docker command not allowed in safe mode"}
+
         docker_script = f"""#!/bin/bash
 set -e
 cd {self.sophia_repo}
@@ -440,9 +459,15 @@ echo "✅ Python operation complete!"
     
     async def _custom_command(self, command: str, service: str, args: Dict) -> Dict:
         """Execute custom command - FULL PRIVILEGES"""
-        
         # WARNING: This executes ANY command with full privileges
-        # This is intentional for maximum control over Sophia
+        # Guarded behind ALLOW_FULL_PRIVILEGE_COMMANDS env flag.
+        if not self.allow_full_privileges:
+            return {
+                "status": "forbidden",
+                "command": command,
+                "service": service,
+                "error": "Custom full-privilege commands are disabled. Set ALLOW_FULL_PRIVILEGE_COMMANDS=true to enable."
+            }
         
         custom_script = f"""#!/bin/bash
 set -e
