@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "// Internal MCP Servers for workbench-ui project": "",
+    
     "// GitHub - Repository management, issues, PRs, and GitHub API operations": "",
     "github": {
       "command": "docker",
@@ -25,6 +26,7 @@
         "get_me"
       ]
     },
+    
     "// Memory - Persistent knowledge graph for maintaining context across conversations": "",
     "memory": {
       "command": "npx",
@@ -33,6 +35,7 @@
         "@modelcontextprotocol/server-memory"
       ]
     },
+    
     "// Sequential Thinking - Structured problem-solving with step-by-step analysis": "",
     "sequentialthinking": {
       "command": "npx",
@@ -40,7 +43,6 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ]
-    },
-    "// Tavily - Advanced web search and content extraction": ""
+    }
   }
 }
