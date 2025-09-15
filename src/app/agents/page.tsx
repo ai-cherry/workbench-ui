@@ -22,6 +22,7 @@ export default function AgentsDashboard() {
   const [prompt, setPrompt] = useState('Summarize system health and next steps.');
   const [streaming, setStreaming] = useState(false);
   const [log, setLog] = useState<Array<{ type: string; text: string }>>([]);
+  const logRef = useRef<HTMLDivElement | null>(null);
   const [health, setHealth] = useState<any>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -113,6 +114,13 @@ export default function AgentsDashboard() {
     setStreaming(false);
   };
 
+  // Auto-scroll logs to bottom on new entries
+  useEffect(() => {
+    if (logRef.current) {
+      logRef.current.scrollTop = logRef.current.scrollHeight;
+    }
+  }, [log]);
+
   const fetchHealth = useCallback(async () => {
     try {
       const data = await backendJson('/health');
@@ -181,40 +189,43 @@ export default function AgentsDashboard() {
                 <CardDescription>Execute real agent with streaming output</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-sm text-gray-400">Agent</label>
-                    <select
-                      className="w-full mt-1 rounded bg-gray-900 border border-gray-700 p-2"
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-sm text-gray-400">Agent</label>
+                      <select
+                        className="w-full mt-1 rounded bg-gray-900 border border-gray-700 p-2"
                       value={agent}
                       onChange={(e) => setAgent(e.target.value as AgentType)}
-                    >
-                      <option value="orchestrator">Orchestrator</option>
-                      <option value="developer">Developer</option>
-                      <option value="infrastructure">Infrastructure</option>
-                      <option value="monitor">Monitor</option>
-                      <option value="team">Team</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="text-sm text-gray-400">Prompt</label>
-                    <input
-                      className="w-full mt-1 rounded bg-gray-900 border border-gray-700 p-2"
+                      disabled={streaming}
+                      >
+                        <option value="orchestrator">Orchestrator</option>
+                        <option value="developer">Developer</option>
+                        <option value="infrastructure">Infrastructure</option>
+                        <option value="monitor">Monitor</option>
+                        <option value="team">Team</option>
+                      </select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="text-sm text-gray-400">Prompt</label>
+                      <input
+                        className="w-full mt-1 rounded bg-gray-900 border border-gray-700 p-2"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
+                      disabled={streaming}
                       placeholder="Enter your instruction"
-                    />
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2">
-                  <Button onClick={runAgent} disabled={!isAuthed || streaming} className="bg-blue-600 hover:bg-blue-700">
-                    <Play className="w-4 h-4 mr-2" />Run
-                  </Button>
-                  <Button onClick={stopRun} disabled={!streaming} className="bg-gray-600 hover:bg-gray-700">
-                    <StopCircle className="w-4 h-4 mr-2" />Stop
-                  </Button>
-                </div>
-                <div className="h-64 overflow-auto rounded border border-gray-700 bg-black/40 p-3 font-mono text-sm">
+                  <div className="flex gap-2">
+                    <Button onClick={runAgent} disabled={!isAuthed || streaming} className="bg-blue-600 hover:bg-blue-700">
+                      <Play className="w-4 h-4 mr-2" />Run
+                    </Button>
+                    <Button onClick={stopRun} disabled={!streaming} className="bg-gray-600 hover:bg-gray-700">
+                      <StopCircle className="w-4 h-4 mr-2" />Stop
+                    </Button>
+                    {streaming && <Badge className="bg-yellow-600">Running…</Badge>}
+                  </div>
+                <div ref={logRef} className="h-64 overflow-auto rounded border border-gray-700 bg-black/40 p-3 font-mono text-sm">
                   {log.length === 0 ? (
                     <p className="text-gray-500">No output yet. Run an agent to stream output.</p>
                   ) : (
@@ -290,4 +301,3 @@ export default function AgentsDashboard() {
     </div>
   );
 }
-

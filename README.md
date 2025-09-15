@@ -155,6 +155,7 @@ SOPHIA_API_URL=http://localhost:8000
 - [Setup Guide](./SETUP_GUIDE.md) - Detailed setup instructions
 - [MCP Integration](./docs/MCP_INTEGRATION.md) - MCP server details
 - [Cursor Workflows](./docs/CURSOR_WORKFLOWS.md) - Cursor usage patterns
+- [Backend (FastAPI)](./docs/BACKEND.md) - Endpoints, SSE schema, security, env vars, tests
 
 ## 🐛 Troubleshooting
 
