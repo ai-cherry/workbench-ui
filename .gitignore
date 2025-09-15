@@ -89,6 +89,7 @@ next-env.d.ts
 # Keep MCP configuration but ensure no secrets
 .roo/credentials/
 .roo/secrets/
+.roo/mcp.json
 .cline/credentials/
 mcp-credentials.json
 
