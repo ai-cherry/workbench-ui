@@ -25,17 +25,18 @@ export default function AgentsDashboard() {
   const [elapsed, setElapsed] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const lastFinalRef = useRef<string>('');
-  const [log, setLog] = useState<Array<{ type: string; text: string }>>([]);
+  const [log, setLog] = useState<Array<{ type: string; text: string; step?: number }>>([]);
   const logRef = useRef<HTMLDivElement | null>(null);
   const [health, setHealth] = useState<any>(null);
   const [workflows, setWorkflows] = useState<Array<{name:string; description:string; steps:number}>>([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const isAuthed = !!token;
 
-  const appendLog = useCallback((type: string, text: string) => {
-    setLog((prev) => [...prev, { type, text }]);
+  const appendLog = useCallback((type: string, text: string, step?: number) => {
+    setLog((prev) => [...prev, { type, text, step }]);
   }, []);
 
   const login = useCallback(async () => {
@@ -333,7 +334,7 @@ export default function AgentsDashboard() {
                   ) : (
                     log.map((l, i) => (
                       <div key={i} className={cn('whitespace-pre-wrap', l.type === 'error' && 'text-red-400', l.type === 'tool' && 'text-purple-300', l.type === 'thinking' && 'text-yellow-300')}>
-                        [{new Date().toLocaleTimeString()}] {l.type.toUpperCase()} - {l.text}
+                        [{new Date().toLocaleTimeString()}]{l.step ? ` [Step ${l.step}]` : ''} {l.type.toUpperCase()} - {l.text}
                       </div>
                     ))
                   )}
@@ -383,12 +384,32 @@ export default function AgentsDashboard() {
                           if (paused) continue;
                           if (msg.event === 'open') appendLog('data','Connection opened');
                           else if (msg.event === 'hb') {/* noop */}
-                          else if (msg.event === 'step_start' && msg.data) appendLog('tool', `STEP START ${msg.data}`);
-                          else if (msg.event === 'step_end' && msg.data) appendLog('tool', `STEP END ${msg.data}`);
+                          else if (msg.event === 'step_start' && msg.data) {
+                            try {
+                              const p = JSON.parse(msg.data);
+                              const idx = Number(p.index) || null;
+                              setCurrentStep(idx);
+                              const agentName = p.agent || 'agent';
+                              const actionName = p.action || 'action';
+                              appendLog('tool', `Start: ${actionName} (${agentName})`, idx || undefined);
+                            } catch { appendLog('tool', `Step start ${msg.data}`); }
+                          }
+                          else if (msg.event === 'step_end' && msg.data) {
+                            try {
+                              const p = JSON.parse(msg.data);
+                              const idx = Number(p.index) || null;
+                              appendLog('tool', `End: status=${p.status || 'ok'}`, idx || undefined);
+                            } catch { appendLog('tool', `Step end ${msg.data}`); }
+                            setCurrentStep(null);
+                          }
                           else if (msg.event === 'done') { appendLog('data','Workflow complete'); break; }
                           else if (msg.event === 'thinking' && msg.data) appendLog('thinking', msg.data);
                           else if (msg.data) {
-                            try { const p = JSON.parse(msg.data); if (p.token) appendLog('token', p.token); if (p.content) { lastFinalRef.current = p.content; appendLog('final', p.content); } }
+                            try {
+                              const p = JSON.parse(msg.data);
+                              if (p.token) appendLog('token', p.token, currentStep || undefined);
+                              if (p.content) { lastFinalRef.current = p.content; appendLog('final', p.content, currentStep || undefined); }
+                            }
                             catch { appendLog('data', msg.data); }
                           }
                         }
