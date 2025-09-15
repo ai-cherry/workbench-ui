@@ -8,6 +8,9 @@ import pino from 'pino';
 import { EventEmitter } from 'eventemitter3';
 import { PortkeyProvider } from '../providers/portkey';
 import { MCPClientPool } from '../providers/mcp-client';
+import fs from 'node:fs';
+import yaml from 'yaml';
+import { OrchestratorEvent } from './events';
 
 // Initialize logger
 const logger = pino({
@@ -72,6 +75,20 @@ export interface AgentState {
   tokensUsed: number;
   cost: number;
 }
+
+/**
+ * Minimal workflow step definition parsed from YAML
+ * - If tool is provided, executeTool(tool, input)
+ * - Else, route through LLM using current agent model
+ */
+type Step = {
+  id?: string;
+  agent?: string;
+  tool?: string;
+  input?: any;
+  parallel?: boolean;
+  if?: { equals?: [string, string] };
+};
 
 /**
  * Base WorkspaceAgent class
@@ -603,6 +620,141 @@ export class WorkspaceAgent extends EventEmitter {
     };
   }
   
+  /**
+   * Execute a bounded set of tasks concurrently (promise pool)
+   */
+  protected async runPool<T>(tasks: Array<() => Promise<T>>, limit: number = 4): Promise<T[]> {
+    const queue = tasks.slice();
+    const inFlight = new Set<Promise<T>>();
+    const results: T[] = [];
+
+    const next = async (): Promise<void> => {
+      if (!queue.length) return;
+      // Start next task
+      const task = queue.shift()!();
+      // Keep the Promise<T> type by returning r in then; swallow errors to avoid breaking race()
+      const p: Promise<T> = task
+        .then((r) => {
+          results.push(r);
+          return r;
+        })
+        .catch(() => undefined as unknown as T);
+      inFlight.add(p);
+      // Remove from inFlight after settle, without affecting type
+      p.finally(() => {
+        inFlight.delete(p);
+      });
+      if (inFlight.size >= limit) {
+        await Promise.race(inFlight);
+      }
+      return next();
+    };
+
+    await next();
+    await Promise.allSettled([...inFlight]);
+    return results;
+  }
+
+  /**
+   * Run a single step, emitting standard events
+   */
+  protected async runSingleStep(step: Step, emit: (e: OrchestratorEvent) => void, ctx: Record<string, any>): Promise<any> {
+    const stepName = step.tool || step.agent || 'step';
+    const startedAt = Date.now();
+    emit({ type: 'step_start', data: { stepId: step.id, name: stepName, agent: step.agent } });
+
+    try {
+      // If tool is specified, call tool; else use LLM completion with current agent model
+      if (step.tool) {
+        emit({ type: 'tool_call', data: { tool: step.tool, args: step.input } });
+        const result = await this.executeTool(step.tool, step.input ?? {});
+        const elapsed = Date.now() - startedAt;
+        emit({ type: 'tool_result', data: { tool: step.tool, ok: true, ms: elapsed, output: result } });
+        emit({ type: 'step_end', data: { stepId: step.id, status: 'ok', elapsed_ms: elapsed } });
+        return result;
+      } else {
+        const userContent = typeof step.input?.prompt === 'string' ? step.input.prompt : 'Proceed with the requested action.';
+        const messages = [{ role: 'user', content: userContent }];
+        emit({ type: 'llm_request', data: { model: this.config.model, task: step.agent ?? 'general', tokens_in: userContent.length } });
+        const resp = await this.portkeyProvider.complete({
+          messages,
+          model: this.config.model,
+          temperature: this.config.temperature,
+          maxTokens: this.config.maxTokens,
+          metadata: { agentId: this.config.id, agentName: this.config.name, stepId: step.id }
+        });
+        const content = resp.choices?.[0]?.message?.content ?? '';
+        const elapsed = Date.now() - startedAt;
+        emit({ type: 'tool_result', data: { model: this.config.model, tokensOut: resp.usage?.completion_tokens ?? 0, latency: elapsed, costUSD: undefined } });
+        emit({ type: 'step_end', data: { stepId: step.id, status: 'ok', elapsed_ms: elapsed } });
+        return content;
+      }
+    } catch (err: any) {
+      const elapsed = Date.now() - startedAt;
+      emit({ type: 'error', data: { stepId: step.id, message: err?.message ?? String(err), retryable: false } });
+      emit({ type: 'step_end', data: { stepId: step.id, status: 'failed', elapsed_ms: elapsed } });
+      throw err;
+    }
+  }
+
+  /**
+   * Execute a config-defined workflow from YAML with serial steps and optional bounded parallel fan-out
+   * This is opt-in; callers may continue to use process()/processStream() as before.
+   */
+  async runSwarm(
+    workflowPath: string,
+    emit: (e: OrchestratorEvent) => void,
+    options?: {
+      topology?: 'planner-worker' | 'manager-n' | 'critic';
+      maxWorkers?: number;
+      maxIterations?: number;
+      thorough?: boolean;
+    }
+  ): Promise<void> {
+    const topology = options?.topology ?? 'planner-worker';
+    const maxWorkers = options?.maxWorkers ?? 4;
+
+    // Load YAML
+    const raw = fs.readFileSync(workflowPath, 'utf8');
+    const cfg = yaml.parse(raw) || {};
+    const wf = (cfg.workflows && (cfg.workflows[topology] || cfg.workflows)) || {};
+    // Support two shapes: workflows: { name: { steps: [...] } } or a plain array under workflows[topology].steps
+    const steps: Step[] = Array.isArray(wf.steps) ? wf.steps : (Array.isArray(wf) ? wf : []);
+
+    // Emit open/thinking/hb for UI parity
+    emit({ type: 'open', data: {} });
+    emit({ type: 'thinking', data: { text: `Running workflow: ${topology}` } });
+    emit({ type: 'hb', data: {} });
+
+    const ctx: Record<string, any> = {};
+    const serialSteps = steps.filter(s => !s.parallel);
+    const parallelSteps = steps.filter(s => s.parallel);
+
+    // Serial
+    for (const step of serialSteps) {
+      if (step.if?.equals) {
+        const [k, v] = step.if.equals;
+        if (ctx[k] !== v) continue;
+      }
+      try {
+        const out = await this.runSingleStep(step, emit, ctx);
+        if (step.id) ctx[step.id] = out;
+      } catch {
+        break; // stop on failure in serial path
+      }
+    }
+
+    // Parallel (optional fan-out)
+    if (topology === 'manager-n' && parallelSteps.length) {
+      const tasks = parallelSteps.map((s) => () => this.runSingleStep(s, emit, ctx));
+      const outputs = await this.runPool(tasks, maxWorkers);
+      emit({ type: 'step_end', data: { stepId: 'merge', status: 'merged', outputs } });
+    }
+
+    emit({ type: 'done', data: {} });
+    emit({ type: 'end', data: {} });
+  }
+
   /**
    * Destroy the agent
    */

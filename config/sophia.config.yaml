@@ -532,3 +532,53 @@ performance:
     maxConcurrentRequests: 100
     requestTimeout: 30000
     keepAliveTimeout: 120000
+
+# Orchestration (agent swarms/workflows)
+# All disabled by default for safe, additive rollout
+orchestration:
+  agentWorkflows: false        # Enable orchestrator-driven workflows
+  workflowModeDefault: false   # Use workflows by default when executing agents
+  maxWorkers: 4                # Bounded parallelism for fan-out steps
+  maxIterations: 2             # For critic/refine loops when enabled
+
+# Model Routing & Budgeting (Portkey VK)
+routing:
+  enabled: false               # Enable task-based VK routing and budget guard
+  mode: "fast"                 # "fast" (mini/cheap) or "thorough" (full/accurate)
+  sessionBudgetUsd: 0.10       # Per-session soft cap for spend (UI can show badge)
+  policies:
+    planning:
+      vk: openai-vk-c           # Primary: ChatGPT-5 (OpenAI VK)
+      fallback:
+        - anthropic-vk-b        # Fallback: Claude Opus 4.1 (Anthropic VK)
+    coding:
+      vk: deepseek-vk-f
+      fallback:
+        - groq-vk-e
+    search:
+      vk: google-vk-d
+      fallback:
+        - openai-vk-c
+    general:
+      vk: grok-vk-e
+      fallback:
+        - openai-vk-c
+
+# MCP Resilience Controls
+mcpResilience:
+  enabled: false               # Enable retries/timeouts/circuit-breaker for MCP calls
+  timeoutMs: 10000             # Per-call timeout
+  retries: 3                   # Exponential backoff retries on 5xx/network
+  breaker:
+    window: 12                 # Rolling window size
+    errorRate: 0.5             # Open when error rate exceeds this threshold
+    openMs: 30000              # Time to stay open before half-open
+
+# Governance toggles (non-blocking safety)
+governance:
+  safeMode: false              # If true, server filters write-capable tools (read-only)
+  piiMask: true                # Mask PII (e.g., emails, PAN-like sequences) in logs/events
+  allowedVks:                  # Allowlist VKs permitted for routing (empty = no restriction)
+    - anthropic-vk-b
+    - deepseek-vk-f
+    - groq-vk-e

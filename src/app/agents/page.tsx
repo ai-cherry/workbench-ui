@@ -30,6 +30,7 @@ export default function AgentsDashboard() {
   const [health, setHealth] = useState<any>(null);
   const [workflows, setWorkflows] = useState<Array<{name:string; description:string; steps:number}>>([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>('');
+  const [lastRun, setLastRun] = useState<{ type: 'agent' | 'workflow'; workflow?: string } | null>(null);
   const [currentStep, setCurrentStep] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -72,6 +73,7 @@ export default function AgentsDashboard() {
     setElapsed(0);
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
+    setLastRun({ type: 'agent' });
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -140,6 +142,42 @@ export default function AgentsDashboard() {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
+  const retryRun = async () => {
+    if (streaming || !isAuthed || !lastRun) return;
+    if (lastRun.type === 'agent') {
+      return runAgent();
+    }
+    if (lastRun.type === 'workflow') {
+      const wf = lastRun.workflow || selectedWorkflow;
+      if (!wf) return;
+      setStreaming(true); setPaused(false); setLog([]); setElapsed(0);
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => setElapsed((e)=>e+1), 1000);
+      const controller = new AbortController();
+      abortRef.current = controller;
+      try {
+        const res = await fetch(`${backend}/agent/workflow/execute?name=${encodeURIComponent(wf)}` ,{
+          method: 'POST', headers: { Authorization: `Bearer ${token}` }, signal: controller.signal
+        });
+        if (!res.ok || !res.body) throw new Error(`Execute failed: ${res.status}`);
+        for await (const msg of readSSE(res.body)) {
+          if (paused) continue;
+          if (msg.event === 'open') appendLog('data','Connection opened');
+          else if (msg.event === 'hb') {/* noop */}
+          else if (msg.event === 'step_start' && msg.data) appendLog('tool', `STEP START ${msg.data}`);
+          else if (msg.event === 'step_end' && msg.data) appendLog('tool', `STEP END ${msg.data}`);
+          else if (msg.event === 'done') { appendLog('data','Workflow complete'); break; }
+          else if (msg.event === 'thinking' && msg.data) appendLog('thinking', msg.data);
+          else if (msg.data) {
+            try { const p = JSON.parse(msg.data); if (p.token) appendLog('token', p.token); if (p.content) { lastFinalRef.current = p.content; appendLog('final', p.content); } }
+            catch { appendLog('data', msg.data); }
+          }
+        }
+      } catch (e: any) { appendLog('error', e.message || String(e)); toast.error('Workflow failed'); }
+      finally { setStreaming(false); setPaused(false); if (timerRef.current) { clearInterval(timerRef.current); timerRef.current=null; } abortRef.current=null; }
+    }
+  };
+
   // Auto-scroll logs to bottom on new entries
   useEffect(() => {
     if (logRef.current) {
@@ -179,9 +217,19 @@ export default function AgentsDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           <h1 className="text-3xl font-bold">Agents Dashboard</h1>
-          <Badge className="bg-blue-600">Backend: {backend}</Badge>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge className="bg-blue-600">Backend: {backend}</Badge>
+            {services.map(([id, s]: any) => {
+              const ok = String(s.status || '').toLowerCase();
+              const healthy = ok.includes('online') || ok.includes('healthy');
+              const label = id === 'filesystem' ? 'fs' : id === 'vector' ? 'vec' : id === 'memory' ? 'mem' : id;
+              return (
+                <span key={id} className={`text-xs px-2 py-0.5 rounded ${healthy ? 'bg-green-600' : 'bg-red-600'}`}>{label}</span>
+              );
+            })}
+          </div>
         </div>
 
         <Tabs defaultValue="control">
@@ -264,9 +312,11 @@ export default function AgentsDashboard() {
                   <Button onClick={stopRun} disabled={!streaming} className="bg-gray-600 hover:bg-gray-700">
                     <StopCircle className="w-4 h-4 mr-2" />Stop
                   </Button>
+                  <Button onClick={retryRun} disabled={!isAuthed || streaming || !lastRun} className="bg-indigo-600 hover:bg-indigo-700">Retry</Button>
                   <Button onClick={() => setPaused((p) => !p)} disabled={!streaming} className="bg-amber-600 hover:bg-amber-700">
                     {paused ? 'Resume' : 'Pause'}
                   </Button>
+                  <Button onClick={retryRun} disabled={!isAuthed || streaming || !lastRun} className="bg-indigo-600 hover:bg-indigo-700">Retry</Button>
                   <Button onClick={() => setLog([])} className="bg-slate-600 hover:bg-slate-700" disabled={streaming}>Clear</Button>
                   <Button onClick={() => { if (lastFinalRef.current) { navigator.clipboard.writeText(lastFinalRef.current); toast.success('Copied'); } }} className="bg-emerald-600 hover:bg-emerald-700" disabled={!lastFinalRef.current}>Copy Final</Button>
                   {streaming && <Badge className="bg-yellow-600">Running… {elapsed}s</Badge>}

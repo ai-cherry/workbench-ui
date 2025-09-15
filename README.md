@@ -112,6 +112,39 @@ Backend notes:
 - CORS allows `http://localhost:3000` by default.
 - In production, set secrets and consider enabling `RESTRICT_MCP_PROXY` and `SAFE_COMMANDS_ONLY`.
 
+## 🛠️ Local Runbook
+
+Quick commands to run everything locally:
+
+- MCP servers (in your sophia-intel-ai repo): ensure these respond on localhost
+  - Memory: `curl -sf http://localhost:8081/health`
+  - Filesystem: `curl -sf http://localhost:8082/health`
+  - Git: `curl -sf http://localhost:8084/health`
+  - Vector: `curl -sf http://localhost:8085/health`
+
+- Backend (FastAPI):
+  ```bash
+  cd backend
+  python -m venv .venv && source .venv/bin/activate
+  pip install -r requirements.txt
+  uvicorn app.main:app --reload --port 8000
+  ```
+  - Health: `curl -sf http://localhost:8000/health | jq`
+
+- Frontend (Next.js):
+  ```bash
+  npm install
+  npm run dev  # http://localhost:3000
+  ```
+
+- Use the dashboard:
+  - Open http://localhost:3000/agents
+  - Login (dev defaults): `ceo` / `payready2025`
+  - Control tab: run single agent; pause/resume; retry; clear; copy final
+  - Workflows tab: select and run workflows from `agno/config.yaml`
+  - Health tab: backend + MCP statuses
+
+
 ## 🛳️ GitHub Workflow (Simple)
 
 For day-to-day work, use SSH and a single sync command:

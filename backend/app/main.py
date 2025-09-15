@@ -19,9 +19,40 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from dotenv import load_dotenv
 import yaml
+import re
 
 # Load environment
 load_dotenv()
+
+def _load_settings() -> Dict[str, Any]:
+    cfg_path = os.path.join(os.getcwd(), 'config', 'sophia.config.yaml')
+    if not os.path.exists(cfg_path):
+        return {}
+    try:
+        with open(cfg_path, 'r') as f:
+            cfg = yaml.safe_load(f) or {}
+        return cfg
+    except Exception:
+        return {}
+
+SETTINGS: Dict[str, Any] = _load_settings()
+PII_MASK: bool = bool(SETTINGS.get('governance', {}).get('piiMask', False))
+SAFE_MODE_DEFAULT: bool = bool(SETTINGS.get('governance', {}).get('safeMode', False))
+
+EMAIL_RE = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
+CARD16_RE = re.compile(r"\b\d{16}\b")
+
+def _mask_text(text: Any) -> Any:
+    if not PII_MASK:
+        return text
+    try:
+        if not isinstance(text, str):
+            return text
+        t = EMAIL_RE.sub("[EMAIL]", text)
+        t = CARD16_RE.sub("[CARD]", t)
+        return t
+    except Exception:
+        return text
 
 # Testing toggle (affects external checks in health)
 TESTING = os.getenv("TESTING", "false").lower() in ("1", "true", "yes")
@@ -208,13 +239,15 @@ async def execute_workflow(name: str, current_user: str = Depends(get_current_us
                 yield "event: step_start\n"; yield f"data: {json.dumps({'index': idx, 'agent': mapped, 'action': action})}\n\n"
                 ag = get_agent(mapped)
                 prompt = f"Action: {action}. Please perform this step and return a concise result."
-                resp = await ag.arun(prompt, stream=True, context=None)
+                ctx = {"safe_mode": True} if SAFE_MODE_DEFAULT else None
+                resp = await ag.arun(prompt, stream=True, context=ctx)
                 for tok in resp.get('tokens', []):
-                    yield f"data: {json.dumps({'token': tok})}\n\n"
-                yield f"data: {json.dumps({'content': resp.get('content','')})}\n\n"
+                    masked_tok = _mask_text(tok)
+                    yield f"data: {json.dumps({'token': masked_tok})}\n\n"
+                yield f"data: {json.dumps({'content': _mask_text(resp.get('content',''))})}\n\n"
                 yield "event: step_end\n"; yield f"data: {json.dumps({'index': idx, 'status': 'ok'})}\n\n"
             except Exception as e:
-                yield "event: error\n"; yield f"data: {json.dumps({'error': str(e), 'index': idx})}\n\n"
+                yield "event: error\n"; yield f"data: {json.dumps({'error': _mask_text(str(e)), 'index': idx})}\n\n"
                 break
         yield "event: done\n"; yield "data: {}\n\n"
         yield "event: end\n"; yield "data: [DONE]\n\n"
@@ -290,16 +323,21 @@ async def execute_agent(
             user_message = request.messages[-1].content if request.messages else ""
             
             # Execute agent with streaming
+            ctx = request.context or {}
+            if SAFE_MODE_DEFAULT:
+                ctx = dict(ctx)
+                ctx["safe_mode"] = True
             response = await agent.arun(
                 user_message,
                 stream=request.stream,
-                context=request.context
+                context=ctx
             )
             
             # Stream tokens
             if request.stream:
                 for token in response.get("tokens", []):
-                    yield f"data: {json.dumps({'token': token})}\n\n"
+                    tok = _mask_text(token)
+                    yield f"data: {json.dumps({'token': tok})}\n\n"
                     await asyncio.sleep(0.01)
             
             # Emit tool calls if any
@@ -311,11 +349,13 @@ async def execute_agent(
                 yield f"data: {json.dumps(tool_call)}\n\n"
             
             # Final response
-            yield f"data: {json.dumps({'content': response.get('content', '')})}\n\n"
+            final_content = _mask_text(response.get('content', ''))
+            yield f"data: {json.dumps({'content': final_content})}\n\n"
             
         except Exception as e:
+            err = _mask_text(str(e))
             yield "event: error\n"
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'error': err})}\n\n"
         
         # End stream
         yield "event: done\n"
