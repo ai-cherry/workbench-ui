@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getBackendUrl, backendJson } from '@/lib/backend';
+import { getBackendUrl, backendJson, backendJsonAuth } from '@/lib/backend';
 import { readSSE } from '@/lib/sse';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
@@ -28,6 +28,8 @@ export default function AgentsDashboard() {
   const [log, setLog] = useState<Array<{ type: string; text: string }>>([]);
   const logRef = useRef<HTMLDivElement | null>(null);
   const [health, setHealth] = useState<any>(null);
+  const [workflows, setWorkflows] = useState<Array<{name:string; description:string; steps:number}>>([]);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<string>('');
   const abortRef = useRef<AbortController | null>(null);
 
   const isAuthed = !!token;
@@ -153,9 +155,23 @@ export default function AgentsDashboard() {
     }
   }, []);
 
+  const fetchWorkflows = useCallback(async () => {
+    if (!token) return;
+    try {
+      const data = await backendJsonAuth<{workflows: any[]}>('/agent/workflow/list', token);
+      setWorkflows(data.workflows || []);
+      if (data.workflows?.length && !selectedWorkflow) setSelectedWorkflow(data.workflows[0].name);
+    } catch (e: any) {
+      // ignore
+    }
+  }, [token, selectedWorkflow]);
+
   useEffect(() => {
     fetchHealth();
-  }, [fetchHealth]);
+    fetchWorkflows();
+  }, [fetchHealth, fetchWorkflows]);
+
+  useEffect(() => { fetchWorkflows(); }, [fetchWorkflows]);
 
   const services = useMemo(() => Object.entries(health?.services || {}), [health]);
 
@@ -172,6 +188,7 @@ export default function AgentsDashboard() {
             <TabsTrigger value="control">Control</TabsTrigger>
             <TabsTrigger value="health">Health</TabsTrigger>
             <TabsTrigger value="log">Trace</TabsTrigger>
+            <TabsTrigger value="workflows">Workflows</TabsTrigger>
           </TabsList>
 
           <TabsContent value="control" className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -317,6 +334,80 @@ export default function AgentsDashboard() {
                     log.map((l, i) => (
                       <div key={i} className={cn('whitespace-pre-wrap', l.type === 'error' && 'text-red-400', l.type === 'tool' && 'text-purple-300', l.type === 'thinking' && 'text-yellow-300')}>
                         [{new Date().toLocaleTimeString()}] {l.type.toUpperCase()} - {l.text}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="workflows" className="mt-4">
+            <Card className="bg-gray-800/60 border-gray-700">
+              <CardHeader>
+                <CardTitle>Run Workflow</CardTitle>
+                <CardDescription>Execute config-defined workflows with streamed output</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="md:col-span-2">
+                    <label className="text-sm text-gray-400">Workflow</label>
+                    <select
+                      className="w-full mt-1 rounded bg-gray-900 border border-gray-700 p-2"
+                      value={selectedWorkflow}
+                      onChange={(e) => setSelectedWorkflow(e.target.value)}
+                      disabled={!isAuthed || streaming}
+                    >
+                      {workflows.map(w => <option key={w.name} value={w.name}>{w.name} ({w.steps})</option>)}
+                    </select>
+                    {selectedWorkflow && (
+                      <p className="text-xs text-gray-500 mt-1">{workflows.find(w => w.name===selectedWorkflow)?.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-2 items-center flex-wrap">
+                  <Button
+                    onClick={async () => {
+                      if (!isAuthed || !selectedWorkflow || streaming) return;
+                      setStreaming(true); setPaused(false); setLog([]); setElapsed(0);
+                      if (timerRef.current) clearInterval(timerRef.current);
+                      timerRef.current = setInterval(() => setElapsed((e)=>e+1), 1000);
+                      const controller = new AbortController();
+                      abortRef.current = controller;
+                      try {
+                        const res = await fetch(`${backend}/agent/workflow/execute?name=${encodeURIComponent(selectedWorkflow)}` ,{
+                          method: 'POST', headers: { Authorization: `Bearer ${token}` }, signal: controller.signal
+                        });
+                        if (!res.ok || !res.body) throw new Error(`Execute failed: ${res.status}`);
+                        for await (const msg of readSSE(res.body)) {
+                          if (paused) continue;
+                          if (msg.event === 'open') appendLog('data','Connection opened');
+                          else if (msg.event === 'hb') {/* noop */}
+                          else if (msg.event === 'step_start' && msg.data) appendLog('tool', `STEP START ${msg.data}`);
+                          else if (msg.event === 'step_end' && msg.data) appendLog('tool', `STEP END ${msg.data}`);
+                          else if (msg.event === 'done') { appendLog('data','Workflow complete'); break; }
+                          else if (msg.event === 'thinking' && msg.data) appendLog('thinking', msg.data);
+                          else if (msg.data) {
+                            try { const p = JSON.parse(msg.data); if (p.token) appendLog('token', p.token); if (p.content) { lastFinalRef.current = p.content; appendLog('final', p.content); } }
+                            catch { appendLog('data', msg.data); }
+                          }
+                        }
+                      } catch (e: any) { appendLog('error', e.message || String(e)); toast.error('Workflow failed'); }
+                      finally { setStreaming(false); setPaused(false); if (timerRef.current) { clearInterval(timerRef.current); timerRef.current=null; } abortRef.current=null; }
+                    }}
+                    disabled={!isAuthed || !selectedWorkflow || streaming}
+                    className="bg-indigo-600 hover:bg-indigo-700"
+                  >Run Workflow</Button>
+                  <Button onClick={() => setLog([])} className="bg-slate-600 hover:bg-slate-700" disabled={streaming}>Clear</Button>
+                  {streaming && <Badge className="bg-yellow-600">Running… {elapsed}s</Badge>}
+                </div>
+                <div ref={logRef} className="h-64 overflow-auto rounded border border-gray-700 bg-black/40 p-3 font-mono text-sm">
+                  {log.length === 0 ? (
+                    <p className="text-gray-500">No output yet. Pick a workflow and run to stream output.</p>
+                  ) : (
+                    log.map((l, i) => (
+                      <div key={i} className={cn('whitespace-pre-wrap', l.type === 'error' && 'text-red-400', l.type === 'tool' && 'text-purple-300', l.type === 'thinking' && 'text-yellow-300')}>
+                        {l.type === 'token' ? <span>{l.text}</span> : <span>[{l.type.toUpperCase()}] {l.text}</span>}
                       </div>
                     ))
                   )}

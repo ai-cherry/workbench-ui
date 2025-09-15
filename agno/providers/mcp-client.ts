@@ -279,10 +279,14 @@ export class MCPClientPool extends EventEmitter {
         return pRetry(
           async () => {
             const client = this.getClient(serverKey);
-            
+            const controller = new AbortController();
+            const timeout = options?.timeout ?? config.timeout;
+            const timer = setTimeout(() => controller.abort(), timeout);
+            const started = Date.now();
             const requestConfig = {
-              timeout: options?.timeout ?? config.timeout
-            };
+              timeout,
+              signal: controller.signal as any,
+            } as any;
             
             let response;
             
@@ -303,6 +307,9 @@ export class MCPClientPool extends EventEmitter {
                 throw new Error(`Unsupported method: ${method}`);
             }
             
+            clearTimeout(timer);
+            const duration = Date.now() - started;
+            logger.debug({ server: serverKey, endpoint, duration, status: response.status }, 'MCP request complete');
             if (response.status >= 400) {
               throw new Error(`MCP request failed: ${response.status} ${response.statusText}`);
             }

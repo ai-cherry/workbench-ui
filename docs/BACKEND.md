@@ -20,6 +20,8 @@ Backend provides authentication, agent execution with SSE streaming, MCP server 
     - `event: end` + `data: [DONE]` — legacy end sentinel
 - `POST /deploy` → deploy service (see code for inputs `{ target, service, version?, rollback? }`).
 - `POST /command` → execute allowlisted repo commands.
+- `GET /agent/workflow/list` → `{ workflows: [{ name, description, steps }] }` (auth required)
+- `POST /agent/workflow/execute?name=<workflow>` → SSE stream of the named workflow from `agno/config.yaml`
 - `GET /mcp/{service}/{path}` and `POST /mcp/{service}/{path}` → proxy to MCP services with validation.
 - `GET /ws` → WebSocket heartbeat.
 - `POST /graphql` → Strawberry GraphQL: `system_health` query.

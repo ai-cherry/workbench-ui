@@ -18,6 +18,7 @@ import httpx
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from dotenv import load_dotenv
+import yaml
 
 # Load environment
 load_dotenv()
@@ -153,6 +154,72 @@ async def login(request: LoginRequest):
     
     access_token = create_access_token(data={"sub": request.username})
     return TokenResponse(access_token=access_token)
+
+# -------- Workflows (from agno/config.yaml) --------
+def _load_workflows() -> Dict[str, Any]:
+    cfg_path = os.path.join(os.getcwd(), 'agno', 'config.yaml')
+    if not os.path.exists(cfg_path):
+        return {}
+    try:
+        with open(cfg_path, 'r') as f:
+            cfg = yaml.safe_load(f) or {}
+        return (cfg.get('workflows') or {})
+    except Exception:
+        return {}
+
+@app.get("/agent/workflow/list")
+async def list_workflows(current_user: str = Depends(get_current_user)):
+    workflows = _load_workflows()
+    out = []
+    for name, wf in workflows.items():
+        out.append({
+            'name': name,
+            'description': wf.get('description', ''),
+            'steps': len(wf.get('steps') or []),
+        })
+    return JSONResponse({'workflows': out})
+
+_AGENT_MAP = {
+    'architect': 'orchestrator',
+    'coder': 'developer',
+    'reviewer': 'monitor',
+    'tester': 'developer',
+}
+
+@app.post("/agent/workflow/execute")
+async def execute_workflow(name: str, current_user: str = Depends(get_current_user)):
+    """Execute a simple workflow from agno/config.yaml and stream events via SSE."""
+    workflows = _load_workflows()
+    if name not in workflows:
+        raise HTTPException(status_code=404, detail=f"Workflow not found: {name}")
+    wf = workflows[name]
+    steps = wf.get('steps') or []
+
+    async def stream_wf():
+        from app.agents.sophia_controller import get_agent
+        yield "event: open\n"; yield "data: {}\n\n"
+        yield "event: thinking\n"; yield f"data: {json.dumps({'text': f'Running workflow: {name}'})}\n\n"
+        yield "event: hb\n"; yield "data: {}\n\n"
+        for idx, step in enumerate(steps, start=1):
+            agent_key = str(step.get('agent', 'developer')).lower()
+            action = step.get('action', 'default')
+            mapped = _AGENT_MAP.get(agent_key, 'developer')
+            try:
+                yield "event: step_start\n"; yield f"data: {json.dumps({'index': idx, 'agent': mapped, 'action': action})}\n\n"
+                ag = get_agent(mapped)
+                prompt = f"Action: {action}. Please perform this step and return a concise result."
+                resp = await ag.arun(prompt, stream=True, context=None)
+                for tok in resp.get('tokens', []):
+                    yield f"data: {json.dumps({'token': tok})}\n\n"
+                yield f"data: {json.dumps({'content': resp.get('content','')})}\n\n"
+                yield "event: step_end\n"; yield f"data: {json.dumps({'index': idx, 'status': 'ok'})}\n\n"
+            except Exception as e:
+                yield "event: error\n"; yield f"data: {json.dumps({'error': str(e), 'index': idx})}\n\n"
+                break
+        yield "event: done\n"; yield "data: {}\n\n"
+        yield "event: end\n"; yield "data: [DONE]\n\n"
+
+    return StreamingResponse(stream_wf(), media_type="text/event-stream")
 
 # Health check
 @app.get("/health")

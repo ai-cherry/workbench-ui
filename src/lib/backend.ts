@@ -17,3 +17,13 @@ export async function backendJson<T = any>(path: string, init?: RequestInit): Pr
   }
   return res.json();
 }
+
+export async function backendJsonAuth<T = any>(path: string, token: string, init?: RequestInit): Promise<T> {
+  return backendJson<T>(path, {
+    ...init,
+    headers: {
+      ...(init?.headers || {}),
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
