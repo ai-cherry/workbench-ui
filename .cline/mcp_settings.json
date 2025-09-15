@@ -1,86 +1,83 @@
 {
+  "// EXTERNAL MCP SERVERS": "These servers are for viewing the sophia-intel-ai codebase, NOT for this workbench-ui project",
+  "// DO NOT USE these servers for workbench-ui operations": "",
+  
   "mcpServers": {
-    "memory": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/memory_server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8081",
-        "MCP_HOST": "127.0.0.1",
-        "LOG_LEVEL": "INFO"
-      }
+    "// EXTERNAL: Session memory and context management for sophia-intel-ai": "",
+    "sophia-memory": {
+      "type": "http",
+      "url": "http://localhost:8081",
+      "headers": {
+        "Authorization": "Bearer dev-token",
+        "Content-Type": "application/json"
+      },
+      "description": "EXTERNAL - Session memory and context management for sophia-intel-ai codebase",
+      "capabilities": [
+        "session.store",
+        "session.retrieve",
+        "memory.search",
+        "context.maintain"
+      ]
     },
-    "filesystem": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/filesystem/server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8082",
-        "MCP_HOST": "127.0.0.1",
-        "ALLOWED_DIRECTORIES": "../sophia-intel-ai,../workbench-ui",
-        "LOG_LEVEL": "INFO"
-      }
+    
+    "// EXTERNAL: File operations and code intelligence for sophia-intel-ai": "",
+    "sophia-filesystem": {
+      "type": "http",
+      "url": "http://localhost:8082",
+      "headers": {
+        "Authorization": "Bearer dev-token",
+        "Content-Type": "application/json"
+      },
+      "description": "EXTERNAL - File operations and code intelligence for sophia-intel-ai codebase",
+      "capabilities": [
+        "file.read",
+        "file.write",
+        "file.list",
+        "code.search",
+        "symbols.index",
+        "symbols.search"
+      ]
     },
-    "analytics": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/analytics/server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8083",
-        "MCP_HOST": "127.0.0.1",
-        "LOG_LEVEL": "INFO"
-      }
+    
+    "// EXTERNAL: Git operations and version control for sophia-intel-ai": "",
+    "sophia-git": {
+      "type": "http",
+      "url": "http://localhost:8084",
+      "headers": {
+        "Authorization": "Bearer dev-token",
+        "Content-Type": "application/json"
+      },
+      "description": "EXTERNAL - Git operations and version control for sophia-intel-ai codebase",
+      "capabilities": [
+        "git.status",
+        "git.log",
+        "git.branches",
+        "git.diff"
+      ]
     },
-    "git": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/git/server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8084",
-        "MCP_HOST": "127.0.0.1",
-        "GIT_REPO_PATH": "../workbench-ui",
-        "LOG_LEVEL": "INFO"
-      }
-    },
-    "unified": {
-      "command": "python",
-      "args": [
-        "../sophia-intel-ai/mcp/unified/server.py"
-      ],
-      "env": {
-        "PYTHONPATH": "../sophia-intel-ai",
-        "MCP_PORT": "8085",
-        "MCP_HOST": "127.0.0.1",
-        "MEMORY_PORT": "8081",
-        "FILESYSTEM_PORT": "8082",
-        "ANALYTICS_PORT": "8083",
-        "GIT_PORT": "8084",
-        "LOG_LEVEL": "INFO"
-      }
+    
+    "// EXTERNAL: Vector search and semantic indexing for sophia-intel-ai": "",
+    "sophia-vector": {
+      "type": "http",
+      "url": "http://localhost:8085",
+      "headers": {
+        "Authorization": "Bearer dev-token",
+        "Content-Type": "application/json"
+      },
+      "description": "EXTERNAL - Vector search and semantic indexing for sophia-intel-ai codebase",
+      "capabilities": [
+        "vector.index",
+        "vector.search",
+        "semantic.similarity",
+        "embedding.generate"
+      ]
     }
   },
-  "apiKeys": {
-    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
-    "OPENAI_API_KEY": "${OPENAI_API_KEY}",
-    "PORTKEY_API_KEY": "${PORTKEY_API_KEY}"
-  },
-  "modelPreferences": {
-    "default": "claude-3-5-sonnet-20241022",
-    "fallback": "gpt-4-turbo-preview",
-    "fast": "claude-3-haiku-20240307"
-  },
-  "workspaceSettings": {
-    "autoStartServers": true,
-    "serverHealthCheckInterval": 30000,
-    "maxRetries": 3,
-    "retryDelay": 1000
-  }
+  
+  "// Configuration for external servers": "",
+  "defaultTimeout": 30000,
+  "retryAttempts": 3,
+  "retryDelay": 1000,
+  
+  "// NOTE": "For internal MCP servers used by workbench-ui, see .roo/mcp.json"
 }

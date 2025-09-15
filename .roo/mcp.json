@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "// Internal MCP Servers for workbench-ui project": "",
+    "// GitHub - Repository management, issues, PRs, and GitHub API operations": "",
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITHUB_TOOLSETS",
+        "-e",
+        "GITHUB_READ_ONLY",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "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",
+        "GITHUB_TOOLSETS": "",
+        "GITHUB_READ_ONLY": ""
+      },
+      "alwaysAllow": [
+        "get_me"
+      ]
+    },
+    "// Memory - Persistent knowledge graph for maintaining context across conversations": "",
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "// Sequential Thinking - Structured problem-solving with step-by-step analysis": "",
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "// Tavily - Advanced web search and content extraction": ""
+  }
+}
