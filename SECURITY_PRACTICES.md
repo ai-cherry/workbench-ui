@@ -4,10 +4,10 @@
 
 ### Immediate Actions Required
 
-1. **Rotate the exposed GitHub PAT immediately**
-   - Go to: https://github.com/settings/tokens
-   - Revoke the token: `github_pat_11A5VHXCI0iQqY61XqziWR...`
-   - Generate a new token using: `./scripts/setup-github-access.sh`
+1. **Simplified GitHub workflow (SSH preferred)**
+   - Remote is SSH: `git@github.com:ai-cherry/workbench-ui.git`
+   - Push with one command: `./scripts/git-sync.sh "feat: message"`
+   - No PAT or GitHub App required for day-to-day pushes.
 
 2. **Set up your local environment**
    ```bash
@@ -21,10 +21,10 @@
    # - Set up MCP servers
    ```
 
-3. **Never expose credentials again**
-   - All credentials go in `.env.local` (already in .gitignore)
-   - Use environment variables in all configurations
-   - Rotate tokens every 90 days
+3. **Local-only credentials**
+   - Keep secrets in `.env.local` (gitignored) and `.roo/mcp.json` (now gitignored).
+   - Do not commit these files. Keep them local.
+   - Optional: use `scripts/setup-github-access.sh` if you choose to use a PAT for GitHub APIs.
 
 ## 🔐 Credential Management
 
@@ -65,7 +65,11 @@ npm run mcp:connect
 
 ## 🚀 Simplified GitHub Access
 
-### Option 1: Personal Access Token (Quick Start)
+### Option 1: SSH (Recommended for day-to-day)
+
+No tokens required for git push/pull.
+
+### Option 2: Personal Access Token (Quick Start)
 
 **Best for**: Development, testing, quick prototypes
 
@@ -98,9 +102,9 @@ See [GitHub App Setup Guide](docs/GITHUB_APP_SETUP_GUIDE.md) for detailed instru
 
 ## 🛠️ MCP Server Configuration
 
-### Current Setup
+### MCP Server Config (Local)
 
-All MCP servers are configured in `.roo/mcp.json` to use environment variables:
+`.roo/mcp.json` is local-only (gitignored). It can reference env vars from `.env.local`:
 
 ```json
 {
@@ -179,7 +183,7 @@ ssh -T git@github.com
 ## 📊 Security Checklist
 
 ### Daily Practices
-- [ ] Use `.env.local` for all credentials
+- [ ] Use `.env.local` and local `.roo/mcp.json` for all credentials
 - [ ] Never hardcode tokens in code
 - [ ] Check git status before committing
 - [ ] Use environment variables in configs
@@ -196,8 +200,16 @@ ssh -T git@github.com
 - [ ] Audit repository access
 - [ ] Update security documentation
 
-### Quarterly Tasks
-- [ ] Rotate all credentials
+### Backend/Frontend Security Toggles (Optional)
+
+- Backend CORS origins: `ALLOWED_ORIGINS` (comma-separated), defaults to `http://localhost:3000,http://localhost:3001`
+- Backend token TTL override: `ACCESS_TOKEN_EXPIRE_MINUTES` (overrides days) and `ACCESS_TOKEN_EXPIRE_DAYS` (default 7)
+- Backend JWT claims (optional): `JWT_ISSUER`, `JWT_AUDIENCE`
+- Backend MCP proxy restrictions: `RESTRICT_MCP_PROXY=true` to enable allowlist
+- Backend safe command modes: `SAFE_COMMANDS_ONLY=true`, and leave `ALLOW_FULL_PRIVILEGE_COMMANDS` unset or false
+- Frontend headers: `NEXT_PUBLIC_APP_URL` to set allowed origin; `NEXT_PUBLIC_BACKEND_URL` for Agents Dashboard
+
+Keep these unset unless you specifically need them. Defaults are dev-friendly.
 - [ ] Security audit of codebase
 - [ ] Review and update .gitignore
 - [ ] Team security training

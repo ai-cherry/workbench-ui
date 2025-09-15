@@ -41,11 +41,13 @@ app = FastAPI(
     description="Unified control interface for Sophia Intel AI with AgentOS patterns"
 )
 
-# CORS for UI
+# CORS for UI (env-driven, sensible defaults)
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001")
+ALLOW_CREDENTIALS = os.getenv("ALLOW_CREDENTIALS", "false").lower() in ("1", "true", "yes")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # UI ports
-    allow_credentials=True,
+    allow_origins=[o.strip() for o in ALLOWED_ORIGINS.split(",") if o.strip()],
+    allow_credentials=ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -55,6 +57,9 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "sophia-intel-ai-control-center-key-2025")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", "7"))
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+TOKEN_ISSUER = os.getenv("JWT_ISSUER")
+TOKEN_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
 # Fail-fast for missing secrets in production
 if ENVIRONMENT == "production":
@@ -117,8 +122,15 @@ class TokenResponse(BaseModel):
 # Auth helpers
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
+    if ACCESS_TOKEN_EXPIRE_MINUTES is not None and ACCESS_TOKEN_EXPIRE_MINUTES.isdigit():
+        expire = datetime.utcnow() + timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
+    else:
+        expire = datetime.utcnow() + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire})
+    if TOKEN_ISSUER:
+        to_encode["iss"] = TOKEN_ISSUER
+    if TOKEN_AUDIENCE:
+        to_encode["aud"] = TOKEN_AUDIENCE
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
