@@ -1,0 +1,174 @@
+# Development Environment Configuration
+# Overrides for sophia.config.yaml in development
+
+system:
+  environment: "development"
+  debug: true
+  logLevel: "debug"
+
+services:
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+  
+  memory:
+    host: "localhost"
+    port: 8081
+    config:
+      maxEntities: 1000
+      maxRelations: 5000
+      backupInterval: 3600000  # 1 hour
+  
+  filesystem:
+    host: "localhost"
+    port: 8082
+    config:
+      allowedPaths:
+        - "/Users/lynnmusil/workbench-ui"
+        - "/Users/lynnmusil/sophia-intel-ai"
+        - "/tmp/sophia-dev"
+  
+  git:
+    host: "localhost"
+    port: 8084
+    config:
+      autoFetch: false  # Disable auto-fetch in dev
+      fetchInterval: 600000  # 10 minutes if enabled
+  
+  vector:
+    host: "localhost"
+    port: 8085
+    config:
+      maxVectors: 10000
+      cacheSize: 100
+
+ui:
+  host: "localhost"
+  port: 3000
+  baseUrl: "http://localhost:3000"
+  
+  api:
+    rateLimit:
+      windowMs: 60000
+      max: 1000  # Higher limit for development
+    cors:
+      enabled: true
+      origins:
+        - "http://localhost:3000"
+        - "http://localhost:3001"
+        - "http://127.0.0.1:3000"
+  
+  session:
+    secure: false
+    sameSite: "lax"
+
+monitoring:
+  dashboard:
+    enabled: true
+    refreshInterval: 2000  # Faster refresh in dev
+  
+  metrics:
+    interval: 30000  # More frequent metrics in dev
+  
+  tracing:
+    sampleRate: 1.0  # Sample all requests in dev
+  
+  logging:
+    level: "debug"
+    format: "pretty"  # Human-readable format for dev
+    transports:
+      - type: "console"
+        level: "debug"
+        colorize: true
+      - type: "file"
+        level: "silly"
+        filename: "logs/dev.log"
+        maxSize: "50m"
+  
+  alerting:
+    enabled: false  # Disable alerts in dev
+
+security:
+  auth:
+    enabled: false  # Disable auth for easier development
+  
+  rateLimit:
+    enabled: false  # Disable rate limiting in dev
+  
+  cors:
+    enabled: true
+    origins:
+      - "*"  # Allow all origins in dev
+  
+  csp:
+    enabled: false  # Disable CSP in dev for flexibility
+
+deployment:
+  scaling:
+    enabled: false
+  
+  gracefulShutdown:
+    timeout: 5000  # Faster shutdown in dev
+
+development:
+  hotReload:
+    enabled: true
+    watch:
+      - "src/**/*"
+      - "config/**/*"
+      - "public/**/*"
+  
+  debug:
+    enabled: true
+    inspector:
+      enabled: true
+      port: 9229
+      break: false
+    profiling:
+      enabled: true
+      outputDir: "profiles/dev"
+  
+  mocks:
+    enabled: false  # Can enable for testing without real services
+
+features:
+  # Enable all features in dev for testing
+  knowledgeGraph: true
+  semanticSearch: true
+  codeAnalysis: true
+  gitIntegration: true
+  distributedTracing: true
+  circuitBreaker: true
+  rateLimit: false
+  caching: true
+  autoIndexing: true
+  mlPipeline: true
+  quantumProcessor: false  # Still experimental
+  darkMode: true
+  advancedEditor: true
+  collaborativeEditing: true
+  realTimeSync: true
+
+performance:
+  connectionPool:
+    min: 2
+    max: 10
+  
+  cache:
+    ttl:
+      default: 60  # Shorter TTL in dev
+      query: 30
+      static: 300
+  
+  optimization:
+    compression: false  # Disable for faster builds
+    minification: false
+    bundling: false
+    sourceMap: true  # Enable source maps
+
+backup:
+  enabled: false  # Disable automatic backups in dev
+  
+maintenance:
+  enabled: false

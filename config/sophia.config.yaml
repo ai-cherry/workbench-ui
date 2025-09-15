@@ -1,0 +1,534 @@
+# Sophia Intel AI - Unified System Configuration
+# This is the master configuration file for the entire Sophia Intel AI ecosystem
+
+system:
+  name: "Sophia Intel AI"
+  version: "2.0.0"
+  environment: "${NODE_ENV:-development}"
+  debug: "${DEBUG:-false}"
+  logLevel: "${LOG_LEVEL:-info}"
+  
+  # System-wide settings
+  timeouts:
+    startup: 120000  # 2 minutes for full system startup
+    shutdown: 30000  # 30 seconds for graceful shutdown
+    request: 30000   # 30 seconds default request timeout
+    health: 5000     # 5 seconds for health checks
+  
+  # Retry configuration
+  retry:
+    maxAttempts: 3
+    initialDelay: 1000
+    maxDelay: 10000
+    multiplier: 2
+    
+  # Circuit breaker configuration
+  circuitBreaker:
+    errorThreshold: 5
+    volumeThreshold: 10
+    timeout: 60000
+    resetTimeout: 30000
+
+# Core Services Configuration
+services:
+  # Redis Cache (required for all services)
+  redis:
+    host: "${REDIS_HOST:-localhost}"
+    port: "${REDIS_PORT:-6379}"
+    password: "${REDIS_PASSWORD:-}"
+    db: "${REDIS_DB:-0}"
+    maxReconnectAttempts: 10
+    reconnectInterval: 5000
+    keyPrefix: "sophia:"
+    ttl:
+      default: 3600
+      session: 86400
+      cache: 1800
+  
+  # Memory Service (Knowledge Graph)
+  memory:
+    enabled: true
+    host: "${MCP_MEMORY_HOST:-localhost}"
+    port: "${MCP_MEMORY_PORT:-8081}"
+    protocol: "ws"
+    dependencies: ["redis"]
+    config:
+      maxEntities: 10000
+      maxRelations: 50000
+      cacheEnabled: true
+      persistenceEnabled: true
+      backupInterval: 3600000  # 1 hour
+      indexingStrategy: "hybrid"
+    health:
+      endpoint: "/health"
+      interval: 10000
+      timeout: 5000
+      retries: 3
+    metrics:
+      enabled: true
+      interval: 60000
+  
+  # Filesystem Service
+  filesystem:
+    enabled: true
+    host: "${MCP_FILESYSTEM_HOST:-localhost}"
+    port: "${MCP_FILESYSTEM_PORT:-8082}"
+    protocol: "ws"
+    dependencies: []
+    config:
+      rootPath: "${FILESYSTEM_ROOT:-/Users/lynnmusil/workbench-ui}"
+      allowedPaths:
+        - "/Users/lynnmusil/workbench-ui"
+        - "/Users/lynnmusil/sophia-intel-ai"
+      maxFileSize: 10485760  # 10MB
+      watchEnabled: true
+      indexingEnabled: true
+      cacheSymbols: true
+    health:
+      endpoint: "/health"
+      interval: 10000
+      timeout: 5000
+      retries: 3
+    metrics:
+      enabled: true
+      interval: 60000
+  
+  # Git Service
+  git:
+    enabled: true
+    host: "${MCP_GIT_HOST:-localhost}"
+    port: "${MCP_GIT_PORT:-8084}"
+    protocol: "ws"
+    dependencies: ["filesystem"]
+    config:
+      defaultBranch: "main"
+      autoFetch: true
+      fetchInterval: 300000  # 5 minutes
+      sshKeyPath: "${SSH_KEY_PATH:-~/.ssh/id_rsa}"
+      githubToken: "${GITHUB_TOKEN:-}"
+      gitlabToken: "${GITLAB_TOKEN:-}"
+      maxRepoSize: 104857600  # 100MB
+    health:
+      endpoint: "/health"
+      interval: 10000
+      timeout: 5000
+      retries: 3
+    metrics:
+      enabled: true
+      interval: 60000
+  
+  # Vector Service (Embeddings & Semantic Search)
+  vector:
+    enabled: true
+    host: "${MCP_VECTOR_HOST:-localhost}"
+    port: "${MCP_VECTOR_PORT:-8085}"
+    protocol: "ws"
+    dependencies: ["memory"]
+    config:
+      defaultModel: "text-embedding-3-small"
+      dimensions: 1536
+      metric: "cosine"
+      maxVectors: 100000
+      indexType: "hnsw"
+      hnswConfig:
+        m: 16
+        efConstruction: 200
+        ef: 50
+      cacheEnabled: true
+      cacheSize: 1000
+    health:
+      endpoint: "/health"
+      interval: 10000
+      timeout: 5000
+      retries: 3
+    metrics:
+      enabled: true
+      interval: 60000
+
+# UI Configuration
+ui:
+  enabled: true
+  host: "${UI_HOST:-localhost}"
+  port: "${UI_PORT:-3000}"
+  baseUrl: "${UI_BASE_URL:-http://localhost:3000}"
+  
+  # API Configuration
+  api:
+    prefix: "/api"
+    version: "v1"
+    rateLimit:
+      windowMs: 60000
+      max: 100
+    cors:
+      enabled: true
+      origins:
+        - "http://localhost:3000"
+        - "https://sophia.ai"
+      credentials: true
+  
+  # Session Configuration
+  session:
+    secret: "${SESSION_SECRET:-sophia-intel-ai-secret-key}"
+    maxAge: 86400000  # 24 hours
+    secure: "${NODE_ENV:-development}"
+    sameSite: "lax"
+  
+  # WebSocket Configuration
+  websocket:
+    enabled: true
+    path: "/ws"
+    pingInterval: 30000
+    pongTimeout: 10000
+    maxConnections: 100
+
+# Monitoring & Observability
+monitoring:
+  enabled: true
+  
+  # Health Dashboard
+  dashboard:
+    enabled: true
+    refreshInterval: 5000
+    showMetrics: true
+    showLogs: true
+    alertsEnabled: true
+  
+  # Metrics Collection
+  metrics:
+    enabled: true
+    provider: "prometheus"
+    endpoint: "/metrics"
+    interval: 60000
+    aggregation:
+      - "p50"
+      - "p90"
+      - "p95"
+      - "p99"
+  
+  # Distributed Tracing
+  tracing:
+    enabled: true
+    provider: "opentelemetry"
+    endpoint: "${OTEL_ENDPOINT:-http://localhost:4318}"
+    serviceName: "sophia-intel-ai"
+    sampleRate: 0.1
+    propagators:
+      - "tracecontext"
+      - "baggage"
+  
+  # Logging
+  logging:
+    level: "${LOG_LEVEL:-info}"
+    format: "${LOG_FORMAT:-json}"
+    transports:
+      - type: "console"
+        level: "info"
+      - type: "file"
+        level: "debug"
+        filename: "logs/sophia.log"
+        maxSize: "10m"
+        maxFiles: 10
+      - type: "redis"
+        level: "warn"
+        key: "sophia:logs"
+        ttl: 86400
+  
+  # Alerting
+  alerting:
+    enabled: true
+    channels:
+      - type: "email"
+        enabled: false
+        smtp:
+          host: "${SMTP_HOST:-}"
+          port: "${SMTP_PORT:-587}"
+          secure: true
+          auth:
+            user: "${SMTP_USER:-}"
+            pass: "${SMTP_PASS:-}"
+        recipients:
+          - "admin@sophia.ai"
+      - type: "slack"
+        enabled: false
+        webhookUrl: "${SLACK_WEBHOOK_URL:-}"
+        channel: "#sophia-alerts"
+      - type: "webhook"
+        enabled: true
+        url: "${ALERT_WEBHOOK_URL:-http://localhost:3000/api/alerts}"
+        headers:
+          Authorization: "Bearer ${ALERT_TOKEN:-}"
+
+# Security Configuration
+security:
+  # Authentication
+  auth:
+    enabled: true
+    provider: "jwt"
+    jwt:
+      secret: "${JWT_SECRET:-sophia-intel-ai-jwt-secret}"
+      expiresIn: "24h"
+      algorithm: "HS256"
+    oauth:
+      enabled: false
+      providers:
+        - name: "github"
+          clientId: "${GITHUB_CLIENT_ID:-}"
+          clientSecret: "${GITHUB_CLIENT_SECRET:-}"
+        - name: "google"
+          clientId: "${GOOGLE_CLIENT_ID:-}"
+          clientSecret: "${GOOGLE_CLIENT_SECRET:-}"
+  
+  # Rate Limiting
+  rateLimit:
+    enabled: true
+    windowMs: 60000
+    max: 100
+    skipSuccessfulRequests: false
+    standardHeaders: true
+    legacyHeaders: false
+  
+  # CORS
+  cors:
+    enabled: true
+    origins:
+      - "http://localhost:3000"
+      - "https://sophia.ai"
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowedHeaders:
+      - "Content-Type"
+      - "Authorization"
+      - "X-Request-ID"
+    exposedHeaders:
+      - "X-Request-ID"
+      - "X-Response-Time"
+    credentials: true
+    maxAge: 86400
+  
+  # Content Security Policy
+  csp:
+    enabled: true
+    directives:
+      defaultSrc: ["'self'"]
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+      styleSrc: ["'self'", "'unsafe-inline'"]
+      imgSrc: ["'self'", "data:", "https:"]
+      fontSrc: ["'self'", "data:"]
+      connectSrc: ["'self'", "ws://localhost:*", "wss://localhost:*"]
+  
+  # Encryption
+  encryption:
+    algorithm: "aes-256-gcm"
+    key: "${ENCRYPTION_KEY:-sophia-intel-ai-encryption-key}"
+    iv: "${ENCRYPTION_IV:-sophia-intel-iv}"
+
+# Deployment Configuration
+deployment:
+  # Auto-scaling
+  scaling:
+    enabled: false
+    minInstances: 1
+    maxInstances: 10
+    targetCPU: 70
+    targetMemory: 80
+  
+  # Health Checks
+  healthCheck:
+    path: "/health"
+    interval: 30000
+    timeout: 10000
+    unhealthyThreshold: 3
+    healthyThreshold: 2
+  
+  # Graceful Shutdown
+  gracefulShutdown:
+    enabled: true
+    timeout: 30000
+    signals:
+      - "SIGTERM"
+      - "SIGINT"
+  
+  # Process Management
+  process:
+    name: "sophia-intel-ai"
+    user: "${PROCESS_USER:-sophia}"
+    group: "${PROCESS_GROUP:-sophia}"
+    workingDirectory: "/opt/sophia"
+    logDirectory: "/var/log/sophia"
+    pidFile: "/var/run/sophia.pid"
+
+# Development Configuration
+development:
+  # Hot Reload
+  hotReload:
+    enabled: true
+    watch:
+      - "src/**/*.ts"
+      - "src/**/*.tsx"
+      - "config/**/*.yaml"
+    ignore:
+      - "node_modules"
+      - "dist"
+      - "logs"
+  
+  # Debug Tools
+  debug:
+    enabled: true
+    inspector:
+      enabled: true
+      port: 9229
+      host: "localhost"
+    profiling:
+      enabled: false
+      outputDir: "profiles"
+  
+  # Mock Services
+  mocks:
+    enabled: false
+    services:
+      - "memory"
+      - "filesystem"
+      - "git"
+      - "vector"
+
+# Feature Flags
+features:
+  # Core Features
+  knowledgeGraph: true
+  semanticSearch: true
+  codeAnalysis: true
+  gitIntegration: true
+  
+  # Advanced Features
+  distributedTracing: true
+  circuitBreaker: true
+  rateLimit: true
+  caching: true
+  
+  # Experimental Features
+  autoIndexing: false
+  mlPipeline: false
+  quantumProcessor: false
+  
+  # UI Features
+  darkMode: true
+  advancedEditor: true
+  collaborativeEditing: false
+  realTimeSync: true
+
+# Integration Points
+integrations:
+  # External APIs
+  apis:
+    openai:
+      enabled: true
+      apiKey: "${OPENAI_API_KEY:-}"
+      organization: "${OPENAI_ORG:-}"
+      baseUrl: "https://api.openai.com/v1"
+    anthropic:
+      enabled: true
+      apiKey: "${ANTHROPIC_API_KEY:-}"
+      baseUrl: "https://api.anthropic.com"
+  
+  # Databases
+  databases:
+    postgres:
+      enabled: false
+      connectionString: "${DATABASE_URL:-}"
+      pool:
+        min: 2
+        max: 10
+        idleTimeout: 10000
+    mongodb:
+      enabled: false
+      uri: "${MONGODB_URI:-}"
+      options:
+        useNewUrlParser: true
+        useUnifiedTopology: true
+  
+  # Message Queues
+  messageQueues:
+    rabbitmq:
+      enabled: false
+      url: "${RABBITMQ_URL:-}"
+      exchanges:
+        - name: "sophia.events"
+          type: "topic"
+          durable: true
+    kafka:
+      enabled: false
+      brokers: "${KAFKA_BROKERS:-}"
+      clientId: "sophia-intel-ai"
+      groupId: "sophia-consumers"
+
+# Maintenance Mode
+maintenance:
+  enabled: false
+  message: "Sophia Intel AI is currently undergoing maintenance. Please check back later."
+  allowedIPs:
+    - "127.0.0.1"
+    - "::1"
+  bypassToken: "${MAINTENANCE_BYPASS_TOKEN:-}"
+
+# Backup & Recovery
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention:
+    daily: 7
+    weekly: 4
+    monthly: 3
+  destinations:
+    - type: "local"
+      path: "/backup/sophia"
+    - type: "s3"
+      bucket: "${BACKUP_S3_BUCKET:-}"
+      region: "${AWS_REGION:-us-west-2}"
+      accessKeyId: "${AWS_ACCESS_KEY_ID:-}"
+      secretAccessKey: "${AWS_SECRET_ACCESS_KEY:-}"
+  encryption:
+    enabled: true
+    algorithm: "aes-256-cbc"
+    key: "${BACKUP_ENCRYPTION_KEY:-}"
+
+# Performance Tuning
+performance:
+  # Connection Pooling
+  connectionPool:
+    min: 10
+    max: 100
+    acquireTimeout: 30000
+    createTimeout: 30000
+    destroyTimeout: 5000
+    idleTimeout: 30000
+  
+  # Caching Strategy
+  cache:
+    provider: "redis"
+    ttl:
+      default: 3600
+      query: 300
+      static: 86400
+    maxSize: 1000
+    strategy: "lru"
+  
+  # Request Optimization
+  optimization:
+    compression: true
+    minification: true
+    bundling: true
+    lazyLoading: true
+    prefetching: true
+  
+  # Resource Limits
+  limits:
+    maxRequestSize: "10mb"
+    maxUploadSize: "100mb"
+    maxConnections: 1000
+    maxConcurrentRequests: 100
+    requestTimeout: 30000
+    keepAliveTimeout: 120000

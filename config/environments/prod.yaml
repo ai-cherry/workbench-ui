@@ -1,0 +1,492 @@
+# Production Environment Configuration
+# Overrides for sophia.config.yaml in production
+
+system:
+  environment: "production"
+  debug: false
+  logLevel: "warn"
+
+services:
+  redis:
+    host: "${REDIS_HOST:-redis-prod.sophia.internal}"
+    port: 6379
+    password: "${REDIS_PASSWORD}"
+    db: 0
+    maxReconnectAttempts: 10
+    reconnectInterval: 5000
+    keyPrefix: "sophia:prod:"
+    cluster:
+      enabled: true
+      nodes:
+        - "redis-01.sophia.internal:6379"
+        - "redis-02.sophia.internal:6379"
+        - "redis-03.sophia.internal:6379"
+  
+  memory:
+    host: "${MCP_MEMORY_HOST:-memory-prod.sophia.internal}"
+    port: 8081
+    config:
+      maxEntities: 10000
+      maxRelations: 50000
+      cacheEnabled: true
+      persistenceEnabled: true
+      backupInterval: 900000  # 15 minutes
+      replicationEnabled: true
+      replicas: 3
+  
+  filesystem:
+    host: "${MCP_FILESYSTEM_HOST:-filesystem-prod.sophia.internal}"
+    port: 8082
+    config:
+      rootPath: "/opt/sophia/workspace"
+      allowedPaths:
+        - "/opt/sophia/workspace"
+        - "/opt/sophia/data"
+        - "/opt/sophia/shared"
+      maxFileSize: 52428800  # 50MB
+      watchEnabled: true
+      indexingEnabled: true
+      cacheSymbols: true
+      distributedCache: true
+  
+  git:
+    host: "${MCP_GIT_HOST:-git-prod.sophia.internal}"
+    port: 8084
+    config:
+      autoFetch: true
+      fetchInterval: 300000  # 5 minutes
+      maxRepoSize: 524288000  # 500MB
+      mirrorEnabled: true
+      mirrorNodes:
+        - "git-mirror-01.sophia.internal"
+        - "git-mirror-02.sophia.internal"
+  
+  vector:
+    host: "${MCP_VECTOR_HOST:-vector-prod.sophia.internal}"
+    port: 8085
+    config:
+      maxVectors: 100000
+      cacheSize: 1000
+      hnswConfig:
+        m: 32
+        efConstruction: 400
+        ef: 100
+      sharding:
+        enabled: true
+        shards: 4
+
+ui:
+  host: "0.0.0.0"
+  port: 3000
+  baseUrl: "https://sophia.ai"
+  
+  api:
+    rateLimit:
+      windowMs: 60000
+      max: 100
+      keyGenerator: "user-ip"
+    cors:
+      enabled: true
+      origins:
+        - "https://sophia.ai"
+        - "https://www.sophia.ai"
+        - "https://app.sophia.ai"
+        - "https://admin.sophia.ai"
+      credentials: true
+  
+  session:
+    secure: true
+    sameSite: "strict"
+    domain: ".sophia.ai"
+    httpOnly: true
+    maxAge: 86400000  # 24 hours
+  
+  websocket:
+    enabled: true
+    path: "/ws"
+    maxConnections: 1000
+    pingInterval: 30000
+    loadBalancer: true
+
+monitoring:
+  dashboard:
+    enabled: true
+    refreshInterval: 30000
+    showMetrics: true
+    showLogs: false  # Use external log aggregator
+    alertsEnabled: true
+  
+  metrics:
+    enabled: true
+    provider: "prometheus"
+    endpoint: "/metrics"
+    interval: 60000
+    retention: 2592000  # 30 days
+  
+  tracing:
+    enabled: true
+    provider: "opentelemetry"
+    endpoint: "${OTEL_ENDPOINT:-http://otel-collector-prod:4318}"
+    sampleRate: 0.1  # Sample 10% of requests
+    serviceName: "sophia-intel-ai-prod"
+  
+  logging:
+    level: "warn"
+    format: "json"
+    transports:
+      - type: "console"
+        level: "error"
+      - type: "file"
+        level: "warn"
+        filename: "/var/log/sophia/prod.log"
+        maxSize: "100m"
+        maxFiles: 30
+        compress: true
+      - type: "syslog"
+        level: "warn"
+        host: "syslog.sophia.internal"
+        port: 514
+        protocol: "tcp"
+      - type: "elasticsearch"
+        level: "info"
+        node: "${ELASTICSEARCH_URL:-http://elasticsearch-prod:9200}"
+        index: "sophia-logs-prod"
+  
+  alerting:
+    enabled: true
+    channels:
+      - type: "email"
+        enabled: true
+        smtp:
+          host: "${SMTP_HOST}"
+          port: 587
+          secure: true
+          auth:
+            user: "${SMTP_USER}"
+            pass: "${SMTP_PASS}"
+        recipients:
+          - "ops@sophia.ai"
+          - "oncall@sophia.ai"
+        priority:
+          critical: ["ops@sophia.ai", "oncall@sophia.ai", "cto@sophia.ai"]
+          high: ["ops@sophia.ai", "oncall@sophia.ai"]
+          medium: ["ops@sophia.ai"]
+      - type: "slack"
+        enabled: true
+        webhookUrl: "${SLACK_WEBHOOK_URL_PROD}"
+        channel: "#sophia-prod-alerts"
+        criticalChannel: "#sophia-incidents"
+      - type: "pagerduty"
+        enabled: true
+        serviceKey: "${PAGERDUTY_SERVICE_KEY}"
+        severity:
+          critical: "critical"
+          high: "error"
+          medium: "warning"
+          low: "info"
+
+security:
+  auth:
+    enabled: true
+    provider: "jwt"
+    jwt:
+      secret: "${JWT_SECRET_PROD}"
+      expiresIn: "24h"
+      algorithm: "RS256"
+      publicKey: "${JWT_PUBLIC_KEY}"
+      privateKey: "${JWT_PRIVATE_KEY}"
+    oauth:
+      enabled: true
+      providers:
+        - name: "github"
+          clientId: "${GITHUB_CLIENT_ID_PROD}"
+          clientSecret: "${GITHUB_CLIENT_SECRET_PROD}"
+        - name: "google"
+          clientId: "${GOOGLE_CLIENT_ID_PROD}"
+          clientSecret: "${GOOGLE_CLIENT_SECRET_PROD}"
+        - name: "microsoft"
+          clientId: "${MICROSOFT_CLIENT_ID_PROD}"
+          clientSecret: "${MICROSOFT_CLIENT_SECRET_PROD}"
+    mfa:
+      enabled: true
+      required: false
+      methods: ["totp", "sms", "email"]
+  
+  rateLimit:
+    enabled: true
+    windowMs: 60000
+    max: 100
+    skipSuccessfulRequests: false
+    standardHeaders: true
+    store: "redis"  # Use Redis for distributed rate limiting
+  
+  cors:
+    enabled: true
+    origins:
+      - "https://sophia.ai"
+      - "https://www.sophia.ai"
+      - "https://app.sophia.ai"
+    credentials: true
+    maxAge: 86400
+  
+  csp:
+    enabled: true
+    reportUri: "https://csp-report.sophia.ai/report"
+    reportOnly: false
+    directives:
+      defaultSrc: ["'self'"]
+      scriptSrc: ["'self'", "https://cdn.sophia.ai"]
+      styleSrc: ["'self'", "https://cdn.sophia.ai"]
+      imgSrc: ["'self'", "data:", "https:"]
+      fontSrc: ["'self'", "https://fonts.gstatic.com"]
+      connectSrc: ["'self'", "wss://sophia.ai", "https://*.sophia.ai"]
+      frameAncestors: ["'none'"]
+      baseUri: ["'self'"]
+      formAction: ["'self'"]
+  
+  encryption:
+    algorithm: "aes-256-gcm"
+    key: "${ENCRYPTION_KEY_PROD}"
+    iv: "${ENCRYPTION_IV_PROD}"
+    rotationEnabled: true
+    rotationInterval: 2592000000  # 30 days
+  
+  firewall:
+    enabled: true
+    rules:
+      - type: "ip-whitelist"
+        ips: "${ALLOWED_IPS}"
+      - type: "geo-blocking"
+        allowedCountries: ["US", "CA", "GB", "EU"]
+      - type: "user-agent"
+        blockedAgents: ["bot", "crawler", "spider"]
+
+deployment:
+  scaling:
+    enabled: true
+    minInstances: 3
+    maxInstances: 20
+    targetCPU: 60
+    targetMemory: 70
+    scaleUpCooldown: 60
+    scaleDownCooldown: 300
+  
+  healthCheck:
+    path: "/health"
+    interval: 10000
+    timeout: 5000
+    unhealthyThreshold: 2
+    healthyThreshold: 3
+  
+  gracefulShutdown:
+    enabled: true
+    timeout: 60000
+    drainConnections: true
+  
+  loadBalancing:
+    enabled: true
+    algorithm: "least-connections"
+    healthCheck: true
+    stickySession: true
+    sessionAffinity: "client-ip"
+  
+  process:
+    name: "sophia-intel-ai-prod"
+    user: "sophia"
+    group: "sophia"
+    workingDirectory: "/opt/sophia"
+    logDirectory: "/var/log/sophia"
+    pidFile: "/var/run/sophia.pid"
+    maxMemory: "4G"
+    maxCpu: 4
+
+development:
+  hotReload:
+    enabled: false
+  debug:
+    enabled: false
+  mocks:
+    enabled: false
+
+features:
+  # Core Features
+  knowledgeGraph: true
+  semanticSearch: true
+  codeAnalysis: true
+  gitIntegration: true
+  
+  # Advanced Features
+  distributedTracing: true
+  circuitBreaker: true
+  rateLimit: true
+  caching: true
+  
+  # Production Features
+  autoIndexing: true
+  mlPipeline: true
+  quantumProcessor: false  # Not ready for production
+  
+  # UI Features
+  darkMode: true
+  advancedEditor: true
+  collaborativeEditing: true
+  realTimeSync: true
+  
+  # Production-specific
+  analyticsTracking: true
+  abTesting: true
+  featureFlags: true
+
+integrations:
+  apis:
+    openai:
+      enabled: true
+      apiKey: "${OPENAI_API_KEY_PROD}"
+      organization: "${OPENAI_ORG_PROD}"
+      maxRetries: 3
+      timeout: 30000
+    anthropic:
+      enabled: true
+      apiKey: "${ANTHROPIC_API_KEY_PROD}"
+      maxRetries: 3
+      timeout: 30000
+  
+  databases:
+    postgres:
+      enabled: true
+      connectionString: "${DATABASE_URL_PROD}"
+      ssl: true
+      pool:
+        min: 10
+        max: 50
+        idleTimeout: 30000
+        connectionTimeout: 5000
+      replicas:
+        - "${DATABASE_REPLICA_1}"
+        - "${DATABASE_REPLICA_2}"
+    
+    mongodb:
+      enabled: true
+      uri: "${MONGODB_URI_PROD}"
+      options:
+        maxPoolSize: 50
+        minPoolSize: 10
+        retryWrites: true
+        w: "majority"
+        readPreference: "primaryPreferred"
+  
+  messageQueues:
+    rabbitmq:
+      enabled: true
+      url: "${RABBITMQ_URL_PROD}"
+      cluster: true
+      exchanges:
+        - name: "sophia.events.prod"
+          type: "topic"
+          durable: true
+          autoDelete: false
+    
+    kafka:
+      enabled: true
+      brokers: "${KAFKA_BROKERS_PROD}"
+      clientId: "sophia-intel-ai-prod"
+      groupId: "sophia-consumers-prod"
+      ssl: true
+      sasl:
+        mechanism: "plain"
+        username: "${KAFKA_USERNAME}"
+        password: "${KAFKA_PASSWORD}"
+
+performance:
+  connectionPool:
+    min: 20
+    max: 100
+    acquireTimeout: 10000
+    createTimeout: 10000
+    destroyTimeout: 5000
+    idleTimeout: 30000
+  
+  cache:
+    provider: "redis"
+    ttl:
+      default: 3600     # 1 hour
+      query: 300        # 5 minutes
+      static: 86400     # 24 hours
+    maxSize: 10000
+    strategy: "lru"
+    distributed: true
+    compression: true
+  
+  optimization:
+    compression: true
+    minification: true
+    bundling: true
+    sourceMap: false
+    lazyLoading: true
+    prefetching: true
+    cdn:
+      enabled: true
+      url: "https://cdn.sophia.ai"
+      assets: ["js", "css", "images", "fonts"]
+  
+  limits:
+    maxRequestSize: "10mb"
+    maxUploadSize: "100mb"
+    maxConnections: 10000
+    maxConcurrentRequests: 1000
+    requestTimeout: 30000
+    keepAliveTimeout: 120000
+
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention:
+    daily: 7
+    weekly: 4
+    monthly: 6
+    yearly: 2
+  destinations:
+    - type: "s3"
+      bucket: "${BACKUP_S3_BUCKET_PROD}"
+      region: "${AWS_REGION:-us-west-2}"
+      accessKeyId: "${AWS_ACCESS_KEY_ID_PROD}"
+      secretAccessKey: "${AWS_SECRET_ACCESS_KEY_PROD}"
+      storageClass: "GLACIER"
+      prefix: "prod/"
+    - type: "gcs"
+      bucket: "${BACKUP_GCS_BUCKET_PROD}"
+      projectId: "${GCP_PROJECT_ID}"
+      keyFile: "/opt/sophia/gcp-key.json"
+  encryption:
+    enabled: true
+    algorithm: "aes-256-cbc"
+    key: "${BACKUP_ENCRYPTION_KEY_PROD}"
+  verification:
+    enabled: true
+    schedule: "0 4 * * 0"  # Weekly on Sunday at 4 AM
+
+maintenance:
+  enabled: false
+  message: "Sophia Intel AI is currently undergoing scheduled maintenance. We'll be back shortly."
+  allowedIPs:
+    - "${ADMIN_IP_RANGE}"
+  bypassToken: "${MAINTENANCE_BYPASS_TOKEN_PROD}"
+  schedule:
+    enabled: true
+    windows:
+      - day: "Sunday"
+        startHour: 2
+        duration: 2  # hours
+
+disaster_recovery:
+  enabled: true
+  rpo: 3600  # Recovery Point Objective: 1 hour
+  rto: 14400  # Recovery Time Objective: 4 hours
+  failover:
+    automatic: true
+    healthCheckInterval: 60000
+    failoverThreshold: 3
+    regions:
+      primary: "us-west-2"
+      secondary: "us-east-1"
+      tertiary: "eu-west-1"

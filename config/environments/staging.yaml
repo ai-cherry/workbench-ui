@@ -1,0 +1,320 @@
+# Staging Environment Configuration
+# Overrides for sophia.config.yaml in staging
+
+system:
+  environment: "staging"
+  debug: false
+  logLevel: "info"
+
+services:
+  redis:
+    host: "${REDIS_HOST:-redis-staging.sophia.internal}"
+    port: 6379
+    password: "${REDIS_PASSWORD}"
+    db: 1
+    maxReconnectAttempts: 5
+    reconnectInterval: 3000
+  
+  memory:
+    host: "${MCP_MEMORY_HOST:-memory-staging.sophia.internal}"
+    port: 8081
+    config:
+      maxEntities: 5000
+      maxRelations: 25000
+      cacheEnabled: true
+      persistenceEnabled: true
+      backupInterval: 1800000  # 30 minutes
+  
+  filesystem:
+    host: "${MCP_FILESYSTEM_HOST:-filesystem-staging.sophia.internal}"
+    port: 8082
+    config:
+      rootPath: "/opt/sophia/workspace"
+      allowedPaths:
+        - "/opt/sophia/workspace"
+        - "/opt/sophia/data"
+      maxFileSize: 20971520  # 20MB
+      watchEnabled: true
+      indexingEnabled: true
+  
+  git:
+    host: "${MCP_GIT_HOST:-git-staging.sophia.internal}"
+    port: 8084
+    config:
+      autoFetch: true
+      fetchInterval: 600000  # 10 minutes
+      maxRepoSize: 209715200  # 200MB
+  
+  vector:
+    host: "${MCP_VECTOR_HOST:-vector-staging.sophia.internal}"
+    port: 8085
+    config:
+      maxVectors: 50000
+      cacheSize: 500
+      hnswConfig:
+        m: 16
+        efConstruction: 200
+        ef: 50
+
+ui:
+  host: "0.0.0.0"
+  port: 3000
+  baseUrl: "https://staging.sophia.ai"
+  
+  api:
+    rateLimit:
+      windowMs: 60000
+      max: 500
+    cors:
+      enabled: true
+      origins:
+        - "https://staging.sophia.ai"
+        - "https://staging-admin.sophia.ai"
+      credentials: true
+  
+  session:
+    secure: true
+    sameSite: "strict"
+    domain: ".sophia.ai"
+  
+  websocket:
+    maxConnections: 500
+    pingInterval: 30000
+
+monitoring:
+  dashboard:
+    enabled: true
+    refreshInterval: 10000
+    showMetrics: true
+    showLogs: true
+    alertsEnabled: true
+  
+  metrics:
+    enabled: true
+    interval: 60000
+  
+  tracing:
+    enabled: true
+    sampleRate: 0.5  # Sample 50% of requests
+    endpoint: "${OTEL_ENDPOINT:-http://otel-collector-staging:4318}"
+  
+  logging:
+    level: "info"
+    format: "json"
+    transports:
+      - type: "console"
+        level: "info"
+      - type: "file"
+        level: "info"
+        filename: "/var/log/sophia/staging.log"
+        maxSize: "20m"
+        maxFiles: 20
+      - type: "redis"
+        level: "warn"
+        key: "sophia:logs:staging"
+        ttl: 172800  # 2 days
+  
+  alerting:
+    enabled: true
+    channels:
+      - type: "slack"
+        enabled: true
+        webhookUrl: "${SLACK_WEBHOOK_URL_STAGING}"
+        channel: "#sophia-staging-alerts"
+      - type: "webhook"
+        enabled: true
+        url: "${ALERT_WEBHOOK_URL:-https://staging-alerts.sophia.ai/webhook}"
+
+security:
+  auth:
+    enabled: true
+    jwt:
+      secret: "${JWT_SECRET_STAGING}"
+      expiresIn: "12h"
+    oauth:
+      enabled: true
+      providers:
+        - name: "github"
+          clientId: "${GITHUB_CLIENT_ID_STAGING}"
+          clientSecret: "${GITHUB_CLIENT_SECRET_STAGING}"
+  
+  rateLimit:
+    enabled: true
+    windowMs: 60000
+    max: 500
+    skipSuccessfulRequests: true
+  
+  cors:
+    enabled: true
+    origins:
+      - "https://staging.sophia.ai"
+      - "https://staging-admin.sophia.ai"
+    credentials: true
+    maxAge: 3600
+  
+  csp:
+    enabled: true
+    reportUri: "/api/csp-report"
+    directives:
+      defaultSrc: ["'self'"]
+      scriptSrc: ["'self'", "'unsafe-inline'"]
+      styleSrc: ["'self'", "'unsafe-inline'"]
+      imgSrc: ["'self'", "data:", "https:"]
+      connectSrc: ["'self'", "wss://staging.sophia.ai", "https://*.sophia.ai"]
+  
+  encryption:
+    key: "${ENCRYPTION_KEY_STAGING}"
+    iv: "${ENCRYPTION_IV_STAGING}"
+
+deployment:
+  scaling:
+    enabled: true
+    minInstances: 2
+    maxInstances: 5
+    targetCPU: 70
+    targetMemory: 75
+  
+  healthCheck:
+    path: "/health"
+    interval: 30000
+    timeout: 10000
+    unhealthyThreshold: 3
+    healthyThreshold: 2
+  
+  gracefulShutdown:
+    enabled: true
+    timeout: 30000
+  
+  process:
+    name: "sophia-intel-ai-staging"
+    user: "sophia-staging"
+    group: "sophia-staging"
+    workingDirectory: "/opt/sophia-staging"
+    logDirectory: "/var/log/sophia-staging"
+    pidFile: "/var/run/sophia-staging.pid"
+
+development:
+  hotReload:
+    enabled: false
+  
+  debug:
+    enabled: false
+    inspector:
+      enabled: false
+  
+  mocks:
+    enabled: false
+
+features:
+  # Core Features
+  knowledgeGraph: true
+  semanticSearch: true
+  codeAnalysis: true
+  gitIntegration: true
+  
+  # Advanced Features
+  distributedTracing: true
+  circuitBreaker: true
+  rateLimit: true
+  caching: true
+  
+  # Experimental Features (testing in staging)
+  autoIndexing: true
+  mlPipeline: true
+  quantumProcessor: false
+  
+  # UI Features
+  darkMode: true
+  advancedEditor: true
+  collaborativeEditing: true
+  realTimeSync: true
+
+integrations:
+  apis:
+    openai:
+      enabled: true
+      apiKey: "${OPENAI_API_KEY_STAGING}"
+      organization: "${OPENAI_ORG_STAGING}"
+    anthropic:
+      enabled: true
+      apiKey: "${ANTHROPIC_API_KEY_STAGING}"
+  
+  databases:
+    postgres:
+      enabled: true
+      connectionString: "${DATABASE_URL_STAGING}"
+      pool:
+        min: 5
+        max: 20
+        idleTimeout: 30000
+    
+    mongodb:
+      enabled: true
+      uri: "${MONGODB_URI_STAGING}"
+      options:
+        maxPoolSize: 20
+        minPoolSize: 5
+  
+  messageQueues:
+    rabbitmq:
+      enabled: true
+      url: "${RABBITMQ_URL_STAGING}"
+      exchanges:
+        - name: "sophia.events.staging"
+          type: "topic"
+          durable: true
+
+performance:
+  connectionPool:
+    min: 5
+    max: 50
+    acquireTimeout: 30000
+    idleTimeout: 60000
+  
+  cache:
+    ttl:
+      default: 1800  # 30 minutes
+      query: 180    # 3 minutes
+      static: 43200  # 12 hours
+    maxSize: 500
+  
+  optimization:
+    compression: true
+    minification: true
+    bundling: true
+    sourceMap: false
+    lazyLoading: true
+    prefetching: true
+  
+  limits:
+    maxRequestSize: "10mb"
+    maxUploadSize: "50mb"
+    maxConnections: 500
+    maxConcurrentRequests: 50
+    requestTimeout: 30000
+
+backup:
+  enabled: true
+  schedule: "0 */6 * * *"  # Every 6 hours
+  retention:
+    daily: 3
+    weekly: 2
+    monthly: 1
+  destinations:
+    - type: "s3"
+      bucket: "${BACKUP_S3_BUCKET_STAGING}"
+      region: "${AWS_REGION:-us-west-2}"
+      accessKeyId: "${AWS_ACCESS_KEY_ID_STAGING}"
+      secretAccessKey: "${AWS_SECRET_ACCESS_KEY_STAGING}"
+      prefix: "staging/"
+  encryption:
+    enabled: true
+    key: "${BACKUP_ENCRYPTION_KEY_STAGING}"
+
+maintenance:
+  enabled: false
+  message: "Sophia Intel AI Staging is currently undergoing maintenance."
+  allowedIPs:
+    - "10.0.0.0/8"
+    - "172.16.0.0/12"
+  bypassToken: "${MAINTENANCE_BYPASS_TOKEN_STAGING}"
