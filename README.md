@@ -112,6 +112,20 @@ Backend notes:
 - CORS allows `http://localhost:3000` by default.
 - In production, set secrets and consider enabling `RESTRICT_MCP_PROXY` and `SAFE_COMMANDS_ONLY`.
 
+## 🛳️ GitHub Workflow (Simple)
+
+For day-to-day work, use SSH and a single sync command:
+
+1. Ensure your remote is SSH (it already is):
+   - `git remote -v` → `origin git@github.com:ai-cherry/workbench-ui.git`
+2. Push changes using the helper:
+   - `./scripts/git-sync.sh "feat: message"`
+3. CI runs type-check/lint/build (frontend) and backend tests automatically.
+
+Notes:
+- `.env.local` and `.roo/mcp.json` are gitignored; keep secrets there locally.
+- For managed tokens or GitHub App, see `docs/GITHUB_APP_SETUP_GUIDE.md` (optional).
+
  
 
 ### Using Cursor with MCP
