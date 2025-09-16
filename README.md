@@ -141,8 +141,24 @@ Quick commands to run everything locally:
   - Open http://localhost:3000/agents
   - Login (dev defaults): `ceo` / `payready2025`
   - Control tab: run single agent; pause/resume; retry; clear; copy final
-  - Workflows tab: select and run workflows from `agno/config.yaml`
-  - Health tab: backend + MCP statuses
+- Workflows tab: select and run workflows from `agno/config.yaml`
+- Health tab: backend + MCP statuses
+
+
+## 🛫 Fly.io Deployment Overview
+
+Two Fly.io apps back the system:
+
+| Service | Fly config | Deploy command |
+|---------|------------|----------------|
+| Frontend (Next.js) | `./fly.toml` | `fly deploy --config fly.toml` (from repo root) |
+| Backend (FastAPI) | `./backend/fly.toml` | `fly deploy --config backend/fly.toml` (from repo root) |
+
+Tips:
+
+- `Dockerfile.frontend` powers the frontend build. Update environment defaults (e.g. `SOPHIA_API_URL`) there or via `fly secrets`.
+- The backend reuses the same `backend/fly.toml` documented in `backend/README.md`; run deployments from the repo root to keep relative paths simple.
+- Always authenticate first: `fly auth login`, then target the correct app with `--app` if you override the name in the config.
 
 
 ## 🛳️ GitHub Workflow (Simple)
@@ -156,14 +172,14 @@ For day-to-day work, use SSH and a single sync command:
 3. CI runs type-check/lint/build (frontend) and backend tests automatically.
 
 Notes:
-- `.env.local` and `.roo/mcp.json` are gitignored; keep secrets there locally.
+- `.env.local` and the generated `.roo/mcp.json` (from `.roo/mcp.json.template`) are gitignored; keep secrets there locally.
 - For managed tokens or GitHub App, see `docs/GITHUB_APP_SETUP_GUIDE.md` (optional).
 
 ## 🔑 Secrets & Keys (Simple)
 
 - Local dev:
   - Put secrets in `.env.local` (gitignored). See `.env.example`.
-  - Generate local MCP config: `./scripts/mcp-config-generate.sh` → writes `.roo/mcp.json` (gitignored).
+- Generate local MCP config: `./scripts/mcp-config-generate.sh` → writes `.roo/mcp.json` next to `.roo/mcp.json.template` (both stay outside version control).
   - Quick check for missing keys: `./scripts/secrets-check.sh` (non-blocking).
 - Cloud:
   - Use provider secrets (Fly: `fly secrets set …`, GitHub Actions secrets).
