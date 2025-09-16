@@ -6,8 +6,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev -p 3000",
+    "dev:preflight": "bash scripts/dev-preflight.sh",
+    "dev:all": "bash scripts/dev-start.sh",
     "build": "next build",
     "start": "next start -p 3000",
+    "clean": "rm -rf .next .pytest_cache logs && echo 'Cleaned .next and caches'",
     "lint": "next lint",
     "test": "jest --watch",
     "test:ci": "jest --ci",
