@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "github": {
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "apify": {
+      "env": {
+        "APIFY_API_TOKEN": "${APIFY_API_TOKEN}"
+      }
+    },
+    "brave-search": {
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    },
+    "exa": {
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      }
+    }
+  }
+}
+
