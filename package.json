@@ -25,9 +25,9 @@
     "agno:test": "jest --testPathPattern=agno --coverage",
     "agno:health": "tsx agno/scripts/health.ts",
     "mcp:tinybird": "node mcp/tinybird-server.js",
-    "codex:chat": "codex chat -m gpt-5-codex",
-    "codex:agent": "codex agent -m gpt-5-codex --dir .",
-    "codex:review": "codex review --model gpt-5-codex --format markdown",
+    "codex:chat": "codex -m gpt-5-codex",
+    "codex:agent": "codex -m gpt-5-codex -C .",
+    "codex:review": "codex exec -m gpt-5-codex -C . --sandbox read-only --full-auto 'Repository review: produce a short markdown summary of risks, issues, and suggestions based on your default heuristics. Output as markdown.'",
     "codex:review:local": "codex exec -m gpt-5-codex -C . --sandbox read-only --full-auto 'Repository review: produce a short markdown summary of risks, issues, and suggestions based on your default heuristics. If file access is restricted, just confirm connectivity.'"
   },
   "dependencies": {

@@ -87,29 +87,28 @@ print_success "Directory structure created"
 
 # Check for .env.local
 if [ ! -f .env.local ]; then
-    print_status "Creating .env.local file..."
-    cat > .env.local << 'EOF'
-# API Keys (Required - Add your keys here)
-ANTHROPIC_API_KEY=your_anthropic_key_here
-OPENAI_API_KEY=your_openai_key_here
-PORTKEY_API_KEY=your_portkey_key_here
+    if [ -f .env.example ]; then
+        print_status "Creating .env.local from .env.example..."
+        cp .env.example .env.local
+    else
+        print_status "Creating empty .env.local file..."
+        touch .env.local
+    fi
+    cat >> .env.local << 'EOF'
 
-# MCP Server Configuration
-MCP_MEMORY_PORT=8081
-MCP_FILESYSTEM_PORT=8082
-MCP_ANALYTICS_PORT=8083
-MCP_GIT_PORT=8084
-MCP_UNIFIED_PORT=8085
-
-# Backend Integration
-SOPHIA_BACKEND_PATH=../sophia-intel-ai
-SOPHIA_API_URL=http://localhost:8000
-
-# Frontend Configuration
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_MCP_ENABLED=true
+# --- Local development overrides ---
+NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
+ALLOW_DEV_WRITES=true
+ALLOW_DEV_NOAUTH=true
+ADMIN_USERNAME=ceo
+ADMIN_PASSWORD=devpassword2025
+ADMIN_WRITE_TOKEN=dev-admin-token-2025
+ENABLE_PORTKEY=false
+RESTRICT_MCP_PROXY=false
+TESTING=false
+NEXT_TELEMETRY_DISABLED=1
 EOF
-    print_warning ".env.local created - Please add your API keys"
+    print_warning ".env.local created - Review the Local development overrides section and add real API keys above it"
 else
     print_success ".env.local already exists"
 fi

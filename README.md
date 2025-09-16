@@ -14,6 +14,11 @@ npm run dev
 
 Full environment and backend instructions live in [`docs/SETUP.md`](docs/SETUP.md).
 
+### Environment Files
+- `.env.master` tracks canonical placeholders and mirrors backend automation. Treat it as reference-only.
+- `.env.example` lists the fields required for the UI; the setup script copies it when bootstrapping a workstation.
+- `.env.local` is git-ignored and receives a "Local development overrides" block from `scripts/setup.sh`. Update fields below that marker with your real keys.
+
 ## Documentation Map
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) – combined system and UI architecture
 - [`docs/SETUP.md`](docs/SETUP.md) – quick start + detailed setup
