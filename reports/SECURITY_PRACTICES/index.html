@@ -1,0 +1,957 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Security Practices for AI Cherry Workbench - Sophia Intel AI Workbench Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#security-practices-for-ai-cherry-workbench" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sophia Intel AI Workbench Docs" class="md-header__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sophia Intel AI Workbench Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Security Practices for AI Cherry Workbench
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sophia Intel AI Workbench Docs" class="md-nav__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sophia Intel AI Workbench Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-action-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Quick Action Items
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Quick Action Items">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immediate-actions-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Immediate Actions Required
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Credential Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Credential Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment Variables Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-setup-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Setup Commands
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplified-github-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Simplified GitHub Access
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Simplified GitHub Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-ssh-recommended-for-day-to-day" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 1: SSH (Recommended for day-to-day)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-personal-access-token-quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 2: Personal Access Token (Quick Start)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-github-app-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 2: GitHub App (Production)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-server-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ MCP Server Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ MCP Server Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mcp-server-config-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCP Server Config (Local)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-mcp-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing MCP Servers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh-key-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔑 SSH Key Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔑 SSH Key Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-ssh-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current SSH Keys
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssh-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSH Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-ssh-connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test SSH Connection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Security Checklist
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Security Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#daily-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Daily Practices
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#weekly-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      Weekly Review
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monthly-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Monthly Tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backendfrontend-security-toggles-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backend/Frontend Security Toggles (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emergency-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚨 Emergency Procedures
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 Emergency Procedures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-credentials-are-exposed" class="md-nav__link">
+    <span class="md-ellipsis">
+      If Credentials Are Exposed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-recovery-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Recovery Commands
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Automated Security
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Automated Security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-actions-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitHub Actions Secrets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-commit Hooks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Links
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Summary
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="security-practices-for-ai-cherry-workbench">Security Practices for AI Cherry Workbench<a class="headerlink" href="#security-practices-for-ai-cherry-workbench" title="Permanent link">&para;</a></h1>
+<h2 id="quick-action-items">🎯 Quick Action Items<a class="headerlink" href="#quick-action-items" title="Permanent link">&para;</a></h2>
+<h3 id="immediate-actions-required">Immediate Actions Required<a class="headerlink" href="#immediate-actions-required" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Simplified GitHub workflow (SSH preferred)</strong></li>
+<li>Remote is SSH: <code>git@github.com:ai-cherry/workbench-ui.git</code></li>
+<li>Push with one command: <code>./scripts/git-sync.sh "feat: message"</code></li>
+<li>
+<p>No PAT or GitHub App required for day-to-day pushes.</p>
+</li>
+<li>
+<p><strong>Set up your local environment</strong>
+   ```bash
+   # Run the setup script
+   ./scripts/setup-github-access.sh</p>
+</li>
+</ol>
+<p># This will:
+   # - Create a new GitHub PAT
+   # - Configure .env.local
+   # - Test the connection
+   # - Set up MCP servers
+   ```</p>
+<ol>
+<li><strong>Local-only credentials</strong></li>
+<li>Keep secrets in <code>.env.local</code> (gitignored) and <code>.roo/mcp.json</code> (now gitignored).</li>
+<li>Do not commit these files. Keep them local.</li>
+<li>Optional: use <code>scripts/setup-github-access.sh</code> if you choose to use a PAT for GitHub APIs.</li>
+</ol>
+<h2 id="credential-management">🔐 Credential Management<a class="headerlink" href="#credential-management" title="Permanent link">&para;</a></h2>
+<h3 id="environment-variables-structure">Environment Variables Structure<a class="headerlink" href="#environment-variables-structure" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .env.local (NEVER COMMIT THIS FILE)</span>
+├──<span class="w"> </span>Core<span class="w"> </span>API<span class="w"> </span>Keys
+│<span class="w">   </span>├──<span class="w"> </span>ANTHROPIC_API_KEY
+│<span class="w">   </span>├──<span class="w"> </span>OPENAI_API_KEY
+│<span class="w">   </span>└──<span class="w"> </span>PORTKEY_API_KEY
+├──<span class="w"> </span>GitHub<span class="w"> </span>Integration
+│<span class="w">   </span>├──<span class="w"> </span>GITHUB_PERSONAL_ACCESS_TOKEN<span class="w"> </span><span class="o">(</span>development<span class="o">)</span>
+│<span class="w">   </span>├──<span class="w"> </span>GITHUB_APP_ID<span class="w"> </span><span class="o">(</span>production<span class="o">)</span>
+│<span class="w">   </span>└──<span class="w"> </span>GITHUB_APP_INSTALLATION_ID<span class="w"> </span><span class="o">(</span>production<span class="o">)</span>
+└──<span class="w"> </span>MCP<span class="w"> </span>Server<span class="w"> </span>Keys
+<span class="w">    </span>├──<span class="w"> </span>APIFY_API_TOKEN
+<span class="w">    </span>├──<span class="w"> </span>BRAVE_API_KEY
+<span class="w">    </span>└──<span class="w"> </span>EXA_API_KEY
+</code></pre></div>
+
+<h3 id="quick-setup-commands">Quick Setup Commands<a class="headerlink" href="#quick-setup-commands" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Initial setup (interactive)</span>
+./scripts/setup-github-access.sh
+
+<span class="c1"># Manual token setup</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GITHUB_PERSONAL_ACCESS_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_token_here&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;GITHUB_PERSONAL_ACCESS_TOKEN=</span><span class="nv">$GITHUB_PERSONAL_ACCESS_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.env.local
+
+<span class="c1"># Test GitHub connection</span>
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: token </span><span class="nv">$GITHUB_PERSONAL_ACCESS_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>https://api.github.com/user
+
+<span class="c1"># Test MCP servers</span>
+npm<span class="w"> </span>run<span class="w"> </span>mcp:connect
+</code></pre></div>
+
+<h2 id="simplified-github-access">🚀 Simplified GitHub Access<a class="headerlink" href="#simplified-github-access" title="Permanent link">&para;</a></h2>
+<h3 id="option-1-ssh-recommended-for-day-to-day">Option 1: SSH (Recommended for day-to-day)<a class="headerlink" href="#option-1-ssh-recommended-for-day-to-day" title="Permanent link">&para;</a></h3>
+<p>No tokens required for git push/pull.</p>
+<h3 id="option-2-personal-access-token-quick-start">Option 2: Personal Access Token (Quick Start)<a class="headerlink" href="#option-2-personal-access-token-quick-start" title="Permanent link">&para;</a></h3>
+<p><strong>Best for</strong>: Development, testing, quick prototypes</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create token at: https://github.com/settings/tokens/new</span>
+<span class="c1"># Required scopes:</span>
+-<span class="w"> </span>repo<span class="w"> </span><span class="o">(</span>full<span class="w"> </span>control<span class="o">)</span>
+-<span class="w"> </span>workflow<span class="w"> </span><span class="o">(</span>GitHub<span class="w"> </span>Actions<span class="o">)</span>
+-<span class="w"> </span>admin:org<span class="w"> </span><span class="o">(</span><span class="k">if</span><span class="w"> </span>working<span class="w"> </span>with<span class="w"> </span>org<span class="w"> </span>repos<span class="o">)</span>
+
+<span class="c1"># Add to .env.local:</span>
+<span class="nv">GITHUB_PERSONAL_ACCESS_TOKEN</span><span class="o">=</span>github_pat_YOUR_TOKEN_HERE
+</code></pre></div>
+
+<h3 id="option-2-github-app-production">Option 2: GitHub App (Production)<a class="headerlink" href="#option-2-github-app-production" title="Permanent link">&para;</a></h3>
+<p><strong>Best for</strong>: Production, team environments, automated workflows</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Quick setup:</span>
+<span class="m">1</span>.<span class="w"> </span>Create<span class="w"> </span>app:<span class="w"> </span>https://github.com/settings/apps/new
+<span class="m">2</span>.<span class="w"> </span>Install<span class="w"> </span>on<span class="w"> </span>ai-cherry<span class="w"> </span>org
+<span class="m">3</span>.<span class="w"> </span>Add<span class="w"> </span>credentials<span class="w"> </span>to<span class="w"> </span>.env.local:
+<span class="w">   </span><span class="nv">GITHUB_APP_ID</span><span class="o">=</span><span class="m">123456</span>
+<span class="w">   </span><span class="nv">GITHUB_APP_INSTALLATION_ID</span><span class="o">=</span><span class="m">12345678</span>
+<span class="w">   </span><span class="nv">GITHUB_APP_PRIVATE_KEY_PATH</span><span class="o">=</span>~/.ssh/github-app.pem
+</code></pre></div>
+
+<p>See <a href="docs/GITHUB_APP_SETUP_GUIDE.md">GitHub App Setup Guide</a> for detailed instructions.</p>
+<h2 id="mcp-server-configuration">🛠️ MCP Server Configuration<a class="headerlink" href="#mcp-server-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="mcp-server-config-local">MCP Server Config (Local)<a class="headerlink" href="#mcp-server-config-local" title="Permanent link">&para;</a></h3>
+<p><code>.roo/mcp.json</code> is local-only (gitignored). It can reference env vars from <code>.env.local</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;github&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${GITHUB_PERSONAL_ACCESS_TOKEN}&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;apify&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;APIFY_API_TOKEN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${APIFY_API_TOKEN}&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;brave-search&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;BRAVE_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${BRAVE_API_KEY}&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;exa&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;EXA_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${EXA_API_KEY}&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="testing-mcp-servers">Testing MCP Servers<a class="headerlink" href="#testing-mcp-servers" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test all MCP servers</span>
+./scripts/test-mcp-servers.sh
+
+<span class="c1"># Test individual server</span>
+npm<span class="w"> </span>run<span class="w"> </span>mcp:test<span class="w"> </span>--<span class="w"> </span>github
+npm<span class="w"> </span>run<span class="w"> </span>mcp:test<span class="w"> </span>--<span class="w"> </span>memory
+npm<span class="w"> </span>run<span class="w"> </span>mcp:test<span class="w"> </span>--<span class="w"> </span>apify
+</code></pre></div>
+
+<h2 id="ssh-key-management">🔑 SSH Key Management<a class="headerlink" href="#ssh-key-management" title="Permanent link">&para;</a></h2>
+<h3 id="current-ssh-keys">Current SSH Keys<a class="headerlink" href="#current-ssh-keys" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># List SSH keys</span>
+ls<span class="w"> </span>-la<span class="w"> </span>~/.ssh/
+
+<span class="c1"># Expected keys:</span>
+~/.ssh/id_ed25519<span class="w">          </span><span class="c1"># Personal GitHub SSH key</span>
+~/.ssh/id_ed25519.pub<span class="w">      </span><span class="c1"># Public key</span>
+~/.ssh/github-app.pem<span class="w">      </span><span class="c1"># GitHub App private key (if using)</span>
+</code></pre></div>
+
+<h3 id="ssh-configuration">SSH Configuration<a class="headerlink" href="#ssh-configuration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ~/.ssh/config</span>
+Host<span class="w"> </span>github.com
+<span class="w">    </span>HostName<span class="w"> </span>github.com
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+</code></pre></div>
+
+<h3 id="test-ssh-connection">Test SSH Connection<a class="headerlink" href="#test-ssh-connection" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test GitHub SSH</span>
+ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
+
+<span class="c1"># Expected output:</span>
+<span class="c1"># Hi username! You&#39;ve successfully authenticated...</span>
+</code></pre></div>
+
+<h2 id="security-checklist">📊 Security Checklist<a class="headerlink" href="#security-checklist" title="Permanent link">&para;</a></h2>
+<h3 id="daily-practices">Daily Practices<a class="headerlink" href="#daily-practices" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Use <code>.env.local</code> and local <code>.roo/mcp.json</code> for all credentials</li>
+<li>[ ] Never hardcode tokens in code</li>
+<li>[ ] Check git status before committing</li>
+<li>[ ] Use environment variables in configs</li>
+</ul>
+<h3 id="weekly-review">Weekly Review<a class="headerlink" href="#weekly-review" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Review API usage logs</li>
+<li>[ ] Check for unusual GitHub activity</li>
+<li>[ ] Update dependencies (<code>npm audit</code>)</li>
+<li>[ ] Verify no credentials in commit history</li>
+</ul>
+<h3 id="monthly-tasks">Monthly Tasks<a class="headerlink" href="#monthly-tasks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Rotate API keys if needed</li>
+<li>[ ] Review GitHub App permissions</li>
+<li>[ ] Audit repository access</li>
+<li>[ ] Update security documentation</li>
+</ul>
+<h3 id="backendfrontend-security-toggles-optional">Backend/Frontend Security Toggles (Optional)<a class="headerlink" href="#backendfrontend-security-toggles-optional" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Backend CORS origins: <code>ALLOWED_ORIGINS</code> (comma-separated), defaults to <code>http://localhost:3000,http://localhost:3001</code></li>
+<li>Backend token TTL override: <code>ACCESS_TOKEN_EXPIRE_MINUTES</code> (overrides days) and <code>ACCESS_TOKEN_EXPIRE_DAYS</code> (default 7)</li>
+<li>Backend JWT claims (optional): <code>JWT_ISSUER</code>, <code>JWT_AUDIENCE</code></li>
+<li>Backend MCP proxy restrictions: <code>RESTRICT_MCP_PROXY=true</code> to enable allowlist</li>
+<li>Backend safe command modes: <code>SAFE_COMMANDS_ONLY=true</code>, and leave <code>ALLOW_FULL_PRIVILEGE_COMMANDS</code> unset or false</li>
+<li>Frontend headers: <code>NEXT_PUBLIC_APP_URL</code> to set allowed origin; <code>NEXT_PUBLIC_BACKEND_URL</code> for Agents Dashboard</li>
+</ul>
+<p>Keep these unset unless you specifically need them. Defaults are dev-friendly.
+- [ ] Security audit of codebase
+- [ ] Review and update .gitignore
+- [ ] Team security training</p>
+<h2 id="emergency-procedures">🚨 Emergency Procedures<a class="headerlink" href="#emergency-procedures" title="Permanent link">&para;</a></h2>
+<h3 id="if-credentials-are-exposed">If Credentials Are Exposed<a class="headerlink" href="#if-credentials-are-exposed" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Immediately revoke the exposed credential</strong>
+   ```bash
+   # GitHub PAT
+   https://github.com/settings/tokens</li>
+</ol>
+<p># API Keys
+   Check respective service dashboards
+   ```</p>
+<ol>
+<li>
+<p><strong>Generate new credentials</strong>
+   <code>bash
+   ./scripts/setup-github-access.sh</code></p>
+</li>
+<li>
+<p><strong>Update all systems</strong>
+   <code>bash
+   # Update .env.local
+   # Restart services
+   npm run dev</code></p>
+</li>
+<li>
+<p><strong>Audit for unauthorized access</strong></p>
+</li>
+<li>Check GitHub audit log</li>
+<li>Review API usage</li>
+<li>Check for unexpected commits</li>
+</ol>
+<h3 id="quick-recovery-commands">Quick Recovery Commands<a class="headerlink" href="#quick-recovery-commands" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Remove credentials from git history</span>
+git<span class="w"> </span>filter-branch<span class="w"> </span>--force<span class="w"> </span>--index-filter<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;git rm --cached --ignore-unmatch .env.local&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--prune-empty<span class="w"> </span>--tag-name-filter<span class="w"> </span>cat<span class="w"> </span>--<span class="w"> </span>--all
+
+<span class="c1"># Force push cleaned history (CAREFUL!)</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--force<span class="w"> </span>--all
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--force<span class="w"> </span>--tags
+</code></pre></div>
+
+<h2 id="automated-security">🔄 Automated Security<a class="headerlink" href="#automated-security" title="Permanent link">&para;</a></h2>
+<h3 id="github-actions-secrets">GitHub Actions Secrets<a class="headerlink" href="#github-actions-secrets" title="Permanent link">&para;</a></h3>
+<p>Set these in your repository settings:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .github/workflows/ci.yml</span>
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+<span class="w">  </span><span class="nt">ANTHROPIC_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.ANTHROPIC_API_KEY }}</span>
+<span class="w">  </span><span class="nt">OPENAI_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.OPENAI_API_KEY }}</span>
+</code></pre></div>
+
+<h3 id="pre-commit-hooks">Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Install pre-commit</span>
+npm<span class="w"> </span>install<span class="w"> </span>--save-dev<span class="w"> </span>husky
+
+<span class="c1"># Add hook to prevent credential commits</span>
+npx<span class="w"> </span>husky<span class="w"> </span>add<span class="w"> </span>.husky/pre-commit<span class="w"> </span><span class="s2">&quot;grep -r &#39;sk-\|github_pat_\|api_key&#39; --exclude-dir=.git .&quot;</span>
+</code></pre></div>
+
+<h2 id="resources">📚 Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
+<h3 id="quick-links">Quick Links<a class="headerlink" href="#quick-links" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://github.com/settings/tokens/new">GitHub PAT Setup</a></li>
+<li><a href="https://github.com/settings/apps/new">GitHub App Creation</a></li>
+<li><a href="https://console.anthropic.com/">Anthropic Console</a></li>
+<li><a href="https://platform.openai.com/api-keys">OpenAI API Keys</a></li>
+<li><a href="https://app.portkey.ai/">Portkey Dashboard</a></li>
+</ul>
+<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="docs/GITHUB_APP_SETUP_GUIDE.md">GitHub App Setup Guide</a></li>
+<li><a href="MCP_SERVERS_GUIDE.md">MCP Servers Guide</a></li>
+<li><a href="QUICK_START.md">Quick Start Guide</a></li>
+</ul>
+<h3 id="support">Support<a class="headerlink" href="#support" title="Permanent link">&para;</a></h3>
+<ul>
+<li>GitHub Issues: <a href="https://github.com/ai-cherry/workbench-ui/issues">ai-cherry/workbench-ui</a></li>
+<li>Security Concerns: security@ai-cherry.com</li>
+</ul>
+<h2 id="summary">✅ Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Credentials are now secure</strong> - All tokens use environment variables</li>
+<li><strong><code>.env.local</code> is protected</strong> - Added to .gitignore</li>
+<li><strong>MCP servers configured</strong> - Using environment variables</li>
+<li><strong>Setup script available</strong> - Run <code>./scripts/setup-github-access.sh</code></li>
+<li><strong>Documentation complete</strong> - Guides for all scenarios</li>
+</ol>
+<h3 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Run the setup script</span>
+./scripts/setup-github-access.sh
+
+<span class="c1"># 2. Start development</span>
+npm<span class="w"> </span>run<span class="w"> </span>dev
+
+<span class="c1"># 3. Test MCP servers</span>
+npm<span class="w"> </span>run<span class="w"> </span>mcp:connect
+
+<span class="c1"># 4. Begin coding!</span>
+</code></pre></div>
+
+<hr />
+<p><strong>Remember</strong>: Security is everyone's responsibility. When in doubt, ask for help!</p>
+<p><strong>Last Updated</strong>: November 2024
+<strong>Version</strong>: 1.0.0</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1397 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>MCP System Deployment Runbook - Sophia Intel AI Workbench Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mcp-system-deployment-runbook" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Sophia Intel AI Workbench Docs" class="md-header__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sophia Intel AI Workbench Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MCP System Deployment Runbook
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Sophia Intel AI Workbench Docs" class="md-nav__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sophia Intel AI Workbench Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development Environment Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development Environment Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-clone-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Clone Repositories
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-setup-backend-sophia-intel-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Setup Backend (sophia-intel-ai)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-setup-frontend-workbench-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Setup Frontend (workbench-ui)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#production-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Production Environment Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Production Environment Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. System Requirements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-environment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Environment Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-docker-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Docker Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-nginx-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Nginx Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pre-deployment-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Pre-Deployment Checklist
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-blue-green-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Blue-Green Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-post-deployment-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Post-Deployment Validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Health Monitoring
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Health Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-health-check-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Health Check Endpoints
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-prometheus-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Prometheus Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alerting-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Alerting Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-server-wont-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Server Won't Start
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-authentication-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Authentication Failures
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-redis-connection-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Redis Connection Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-vector-server-degraded" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Vector Server Degraded
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debug Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rollback-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rollback Procedures
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rollback Procedures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-quick-rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Quick Rollback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-database-rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Database Rollback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-emergency-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Emergency Recovery
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintenance-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Maintenance Windows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintenance Windows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scheduled-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scheduled Maintenance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zero-downtime-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zero-Downtime Updates
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contact-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contact Information
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contact Information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#escalation-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Escalation Path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-environment-variables-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      A. Environment Variables Reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-port-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      B. Port Reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-api-endpoint-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      C. API Endpoint Reference
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mcp-system-deployment-runbook">MCP System Deployment Runbook<a class="headerlink" href="#mcp-system-deployment-runbook" title="Permanent link">&para;</a></h1>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#development-environment-setup">Development Environment Setup</a></li>
+<li><a href="#production-environment-setup">Production Environment Setup</a></li>
+<li><a href="#deployment-process">Deployment Process</a></li>
+<li><a href="#health-monitoring">Health Monitoring</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#rollback-procedures">Rollback Procedures</a></li>
+</ol>
+<hr />
+<h2 id="development-environment-setup">Development Environment Setup<a class="headerlink" href="#development-environment-setup" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Python 3.8+ installed</li>
+<li>Node.js 18+ and npm installed</li>
+<li>Redis server running locally</li>
+<li>Git installed</li>
+<li>Optional: Weaviate for Vector server (can run degraded without it)</li>
+</ul>
+<h3 id="1-clone-repositories">1. Clone Repositories<a class="headerlink" href="#1-clone-repositories" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Clone both repositories</span>
+<span class="nb">cd</span><span class="w"> </span>~/
+git<span class="w"> </span>clone<span class="w"> </span><span class="o">[</span>sophia-intel-ai-repo-url<span class="o">]</span><span class="w"> </span>sophia-intel-ai
+git<span class="w"> </span>clone<span class="w"> </span><span class="o">[</span>workbench-ui-repo-url<span class="o">]</span><span class="w"> </span>workbench-ui
+</code></pre></div>
+
+<h3 id="2-setup-backend-sophia-intel-ai">2. Setup Backend (sophia-intel-ai)<a class="headerlink" href="#2-setup-backend-sophia-intel-ai" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/sophia-intel-ai
+
+<span class="c1"># Create virtual environment</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># Install dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="c1"># Copy environment file</span>
+cp<span class="w"> </span>environments/shared-mcp.env<span class="w"> </span>.env
+
+<span class="c1"># Start MCP servers</span>
+./startup_enhanced.sh
+
+<span class="c1"># Validate servers</span>
+python3<span class="w"> </span>scripts/validate_mcp_servers_enhanced.py<span class="w"> </span>--allow-vector-skip
+</code></pre></div>
+
+<h3 id="3-setup-frontend-workbench-ui">3. Setup Frontend (workbench-ui)<a class="headerlink" href="#3-setup-frontend-workbench-ui" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/workbench-ui
+
+<span class="c1"># Install dependencies</span>
+npm<span class="w"> </span>install
+
+<span class="c1"># Copy environment configuration</span>
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env.local
+
+<span class="c1"># Update .env.local with:</span>
+<span class="c1"># NEXT_PUBLIC_MCP_BASE_URL=http://localhost</span>
+<span class="c1"># MCP_DEV_BYPASS=1</span>
+
+<span class="c1"># Start development server</span>
+npm<span class="w"> </span>run<span class="w"> </span>dev
+</code></pre></div>
+
+<h3 id="4-verify-installation">4. Verify Installation<a class="headerlink" href="#4-verify-installation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/workbench-ui
+./scripts/test-full-system.sh
+</code></pre></div>
+
+<hr />
+<h2 id="production-environment-setup">Production Environment Setup<a class="headerlink" href="#production-environment-setup" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites_1">Prerequisites<a class="headerlink" href="#prerequisites_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ubuntu 20.04+ or similar Linux distribution</li>
+<li>Docker and Docker Compose installed</li>
+<li>Nginx or similar reverse proxy</li>
+<li>SSL certificates (Let's Encrypt recommended)</li>
+<li>Redis instance (managed service recommended)</li>
+<li>Optional: Weaviate instance for Vector server</li>
+</ul>
+<h3 id="1-system-requirements">1. System Requirements<a class="headerlink" href="#1-system-requirements" title="Permanent link">&para;</a></h3>
+<p><strong>Minimum Requirements:</strong>
+- 4 CPU cores
+- 8GB RAM
+- 50GB SSD storage
+- 100Mbps network connection</p>
+<p><strong>Recommended Requirements:</strong>
+- 8 CPU cores
+- 16GB RAM
+- 100GB SSD storage
+- 1Gbps network connection</p>
+<h3 id="2-environment-configuration">2. Environment Configuration<a class="headerlink" href="#2-environment-configuration" title="Permanent link">&para;</a></h3>
+<p>Create production environment file:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># /etc/sophia-mcp/production.env</span>
+<span class="nv">MCP_ENV</span><span class="o">=</span>production
+<span class="nv">MCP_AUTH_TOKEN</span><span class="o">=</span>&lt;secure-random-token&gt;
+
+<span class="c1"># Redis Configuration</span>
+<span class="nv">REDIS_HOST</span><span class="o">=</span>redis.internal.domain
+<span class="nv">REDIS_PORT</span><span class="o">=</span><span class="m">6379</span>
+<span class="nv">REDIS_PASSWORD</span><span class="o">=</span>&lt;redis-password&gt;
+
+<span class="c1"># MCP Server Ports (internal)</span>
+<span class="c1"># Canonical assignments live in docs/reference/MCP_PORTS.md.</span>
+
+<span class="c1"># Weaviate (if available)</span>
+<span class="nv">WEAVIATE_HOST</span><span class="o">=</span>weaviate.internal.domain
+<span class="nv">WEAVIATE_PORT</span><span class="o">=</span><span class="m">8080</span>
+
+<span class="c1"># Security</span>
+<span class="nv">MCP_ALLOWED_ORIGINS</span><span class="o">=</span>https://workbench.yourdomain.com
+<span class="nv">MCP_RATE_LIMIT</span><span class="o">=</span><span class="m">1000</span>
+<span class="nv">MCP_RATE_WINDOW</span><span class="o">=</span><span class="m">60</span>
+
+<span class="c1"># Logging</span>
+<span class="nv">LOG_LEVEL</span><span class="o">=</span>info
+<span class="nv">LOG_FILE</span><span class="o">=</span>/var/log/sophia-mcp/mcp.log
+</code></pre></div>
+
+<h3 id="3-docker-deployment">3. Docker Deployment<a class="headerlink" href="#3-docker-deployment" title="Permanent link">&para;</a></h3>
+<p>Create <code>docker-compose.production.yml</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sophia-mcp/memory-server:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;127.0.0.1:8081:8081&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MCP_ENV=production</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sophia-mcp/production.env</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">logging</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json-file&quot;</span>
+<span class="w">      </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">max-size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10m&quot;</span>
+<span class="w">        </span><span class="nt">max-file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span>
+
+<span class="w">  </span><span class="nt">filesystem-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sophia-mcp/filesystem-server:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;127.0.0.1:8082:8082&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/workspace:/workspace:ro</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MCP_ENV=production</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sophia-mcp/production.env</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+
+<span class="w">  </span><span class="nt">git-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sophia-mcp/git-server:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;127.0.0.1:8084:8084&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/repos:/repos:ro</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MCP_ENV=production</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sophia-mcp/production.env</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+
+<span class="w">  </span><span class="nt">vector-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sophia-mcp/vector-server:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;127.0.0.1:8085:8085&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MCP_ENV=production</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sophia-mcp/production.env</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+
+<span class="w">  </span><span class="nt">workbench-ui</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sophia-mcp/workbench-ui:latest</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;127.0.0.1:3201:3201&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NODE_ENV=production</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sophia-mcp/production.env</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</code></pre></div>
+
+<h3 id="4-nginx-configuration">4. Nginx Configuration<a class="headerlink" href="#4-nginx-configuration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># /etc/nginx/sites-available/mcp-system</span>
+<span class="k">upstream</span><span class="w"> </span><span class="s">mcp_memory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8081</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span><span class="w"> </span><span class="s">mcp_filesystem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8082</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span><span class="w"> </span><span class="s">mcp_git</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8084</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span><span class="w"> </span><span class="s">mcp_vector</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8085</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span><span class="w"> </span><span class="s">workbench_ui</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">3201</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">443</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">api.yourdomain.com</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">ssl_certificate</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/api.yourdomain.com/fullchain.pem</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">ssl_certificate_key</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/api.yourdomain.com/privkey.pem</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># Security headers</span>
+<span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-Frame-Options</span><span class="w"> </span><span class="s">&quot;SAMEORIGIN&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-Content-Type-Options</span><span class="w"> </span><span class="s">&quot;nosniff&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-XSS-Protection</span><span class="w"> </span><span class="s">&quot;1</span><span class="p">;</span><span class="w"> </span><span class="kn">mode=block&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># Rate limiting</span>
+<span class="w">    </span><span class="kn">limit_req_zone</span><span class="w"> </span><span class="nv">$binary_remote_addr</span><span class="w"> </span><span class="s">zone=api_limit:10m</span><span class="w"> </span><span class="s">rate=100r/s</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">limit_req</span><span class="w"> </span><span class="s">zone=api_limit</span><span class="w"> </span><span class="s">burst=200</span><span class="w"> </span><span class="s">nodelay</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># MCP Memory Server</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/mcp/memory/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://mcp_memory/</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1"># MCP Filesystem Server</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/mcp/filesystem/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://mcp_filesystem/</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1"># MCP Git Server</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/mcp/git/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://mcp_git/</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1"># MCP Vector Server</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/mcp/vector/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://mcp_vector/</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">443</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">workbench.yourdomain.com</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">ssl_certificate</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/workbench.yourdomain.com/fullchain.pem</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">ssl_certificate_key</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/workbench.yourdomain.com/privkey.pem</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://workbench_ui</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-Proto</span><span class="w"> </span><span class="nv">$scheme</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1"># WebSocket support</span>
+<span class="w">        </span><span class="kn">proxy_http_version</span><span class="w"> </span><span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Upgrade</span><span class="w"> </span><span class="nv">$http_upgrade</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Connection</span><span class="w"> </span><span class="s">&quot;upgrade&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2 id="deployment-process">Deployment Process<a class="headerlink" href="#deployment-process" title="Permanent link">&para;</a></h2>
+<h3 id="1-pre-deployment-checklist">1. Pre-Deployment Checklist<a class="headerlink" href="#1-pre-deployment-checklist" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] All tests passing in CI/CD</li>
+<li>[ ] Version tags created for release</li>
+<li>[ ] Database backups completed</li>
+<li>[ ] Environment variables updated</li>
+<li>[ ] SSL certificates valid</li>
+<li>[ ] Monitoring alerts configured</li>
+</ul>
+<h3 id="2-blue-green-deployment">2. Blue-Green Deployment<a class="headerlink" href="#2-blue-green-deployment" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># deploy.sh - Blue-Green Deployment Script</span>
+
+<span class="nb">set</span><span class="w"> </span>-e
+
+<span class="nv">DEPLOYMENT_ENV</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">VERSION</span><span class="o">=</span><span class="nv">$2</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DEPLOYMENT_ENV</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VERSION</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Usage: ./deploy.sh [staging|production] [version]&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Deploying version </span><span class="nv">$VERSION</span><span class="s2"> to </span><span class="nv">$DEPLOYMENT_ENV</span><span class="s2">...&quot;</span>
+
+<span class="c1"># Pull new images</span>
+docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.<span class="nv">$DEPLOYMENT_ENV</span>.yml<span class="w"> </span>pull
+
+<span class="c1"># Start new containers (blue)</span>
+docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.<span class="nv">$DEPLOYMENT_ENV</span>.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--scale<span class="w"> </span>memory-server<span class="o">=</span><span class="m">2</span>
+
+<span class="c1"># Health check</span>
+sleep<span class="w"> </span><span class="m">10</span>
+./scripts/health-check.sh<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+
+<span class="c1"># Switch traffic to new containers</span>
+docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.<span class="nv">$DEPLOYMENT_ENV</span>.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--remove-orphans
+
+<span class="c1"># Remove old containers</span>
+docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.<span class="nv">$DEPLOYMENT_ENV</span>.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--scale<span class="w"> </span>memory-server<span class="o">=</span><span class="m">1</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Deployment complete!&quot;</span>
+</code></pre></div>
+
+<h3 id="3-post-deployment-validation">3. Post-Deployment Validation<a class="headerlink" href="#3-post-deployment-validation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run system tests</span>
+<span class="nb">cd</span><span class="w"> </span>~/workbench-ui
+./scripts/test-full-system.sh
+
+<span class="c1"># Check logs</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>--tail<span class="o">=</span><span class="m">100</span>
+
+<span class="c1"># Monitor metrics</span>
+curl<span class="w"> </span>https://api.yourdomain.com/mcp/memory/health
+curl<span class="w"> </span>https://api.yourdomain.com/mcp/filesystem/health
+curl<span class="w"> </span>https://api.yourdomain.com/mcp/git/health
+curl<span class="w"> </span>https://api.yourdomain.com/mcp/vector/health
+</code></pre></div>
+
+<hr />
+<h2 id="health-monitoring">Health Monitoring<a class="headerlink" href="#health-monitoring" title="Permanent link">&para;</a></h2>
+<h3 id="1-health-check-endpoints">1. Health Check Endpoints<a class="headerlink" href="#1-health-check-endpoints" title="Permanent link">&para;</a></h3>
+<p>All MCP servers expose health endpoints:
+- Memory: <code>http://localhost:8081/health</code>
+- Filesystem: <code>http://localhost:8082/health</code>
+- Git: <code>http://localhost:8084/health</code>
+- Vector: <code>http://localhost:8085/health</code></p>
+<h3 id="2-prometheus-metrics">2. Prometheus Metrics<a class="headerlink" href="#2-prometheus-metrics" title="Permanent link">&para;</a></h3>
+<p>Configure Prometheus to scrape metrics:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># prometheus.yml</span>
+<span class="nt">scrape_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;mcp-servers&#39;</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;localhost:8081&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;localhost:8082&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;localhost:8084&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;localhost:8085&#39;</span>
+<span class="w">    </span><span class="nt">metrics_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/metrics&#39;</span>
+</code></pre></div>
+
+<h3 id="3-alerting-rules">3. Alerting Rules<a class="headerlink" href="#3-alerting-rules" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># alerts.yml</span>
+<span class="nt">groups</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcp_alerts</span>
+<span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MCPServerDown</span>
+<span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up{job=&quot;mcp-servers&quot;} == 0</span>
+<span class="w">        </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MCP</span><span class="nv"> </span><span class="s">Server</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.instance</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">down&quot;</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighMemoryUsage</span>
+<span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_resident_memory_bytes &gt; 1e9</span>
+<span class="w">        </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;High</span><span class="nv"> </span><span class="s">memory</span><span class="nv"> </span><span class="s">usage</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.instance</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighErrorRate</span>
+<span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rate(http_requests_total{status=~&quot;5..&quot;}[5m]) &gt; 0.05</span>
+<span class="w">        </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;High</span><span class="nv"> </span><span class="s">error</span><span class="nv"> </span><span class="s">rate</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.instance</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
+<h4 id="1-server-wont-start">1. Server Won't Start<a class="headerlink" href="#1-server-wont-start" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> MCP server fails to start
+<strong>Solution:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check logs</span>
+docker<span class="w"> </span>logs<span class="w"> </span><span class="o">[</span>container-name<span class="o">]</span>
+
+<span class="c1"># Verify environment variables</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="o">[</span>container-name<span class="o">]</span><span class="w"> </span>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>MCP
+
+<span class="c1"># Check port availability</span>
+netstat<span class="w"> </span>-tulpn<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;808[1-5]&quot;</span>
+</code></pre></div>
+
+<h4 id="2-authentication-failures">2. Authentication Failures<a class="headerlink" href="#2-authentication-failures" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> 401 Unauthorized errors
+<strong>Solution:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Verify token in environment</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$MCP_AUTH_TOKEN</span>
+
+<span class="c1"># Test with curl</span>
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$MCP_AUTH_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8081/health
+</code></pre></div>
+
+<h4 id="3-redis-connection-issues">3. Redis Connection Issues<a class="headerlink" href="#3-redis-connection-issues" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Memory server errors
+<strong>Solution:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test Redis connection</span>
+redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="nv">$REDIS_HOST</span><span class="w"> </span>-p<span class="w"> </span><span class="nv">$REDIS_PORT</span><span class="w"> </span>ping
+
+<span class="c1"># Check Redis memory</span>
+redis-cli<span class="w"> </span>info<span class="w"> </span>memory
+</code></pre></div>
+
+<h4 id="4-vector-server-degraded">4. Vector Server Degraded<a class="headerlink" href="#4-vector-server-degraded" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Vector server running but degraded
+<strong>Solution:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Check Weaviate connection</span>
+curl<span class="w"> </span>http://<span class="nv">$WEAVIATE_HOST</span>:<span class="nv">$WEAVIATE_PORT</span>/v1/schema
+
+<span class="c1"># Run without Weaviate (degraded mode)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VECTOR_ALLOW_DEGRADED</span><span class="o">=</span><span class="nb">true</span>
+docker-compose<span class="w"> </span>restart<span class="w"> </span>vector-server
+</code></pre></div>
+
+<h3 id="debug-mode">Debug Mode<a class="headerlink" href="#debug-mode" title="Permanent link">&para;</a></h3>
+<p>Enable debug logging:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Set in environment</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LOG_LEVEL</span><span class="o">=</span>debug
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCP_DEBUG</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># Restart services</span>
+docker-compose<span class="w"> </span>restart
+</code></pre></div>
+
+<hr />
+<h2 id="rollback-procedures">Rollback Procedures<a class="headerlink" href="#rollback-procedures" title="Permanent link">&para;</a></h2>
+<h3 id="1-quick-rollback">1. Quick Rollback<a class="headerlink" href="#1-quick-rollback" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># rollback.sh - Quick rollback to previous version</span>
+
+<span class="nv">PREVIOUS_VERSION</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PREVIOUS_VERSION</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Usage: ./rollback.sh [previous-version]&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rolling back to version </span><span class="nv">$PREVIOUS_VERSION</span><span class="s2">...&quot;</span>
+
+<span class="c1"># Stop current containers</span>
+docker-compose<span class="w"> </span>down
+
+<span class="c1"># Pull previous version</span>
+docker-compose<span class="w"> </span>pull<span class="w"> </span>--quiet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>memory-server:<span class="nv">$PREVIOUS_VERSION</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>filesystem-server:<span class="nv">$PREVIOUS_VERSION</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git-server:<span class="nv">$PREVIOUS_VERSION</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>vector-server:<span class="nv">$PREVIOUS_VERSION</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>workbench-ui:<span class="nv">$PREVIOUS_VERSION</span>
+
+<span class="c1"># Start previous version</span>
+docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># Verify</span>
+./scripts/health-check.sh
+</code></pre></div>
+
+<h3 id="2-database-rollback">2. Database Rollback<a class="headerlink" href="#2-database-rollback" title="Permanent link">&para;</a></h3>
+<p>If database schema changes need reverting:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Restore Redis backup</span>
+redis-cli<span class="w"> </span>--rdb<span class="w"> </span>/backups/redis-backup-<span class="nv">$DATE</span>.rdb
+
+<span class="c1"># Restore Weaviate backup (if applicable)</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/v1/backups/restore<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;backup_id&quot;: &quot;backup-&#39;</span><span class="nv">$DATE</span><span class="s1">&#39;&quot;}&#39;</span>
+</code></pre></div>
+
+<h3 id="3-emergency-recovery">3. Emergency Recovery<a class="headerlink" href="#3-emergency-recovery" title="Permanent link">&para;</a></h3>
+<p>In case of complete system failure:
+1. Switch to maintenance mode
+2. Restore from latest backup
+3. Verify data integrity
+4. Gradually bring services online
+5. Run full system tests</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Enable maintenance mode</span>
+touch<span class="w"> </span>/var/www/maintenance.flag
+
+<span class="c1"># Restore services one by one</span>
+<span class="k">for</span><span class="w"> </span>service<span class="w"> </span><span class="k">in</span><span class="w"> </span>memory<span class="w"> </span>filesystem<span class="w"> </span>git<span class="w"> </span>vector<span class="w"> </span>workbench-ui<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span><span class="nv">$service</span>-server
+<span class="w">    </span>sleep<span class="w"> </span><span class="m">10</span>
+<span class="w">    </span>./scripts/health-check.sh<span class="w"> </span><span class="nv">$service</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">done</span>
+
+<span class="c1"># Disable maintenance mode</span>
+rm<span class="w"> </span>/var/www/maintenance.flag
+</code></pre></div>
+
+<hr />
+<h2 id="maintenance-windows">Maintenance Windows<a class="headerlink" href="#maintenance-windows" title="Permanent link">&para;</a></h2>
+<h3 id="scheduled-maintenance">Scheduled Maintenance<a class="headerlink" href="#scheduled-maintenance" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Notification:</strong> 48 hours before maintenance</li>
+<li><strong>Backup:</strong> Complete system backup 1 hour before</li>
+<li><strong>Maintenance Mode:</strong> Enable 5 minutes before</li>
+<li><strong>Updates:</strong> Apply updates in order:</li>
+<li>Database migrations</li>
+<li>Backend services</li>
+<li>Frontend application</li>
+<li><strong>Validation:</strong> Run full test suite</li>
+<li><strong>Recovery:</strong> Disable maintenance mode</li>
+</ol>
+<h3 id="zero-downtime-updates">Zero-Downtime Updates<a class="headerlink" href="#zero-downtime-updates" title="Permanent link">&para;</a></h3>
+<p>For minor updates without downtime:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Rolling update</span>
+docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--no-deps<span class="w"> </span>--scale<span class="w"> </span>memory-server<span class="o">=</span><span class="m">2</span><span class="w"> </span>memory-server
+sleep<span class="w"> </span><span class="m">30</span>
+docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--no-deps<span class="w"> </span>--scale<span class="w"> </span>memory-server<span class="o">=</span><span class="m">1</span><span class="w"> </span>memory-server
+</code></pre></div>
+
+<hr />
+<h2 id="contact-information">Contact Information<a class="headerlink" href="#contact-information" title="Permanent link">&para;</a></h2>
+<h3 id="escalation-path">Escalation Path<a class="headerlink" href="#escalation-path" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Level 1:</strong> On-call engineer - [oncall@yourdomain.com]</li>
+<li><strong>Level 2:</strong> Backend team lead - [backend-lead@yourdomain.com]</li>
+<li><strong>Level 3:</strong> Platform architect - [architect@yourdomain.com]</li>
+</ol>
+<h3 id="external-dependencies">External Dependencies<a class="headerlink" href="#external-dependencies" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Redis Support:</strong> [redis-support-ticket-url]</li>
+<li><strong>Weaviate Support:</strong> [weaviate-support-ticket-url]</li>
+<li><strong>Infrastructure:</strong> [infrastructure-team@yourdomain.com]</li>
+</ul>
+<hr />
+<h2 id="appendix">Appendix<a class="headerlink" href="#appendix" title="Permanent link">&para;</a></h2>
+<h3 id="a-environment-variables-reference">A. Environment Variables Reference<a class="headerlink" href="#a-environment-variables-reference" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCP_ENV</td>
+<td>Environment (development/production)</td>
+<td>development</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>MCP_AUTH_TOKEN</td>
+<td>Authentication token</td>
+<td>-</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>REDIS_HOST</td>
+<td>Redis server hostname</td>
+<td>localhost</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>REDIS_PORT</td>
+<td>Redis server port</td>
+<td>6379</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>WEAVIATE_HOST</td>
+<td>Weaviate hostname</td>
+<td>localhost</td>
+<td>No</td>
+</tr>
+<tr>
+<td>WEAVIATE_PORT</td>
+<td>Weaviate port</td>
+<td>8080</td>
+<td>No</td>
+</tr>
+<tr>
+<td>LOG_LEVEL</td>
+<td>Logging level</td>
+<td>info</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MCP_RATE_LIMIT</td>
+<td>Rate limit per window</td>
+<td>1000</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b-port-reference">B. Port Reference<a class="headerlink" href="#b-port-reference" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port</th>
+<th>Protocol</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory Server</td>
+<td>8081</td>
+<td>HTTP</td>
+<td>Memory/search operations</td>
+</tr>
+<tr>
+<td>Filesystem Server</td>
+<td>8082</td>
+<td>HTTP</td>
+<td>File operations</td>
+</tr>
+<tr>
+<td>Git Server</td>
+<td>8084</td>
+<td>HTTP</td>
+<td>Git operations</td>
+</tr>
+<tr>
+<td>Vector Server</td>
+<td>8085</td>
+<td>HTTP</td>
+<td>Vector search operations</td>
+</tr>
+<tr>
+<td>Workbench UI</td>
+<td>3201</td>
+<td>HTTP</td>
+<td>Frontend application</td>
+</tr>
+</tbody>
+</table>
+<h3 id="c-api-endpoint-reference">C. API Endpoint Reference<a class="headerlink" href="#c-api-endpoint-reference" title="Permanent link">&para;</a></h3>
+<p>See <a href="./API_DOCUMENTATION.md">API_DOCUMENTATION.md</a> for complete endpoint documentation.</p>
+<hr />
+<p><em>Last Updated: [Current Date]</em>
+<em>Version: 1.0.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

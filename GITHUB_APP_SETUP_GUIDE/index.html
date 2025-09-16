@@ -1,0 +1,1091 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>GitHub App Setup Guide for ai-cherry Organization - Sophia Intel AI Workbench Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#github-app-setup-guide-for-ai-cherry-organization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Sophia Intel AI Workbench Docs" class="md-header__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sophia Intel AI Workbench Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GitHub App Setup Guide for ai-cherry Organization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Sophia Intel AI Workbench Docs" class="md-nav__button md-logo" aria-label="Sophia Intel AI Workbench Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sophia Intel AI Workbench Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#security-first-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔒 Security First Approach
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-github-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why GitHub Apps?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-create-a-github-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Create a GitHub App
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Create a GitHub App">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Webhook Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permissions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Permissions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repository-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Repository Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#organization-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Organization Permissions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscribe-to-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subscribe to Events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-can-this-github-app-be-installed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where can this GitHub App be installed?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-generate-and-secure-the-private-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Generate and Secure the Private Key
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Generate and Secure the Private Key">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secure-the-private-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Secure the Private Key
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-convert-to-base64-for-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional: Convert to Base64 (for environment variables)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-install-the-app-to-your-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Install the App to Your Organization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-configure-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Configure Environment Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-implement-oauth-flow-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Implement OAuth Flow (Optional)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Implement OAuth Flow (Optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-update-app-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Update App Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generate-client-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Generate Client Secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-add-oauth-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Add OAuth Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-implement-authentication-in-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6: Implement Authentication in Code
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Implement Authentication in Code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-github-app-authentication-server-to-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using GitHub App Authentication (Server-to-Server)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-oauth-user-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using OAuth (User Authentication)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-webhook-handler-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 7: Webhook Handler Implementation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-private-key-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Private Key Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-token-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Token Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-webhook-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Webhook Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-permission-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Permission Principle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-monitoring-auditing" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Monitoring &amp; Auditing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debug Commands
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-from-personal-access-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migration from Personal Access Tokens
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-and-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support and Resources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emergency-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emergency Procedures
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Emergency Procedures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-private-key-is-compromised" class="md-nav__link">
+    <span class="md-ellipsis">
+      If Private Key is Compromised
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-suspicious-activity-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      If Suspicious Activity Detected
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="github-app-setup-guide-for-ai-cherry-organization">GitHub App Setup Guide for ai-cherry Organization<a class="headerlink" href="#github-app-setup-guide-for-ai-cherry-organization" title="Permanent link">&para;</a></h1>
+<h2 id="security-first-approach">🔒 Security First Approach<a class="headerlink" href="#security-first-approach" title="Permanent link">&para;</a></h2>
+<p>This guide provides a secure, production-ready setup for GitHub integration using GitHub Apps instead of Personal Access Tokens (PATs).</p>
+<h2 id="why-github-apps">Why GitHub Apps?<a class="headerlink" href="#why-github-apps" title="Permanent link">&para;</a></h2>
+<p>GitHub Apps provide several security advantages over Personal Access Tokens:
+- <strong>Fine-grained permissions</strong>: Only grant access to what's needed
+- <strong>Organization-level installation</strong>: No personal account dependencies
+- <strong>Automatic token rotation</strong>: Short-lived tokens (1 hour)
+- <strong>Audit logging</strong>: Track all actions performed by the app
+- <strong>No user seat consumption</strong>: Doesn't count against organization member limits</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Admin access to the <code>ai-cherry</code> GitHub organization</li>
+<li>Access to the workbench-ui repository</li>
+<li>OpenSSL or similar tool for generating private keys</li>
+</ul>
+<h2 id="step-1-create-a-github-app">Step 1: Create a GitHub App<a class="headerlink" href="#step-1-create-a-github-app" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Navigate to your organization settings:
+   <code>https://github.com/organizations/ai-cherry/settings/apps</code></p>
+</li>
+<li>
+<p>Click <strong>"New GitHub App"</strong></p>
+</li>
+<li>
+<p>Configure the app with these settings:</p>
+</li>
+</ol>
+<h3 id="basic-information">Basic Information<a class="headerlink" href="#basic-information" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">GitHub App name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AI Cherry Workbench</span>
+<span class="nt">Homepage URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/ai-cherry/workbench-ui</span>
+<span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secure GitHub integration for AI Cherry Workbench UI</span>
+</code></pre></div>
+
+<h3 id="webhook-configuration">Webhook Configuration<a class="headerlink" href="#webhook-configuration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">Webhook URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-domain.com/api/webhooks/github</span>
+<span class="nt">Webhook secret</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Generate a random string and save it</span><span class="p p-Indicator">]</span>
+<span class="nt">SSL verification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable</span>
+</code></pre></div>
+
+<h3 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h3>
+<h4 id="repository-permissions">Repository Permissions<a class="headerlink" href="#repository-permissions" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Actions</strong>: Read</li>
+<li><strong>Administration</strong>: Read</li>
+<li><strong>Checks</strong>: Write</li>
+<li><strong>Code</strong>: Read</li>
+<li><strong>Commit statuses</strong>: Write</li>
+<li><strong>Contents</strong>: Write</li>
+<li><strong>Deployments</strong>: Write</li>
+<li><strong>Issues</strong>: Write</li>
+<li><strong>Metadata</strong>: Read (mandatory)</li>
+<li><strong>Pull requests</strong>: Write</li>
+<li><strong>Webhooks</strong>: Write</li>
+</ul>
+<h4 id="organization-permissions">Organization Permissions<a class="headerlink" href="#organization-permissions" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Members</strong>: Read</li>
+<li><strong>Projects</strong>: Read</li>
+</ul>
+<h3 id="subscribe-to-events">Subscribe to Events<a class="headerlink" href="#subscribe-to-events" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Branch protection rule</li>
+<li>Check run</li>
+<li>Check suite</li>
+<li>Commit comment</li>
+<li>Create</li>
+<li>Delete</li>
+<li>Deployment</li>
+<li>Deployment status</li>
+<li>Fork</li>
+<li>Issue comment</li>
+<li>Issues</li>
+<li>Pull request</li>
+<li>Pull request review</li>
+<li>Pull request review comment</li>
+<li>Push</li>
+<li>Release</li>
+<li>Repository</li>
+<li>Status</li>
+<li>Workflow dispatch</li>
+<li>Workflow run</li>
+</ul>
+<h3 id="where-can-this-github-app-be-installed">Where can this GitHub App be installed?<a class="headerlink" href="#where-can-this-github-app-be-installed" title="Permanent link">&para;</a></h3>
+<p>Select: <strong>Only on this account</strong> (ai-cherry organization)</p>
+<ol>
+<li>Click <strong>"Create GitHub App"</strong></li>
+</ol>
+<h2 id="step-2-generate-and-secure-the-private-key">Step 2: Generate and Secure the Private Key<a class="headerlink" href="#step-2-generate-and-secure-the-private-key" title="Permanent link">&para;</a></h2>
+<ol>
+<li>After creating the app, you'll be redirected to the app settings</li>
+<li>Scroll down to <strong>"Private keys"</strong></li>
+<li>Click <strong>"Generate a private key"</strong></li>
+<li>A <code>.pem</code> file will download - <strong>SAVE THIS SECURELY</strong></li>
+</ol>
+<h3 id="secure-the-private-key">Secure the Private Key<a class="headerlink" href="#secure-the-private-key" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create a secure directory for GitHub App credentials</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh/github-apps
+chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh/github-apps
+
+<span class="c1"># Move and secure the private key</span>
+mv<span class="w"> </span>~/Downloads/ai-cherry-workbench.*.pem<span class="w"> </span>~/.ssh/github-apps/ai-cherry-workbench.pem
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/github-apps/ai-cherry-workbench.pem
+
+<span class="c1"># Verify the key</span>
+openssl<span class="w"> </span>rsa<span class="w"> </span>-in<span class="w"> </span>~/.ssh/github-apps/ai-cherry-workbench.pem<span class="w"> </span>-check<span class="w"> </span>-noout
+</code></pre></div>
+
+<h3 id="optional-convert-to-base64-for-environment-variables">Optional: Convert to Base64 (for environment variables)<a class="headerlink" href="#optional-convert-to-base64-for-environment-variables" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Convert PEM to base64 for environment variable storage</span>
+base64<span class="w"> </span>-i<span class="w"> </span>~/.ssh/github-apps/ai-cherry-workbench.pem<span class="w"> </span>-o<span class="w"> </span>ai-cherry-workbench.pem.b64
+
+<span class="c1"># To decode later:</span>
+<span class="c1"># base64 -d -i ai-cherry-workbench.pem.b64 -o ai-cherry-workbench.pem</span>
+</code></pre></div>
+
+<h2 id="step-3-install-the-app-to-your-organization">Step 3: Install the App to Your Organization<a class="headerlink" href="#step-3-install-the-app-to-your-organization" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Go to the app's public page:
+   <code>https://github.com/apps/ai-cherry-workbench</code></p>
+</li>
+<li>
+<p>Click <strong>"Install"</strong></p>
+</li>
+<li>
+<p>Select the <code>ai-cherry</code> organization</p>
+</li>
+<li>
+<p>Choose repository access:</p>
+</li>
+<li>
+<p><strong>Recommended</strong>: Select "Only select repositories" and choose:</p>
+<ul>
+<li><code>workbench-ui</code></li>
+<li><code>sophia-intel-ai</code></li>
+<li>Any other repositories that need integration</li>
+</ul>
+</li>
+<li>
+<p>Click <strong>"Install"</strong></p>
+</li>
+<li>
+<p>Note the <strong>Installation ID</strong> from the URL:
+   <code>https://github.com/organizations/ai-cherry/settings/installations/[INSTALLATION_ID]</code></p>
+</li>
+</ol>
+<h2 id="step-4-configure-environment-variables">Step 4: Configure Environment Variables<a class="headerlink" href="#step-4-configure-environment-variables" title="Permanent link">&para;</a></h2>
+<p>Update your <code>.env.local</code> file with the GitHub App credentials:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># GitHub App Configuration (Production)</span>
+<span class="nv">GITHUB_APP_ID</span><span class="o">=</span><span class="m">123456</span><span class="w">  </span><span class="c1"># From app settings page</span>
+<span class="nv">GITHUB_APP_INSTALLATION_ID</span><span class="o">=</span><span class="m">12345678</span><span class="w">  </span><span class="c1"># From installation URL</span>
+<span class="nv">GITHUB_APP_PRIVATE_KEY_PATH</span><span class="o">=</span>~/.ssh/github-apps/ai-cherry-workbench.pem
+
+<span class="c1"># Optional: Use base64 encoded key instead of file path</span>
+<span class="c1"># GITHUB_APP_PRIVATE_KEY_BASE64=LS0tLS1CRUdJTi...</span>
+
+<span class="c1"># Webhook secret (for validating webhooks)</span>
+<span class="nv">GITHUB_WEBHOOK_SECRET</span><span class="o">=</span>your-webhook-secret-here
+
+<span class="c1"># Organization settings</span>
+<span class="nv">GITHUB_ORG</span><span class="o">=</span>ai-cherry
+</code></pre></div>
+
+<h2 id="step-5-implement-oauth-flow-optional">Step 5: Implement OAuth Flow (Optional)<a class="headerlink" href="#step-5-implement-oauth-flow-optional" title="Permanent link">&para;</a></h2>
+<p>For user-specific actions, implement OAuth:</p>
+<h3 id="1-update-app-settings">1. Update App Settings<a class="headerlink" href="#1-update-app-settings" title="Permanent link">&para;</a></h3>
+<p>In your GitHub App settings, add:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">Callback URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-domain.com/api/auth/github/callback</span>
+<span class="nt">Request user authorization (OAuth) during installation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable</span>
+</code></pre></div>
+
+<h3 id="2-generate-client-secret">2. Generate Client Secret<a class="headerlink" href="#2-generate-client-secret" title="Permanent link">&para;</a></h3>
+<ol>
+<li>In app settings, find <strong>"Client secrets"</strong></li>
+<li>Click <strong>"Generate a new client secret"</strong></li>
+<li>Save the secret securely</li>
+</ol>
+<h3 id="3-add-oauth-configuration">3. Add OAuth Configuration<a class="headerlink" href="#3-add-oauth-configuration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># OAuth Configuration (in .env.local)</span>
+<span class="nv">GITHUB_APP_CLIENT_ID</span><span class="o">=</span>Iv23lixxxxxxxxxxxxx<span class="w">  </span><span class="c1"># From app settings</span>
+<span class="nv">GITHUB_APP_CLIENT_SECRET</span><span class="o">=</span>xxxxxxxxxxxxxxxxxxxxx<span class="w">  </span><span class="c1"># Generated secret</span>
+<span class="nv">GITHUB_OAUTH_CALLBACK_URL</span><span class="o">=</span>https://your-domain.com/api/auth/github/callback
+</code></pre></div>
+
+<h2 id="step-6-implement-authentication-in-code">Step 6: Implement Authentication in Code<a class="headerlink" href="#step-6-implement-authentication-in-code" title="Permanent link">&para;</a></h2>
+<h3 id="using-github-app-authentication-server-to-server">Using GitHub App Authentication (Server-to-Server)<a class="headerlink" href="#using-github-app-authentication-server-to-server" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// src/lib/github-app.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createAppAuth</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@octokit/auth-app&quot;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Octokit</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@octokit/rest&quot;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getGitHubAppClient</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">auth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createAppAuth</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">appId</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">privateKey</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_PRIVATE_KEY_PATH</span><span class="w"> </span>
+<span class="w">      </span><span class="o">?</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GITHUB_APP_PRIVATE_KEY_PATH</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GITHUB_APP_PRIVATE_KEY_BASE64</span><span class="o">!</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;base64&#39;</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
+<span class="w">    </span><span class="nx">installationId</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_INSTALLATION_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Octokit</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">authStrategy</span><span class="o">:</span><span class="w"> </span><span class="kt">createAppAuth</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">appId</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">privateKey</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_PRIVATE_KEY_PATH</span><span class="w"> </span>
+<span class="w">        </span><span class="o">?</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GITHUB_APP_PRIVATE_KEY_PATH</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GITHUB_APP_PRIVATE_KEY_BASE64</span><span class="o">!</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;base64&#39;</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
+<span class="w">      </span><span class="nx">installationId</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_INSTALLATION_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="using-oauth-user-authentication">Using OAuth (User Authentication)<a class="headerlink" href="#using-oauth-user-authentication" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// src/lib/github-oauth.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createOAuthAppAuth</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@octokit/auth-oauth-app&quot;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getOAuthUrl</span><span class="p">(</span><span class="nx">state</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">URLSearchParams</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">client_id</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_CLIENT_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">redirect_uri</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_OAUTH_CALLBACK_URL</span><span class="o">!</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;repo read:user&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">state</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="sb">`https://github.com/login/oauth/authorize?</span><span class="si">${</span><span class="nx">params</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">exchangeCodeForToken</span><span class="p">(</span><span class="nx">code</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">auth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createOAuthAppAuth</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">clientType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;oauth-app&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">clientId</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_CLIENT_ID</span><span class="o">!</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">clientSecret</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.GITHUB_APP_CLIENT_SECRET</span><span class="o">!</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">token</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">auth</span><span class="p">({</span>
+<span class="w">    </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;oauth-user&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">code</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">token</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="step-7-webhook-handler-implementation">Step 7: Webhook Handler Implementation<a class="headerlink" href="#step-7-webhook-handler-implementation" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="c1">// src/app/api/webhooks/github/route.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">crypto</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;crypto&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">POST</span><span class="p">(</span><span class="nx">req</span><span class="o">:</span><span class="w"> </span><span class="kt">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;x-hub-signature-256&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Verify webhook signature</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">expectedSignature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`sha256=</span><span class="si">${</span><span class="nx">crypto</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s1">&#39;sha256&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GITHUB_WEBHOOK_SECRET</span><span class="o">!</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">signature</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">expectedSignature</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Response</span><span class="p">(</span><span class="s1">&#39;Invalid signature&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">status</span><span class="o">:</span><span class="w"> </span><span class="kt">401</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;x-github-event&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Handle different webhook events</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;push&#39;</span><span class="o">:</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">handlePushEvent</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;pull_request&#39;</span><span class="o">:</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">handlePullRequestEvent</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Add more event handlers as needed</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Response</span><span class="p">(</span><span class="s1">&#39;OK&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">status</span><span class="o">:</span><span class="w"> </span><span class="kt">200</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="security-best-practices">Security Best Practices<a class="headerlink" href="#security-best-practices" title="Permanent link">&para;</a></h2>
+<h3 id="1-private-key-management">1. Private Key Management<a class="headerlink" href="#1-private-key-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Never</strong> commit private keys to version control</li>
+<li>Store keys in secure locations with restricted permissions</li>
+<li>Use key management services in production (AWS KMS, Azure Key Vault, etc.)</li>
+<li>Rotate keys regularly (every 90 days)</li>
+</ul>
+<h3 id="2-token-security">2. Token Security<a class="headerlink" href="#2-token-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use short-lived installation access tokens (1 hour expiry)</li>
+<li>Implement token refresh logic</li>
+<li>Never log or expose tokens</li>
+<li>Use environment variables, never hardcode</li>
+</ul>
+<h3 id="3-webhook-security">3. Webhook Security<a class="headerlink" href="#3-webhook-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Always verify webhook signatures</li>
+<li>Use HTTPS for webhook endpoints</li>
+<li>Implement rate limiting</li>
+<li>Log webhook events for auditing</li>
+</ul>
+<h3 id="4-permission-principle">4. Permission Principle<a class="headerlink" href="#4-permission-principle" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Grant minimum required permissions</li>
+<li>Review permissions quarterly</li>
+<li>Remove unused permissions</li>
+<li>Monitor API usage</li>
+</ul>
+<h3 id="5-monitoring-auditing">5. Monitoring &amp; Auditing<a class="headerlink" href="#5-monitoring-auditing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Enable GitHub audit logs</li>
+<li>Monitor API rate limits</li>
+<li>Track failed authentication attempts</li>
+<li>Set up alerts for suspicious activity</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>"Bad credentials" error</strong></li>
+<li>Verify App ID and Installation ID</li>
+<li>Check private key format and permissions</li>
+<li>
+<p>Ensure the app is installed on the repository</p>
+</li>
+<li>
+<p><strong>"Resource not accessible by integration"</strong></p>
+</li>
+<li>Check app permissions</li>
+<li>Verify repository access</li>
+<li>
+<p>Ensure installation is active</p>
+</li>
+<li>
+<p><strong>Webhook signature validation fails</strong></p>
+</li>
+<li>Verify webhook secret matches</li>
+<li>Check signature algorithm (should be sha256)</li>
+<li>Ensure body is raw, not parsed</li>
+</ol>
+<h3 id="debug-commands">Debug Commands<a class="headerlink" href="#debug-commands" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test GitHub App authentication</span>
+curl<span class="w"> </span>-i<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer YOUR_JWT&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/vnd.github.v3+json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://api.github.com/app
+
+<span class="c1"># List installations</span>
+curl<span class="w"> </span>-i<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer YOUR_JWT&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/vnd.github.v3+json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://api.github.com/app/installations
+
+<span class="c1"># Get installation access token</span>
+curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer YOUR_JWT&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/vnd.github.v3+json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://api.github.com/app/installations/INSTALLATION_ID/access_tokens
+</code></pre></div>
+
+<h2 id="migration-from-personal-access-tokens">Migration from Personal Access Tokens<a class="headerlink" href="#migration-from-personal-access-tokens" title="Permanent link">&para;</a></h2>
+<p>If migrating from PATs to GitHub Apps:</p>
+<ol>
+<li><strong>Parallel Run</strong>: Run both authentication methods temporarily</li>
+<li><strong>Update Code</strong>: Gradually update code to use App authentication</li>
+<li><strong>Test Thoroughly</strong>: Ensure all features work with App auth</li>
+<li><strong>Revoke PATs</strong>: Once confirmed, revoke all PATs</li>
+<li><strong>Update Documentation</strong>: Ensure team knows about the change</li>
+</ol>
+<h2 id="support-and-resources">Support and Resources<a class="headerlink" href="#support-and-resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://docs.github.com/en/developers/apps">GitHub Apps Documentation</a></li>
+<li><a href="https://octokit.github.io/rest.js">Octokit Documentation</a></li>
+<li><a href="https://docs.github.com/en/rest">GitHub API Reference</a></li>
+<li><a href="https://docs.github.com/en/code-security">Security Best Practices</a></li>
+</ul>
+<h2 id="emergency-procedures">Emergency Procedures<a class="headerlink" href="#emergency-procedures" title="Permanent link">&para;</a></h2>
+<h3 id="if-private-key-is-compromised">If Private Key is Compromised<a class="headerlink" href="#if-private-key-is-compromised" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Immediately</strong> generate a new private key in GitHub App settings</li>
+<li>Delete the compromised key from GitHub</li>
+<li>Update all systems with the new key</li>
+<li>Audit recent API activity for unauthorized access</li>
+<li>Notify security team</li>
+</ol>
+<h3 id="if-suspicious-activity-detected">If Suspicious Activity Detected<a class="headerlink" href="#if-suspicious-activity-detected" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Review GitHub audit logs</li>
+<li>Temporarily suspend the app if needed</li>
+<li>Rotate all credentials</li>
+<li>Review and restrict permissions</li>
+<li>Enable additional monitoring</li>
+</ol>
+<hr />
+<p><strong>Last Updated</strong>: November 2024
+<strong>Maintained By</strong>: AI Cherry Security Team
+<strong>Review Schedule</strong>: Quarterly</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
