@@ -100,7 +100,7 @@ if ENVIRONMENT == "production":
         raise RuntimeError("JWT_SECRET_KEY must be set in production")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 # Single user auth (CEO)
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "ceo")
@@ -176,6 +176,11 @@ def create_access_token(data: dict):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    ALLOW_DEV_NOAUTH = os.getenv("ALLOW_DEV_NOAUTH", "false").lower() in ("1", "true", "yes")
+    if (credentials is None or not getattr(credentials, 'credentials', None)):
+        if ALLOW_DEV_NOAUTH and ENVIRONMENT != "production":
+            return ADMIN_USERNAME
+        raise HTTPException(status_code=401, detail="Missing authentication")
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -184,6 +189,8 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
             raise HTTPException(status_code=403, detail="Not authorized")
         return username
     except JWTError:
+        if ALLOW_DEV_NOAUTH and ENVIRONMENT != "production":
+            return ADMIN_USERNAME
         raise HTTPException(status_code=401, detail="Invalid authentication")
 
 # Auth endpoints (minimal)
@@ -222,6 +229,8 @@ async def agent_router_endpoint(req: RouterRequest):
             return RouterResponse(content=content, model=str(model_id))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Router error: {str(e)}")
+
+ 
 
 # -------- Workflows (from agno/config.yaml) --------
 def _load_workflows() -> Dict[str, Any]:
