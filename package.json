@@ -20,7 +20,11 @@
     "agno:chain": "tsx agno/scripts/chain.ts run",
     "agno:ui": "tsx agno/scripts/ui.ts --mode hybrid",
     "agno:test": "jest --testPathPattern=agno --coverage",
-    "agno:health": "tsx agno/scripts/health.ts"
+    "agno:health": "tsx agno/scripts/health.ts",
+    "mcp:tinybird": "node mcp/tinybird-server.js",
+    "codex:chat": "codex chat -m gpt-5-codex",
+    "codex:agent": "codex agent -m gpt-5-codex --dir .",
+    "codex:review": "codex review --model gpt-5-codex --format markdown"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
