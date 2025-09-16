@@ -1,0 +1,15 @@
+{
+  "extends": ["config:recommended"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^docs/.*\\.md$", "^README\\.md$"],
+      "matchStrings": [
+        "pip install my-sdk==(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "pypi",
+      "depNameTemplate": "my-sdk",
+      "versioningTemplate": "pep440"
+    }
+  ]
+}
+

@@ -1,0 +1,13 @@
+site_name: Sophia Intel AI Workbench Docs
+theme:
+  name: material
+nav:
+  - Overview: index.md
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+plugins:
+  - search
+

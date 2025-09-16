@@ -1,0 +1,19 @@
+name: "Sync version badge in README"
+sources:
+  my_version:
+    kind: file
+    name: "package.json version"
+    spec:
+      file: package.json
+      matchpattern: '"version"\s*:\s*"(?P<ver>[^\"]+)"'
+      capturegroup: ver
+targets:
+  readme_badge:
+    name: "README badge"
+    kind: file
+    spec:
+      file: README.md
+      matchpattern: 'version-[0-9]+\.[0-9]+\.[0-9]+-blue'
+      replacepattern: 'version-{{ source "my_version" }}-blue'
+    transformers: []
+

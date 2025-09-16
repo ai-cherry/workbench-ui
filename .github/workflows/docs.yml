@@ -1,0 +1,93 @@
+name: Docs Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  generate:
+    name: Generate docs (RepoAgent)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install RepoAgent
+        run: |
+          pip install --upgrade pip
+          pip install "git+https://github.com/OpenBMB/RepoAgent@main"
+      - name: Generate or refresh docs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          repoagent run --target-repo-path . --print-hierarchy || echo "RepoAgent generation step completed (non-blocking)"
+      - name: Upload generated docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: repoagent-docs
+          path: docs
+
+  review:
+    name: Agno policy review
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install reviewer deps
+        run: |
+          pip install --upgrade pip
+          pip install agno requests
+      - name: Download generated docs
+        uses: actions/download-artifact@v4
+        with:
+          name: repoagent-docs
+          path: docs
+      - name: Run reviewer agent (non-blocking)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PORTKEY_API_KEY: ${{ secrets.PORTKEY_API_KEY }}
+        run: |
+          python scripts/agents/reviewer.py || echo "Reviewer completed (non-blocking)"
+
+  updatecli:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deterministic updates (Updatecli)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Updatecli
+        run: |
+          curl -sL https://github.com/updatecli/updatecli/releases/latest/download/updatecli_Linux_x86_64.tar.gz | tar xz
+          sudo mv updatecli /usr/local/bin/updatecli
+      - name: Apply Updatecli manifests
+        run: |
+          if [ -d updatecli.d ]; then updatecli apply --config updatecli.d/ || true; fi
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [review, updatecli]
+    name: Publish MkDocs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install MkDocs Material
+        run: |
+          pip install --upgrade pip
+          pip install mkdocs-material
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force
+
