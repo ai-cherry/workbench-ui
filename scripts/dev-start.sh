@@ -15,10 +15,20 @@ fi
 
 echo "[dev] Using ports -> frontend:$FRONTEND_PORT backend:$BACKEND_PORT"
 
-# Start backend in background
+# Ensure Python venv and dependencies
+if [[ ! -d "$ROOT_DIR/backend/.venv" ]]; then
+  echo "[dev] Creating Python venv at backend/.venv ..."
+  python3 -m venv "$ROOT_DIR/backend/.venv"
+fi
+
+echo "[dev] Ensuring backend dependencies (uvicorn, fastapi, etc.) ..."
+"$ROOT_DIR/backend/.venv/bin/python" -m pip install --upgrade pip >/dev/null 2>&1 || true
+"$ROOT_DIR/backend/.venv/bin/python" -m pip install -r "$ROOT_DIR/backend/requirements.txt" >/tmp/backend_pip.log 2>&1 || true
+
+# Start backend in background using venv Python
 echo "[dev] Starting backend (uvicorn) on $BACKEND_PORT ..."
 ENVIRONMENT=development ALLOW_DEV_NOAUTH=true \
-  uvicorn backend.app.main:app --reload --port "$BACKEND_PORT" >/tmp/backend.log 2>&1 &
+  "$ROOT_DIR/backend/.venv/bin/python" -m uvicorn backend.app.main:app --reload --port "$BACKEND_PORT" >/tmp/backend.log 2>&1 &
 BACK_PID=$!
 
 cleanup() {
@@ -40,5 +50,5 @@ done
 
 # Start frontend (foreground)
 echo "[dev] Starting frontend (Next.js) on $FRONTEND_PORT ..."
+echo "[dev] UI URL: http://localhost:$FRONTEND_PORT"
 npm run dev -- -p "$FRONTEND_PORT"
-

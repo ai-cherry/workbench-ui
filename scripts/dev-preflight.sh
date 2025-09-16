@@ -45,7 +45,8 @@ if command -v python3 >/dev/null 2>&1; then
   PY_VER=$(python3 -V 2>&1)
   info "Python: ${PY_VER}"
 else
-  warn "python3 not found; ensure backend venv is set up manually."
+  err "python3 not found; please install Python 3.11+"
+  exit 1
 fi
 
 # 2) Ports
@@ -104,4 +105,3 @@ EOF
 
 echo "FRONTEND_PORT=$FRONTEND_PORT"
 echo "BACKEND_PORT=$BACKEND_PORT"
-
