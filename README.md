@@ -213,6 +213,7 @@ SOPHIA_API_URL=http://localhost:8000
 - [MCP Integration](./docs/MCP_INTEGRATION.md) - MCP server details
 - [Cursor Workflows](./docs/CURSOR_WORKFLOWS.md) - Cursor usage patterns
 - [Backend (FastAPI)](./docs/BACKEND.md) - Endpoints, SSE schema, security, env vars, tests
+- [Codex CLI & PR Reviews](./docs/CODEX.md) - Install, aliases, and CI review workflow
 
 ## 🐛 Troubleshooting
 
