@@ -57,6 +57,7 @@ def _mask_text(text: Any) -> Any:
 # Testing toggle (affects external checks in health)
 TESTING = os.getenv("TESTING", "false").lower() in ("1", "true", "yes")
 RESTRICT_MCP_PROXY = os.getenv("RESTRICT_MCP_PROXY", "false").lower() in ("1", "true", "yes")
+ENABLE_PORTKEY = os.getenv("ENABLE_PORTKEY", "false").lower() in ("1", "true", "yes")
 
 # Optional allowlist of MCP proxy path prefixes when restriction is enabled
 ALLOWED_MCP_PATHS = {
@@ -151,6 +152,15 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+# ---- Portkey Router request/response ----
+class RouterRequest(BaseModel):
+    task: str = Field(default="plan")
+    prompt: str
+
+class RouterResponse(BaseModel):
+    content: str
+    model: str
+
 # Auth helpers
 def create_access_token(data: dict):
     to_encode = data.copy()
@@ -185,6 +195,33 @@ async def login(request: LoginRequest):
     
     access_token = create_access_token(data={"sub": request.username})
     return TokenResponse(access_token=access_token)
+
+# Optional Portkey-routed quick test endpoint
+@app.post("/agent/router", response_model=RouterResponse)
+async def agent_router_endpoint(req: RouterRequest):
+    if not ENABLE_PORTKEY:
+        raise HTTPException(status_code=404, detail="Portkey routing disabled")
+    try:
+        if TESTING:
+            return RouterResponse(content=f"[TEST] Routed task={req.task}: {req.prompt}", model="test-model")
+        from agno.agent import Agent
+        from app.portkey_agent import get_model_for_task
+        primary = get_model_for_task(req.task)
+        agent = Agent(name="Router", role="Answer concisely.", model=primary, markdown=True)
+        try:
+            resp = await agent.arun(req.prompt, stream=False)
+            content = resp.get("content", "") if isinstance(resp, dict) else str(resp)
+            model_id = getattr(primary, 'id', None) or getattr(primary, 'model', None) or "unknown"
+            return RouterResponse(content=content, model=str(model_id))
+        except Exception:
+            fallback = get_model_for_task("default")
+            agent_fb = Agent(name="Router", role="Answer concisely.", model=fallback, markdown=True)
+            resp = await agent_fb.arun(req.prompt, stream=False)
+            content = resp.get("content", "") if isinstance(resp, dict) else str(resp)
+            model_id = getattr(fallback, 'id', None) or getattr(fallback, 'model', None) or "unknown"
+            return RouterResponse(content=content, model=str(model_id))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Router error: {str(e)}")
 
 # -------- Workflows (from agno/config.yaml) --------
 def _load_workflows() -> Dict[str, Any]:
