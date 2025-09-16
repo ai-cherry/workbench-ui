@@ -105,12 +105,7 @@ curl http://localhost:8084/status
 - `GROQ_API_KEY`
 
 ### MCP Configuration (in workbench-ui `.env.local`)
-```env
-MCP_MEMORY_PORT=8081
-MCP_FILESYSTEM_PORT=8082
-MCP_GIT_PORT=8084
-MCP_VECTOR_PORT=8085
-```
+Refer to [`docs/reference/MCP_PORTS.md`](../reference/MCP_PORTS.md) for the current MCP port assignments used across the ecosystem.
 
 ## ⚠️ Known Issues & Fixes
 

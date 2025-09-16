@@ -117,10 +117,7 @@ REDIS_PORT=6379
 REDIS_PASSWORD=<redis-password>
 
 # MCP Server Ports (internal)
-MCP_MEMORY_PORT=8081
-MCP_FILESYSTEM_PORT=8082
-MCP_GIT_PORT=8084
-MCP_VECTOR_PORT=8085
+# Canonical assignments live in docs/reference/MCP_PORTS.md.
 
 # Weaviate (if available)
 WEAVIATE_HOST=weaviate.internal.domain

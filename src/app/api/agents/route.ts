@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
+import path from 'path';
 import yaml from 'js-yaml';
-
-import { getAgentConfigPath, updateAgentConfig } from '@/lib/server/config';
 
 interface AgentEntry {
   name?: string;
@@ -16,7 +15,7 @@ interface AgentEntry {
 
 export async function GET() {
   try {
-    const configPath = getAgentConfigPath();
+    const configPath = path.join(process.cwd(), 'agno/config.yaml');
     if (!fs.existsSync(configPath)) {
       return NextResponse.json({ agents: [], error: 'Agno config.yaml not found' });
     }
@@ -44,46 +43,30 @@ export async function GET() {
   }
 }
 
-function hasAdminAuthorization(req: NextRequest) {
-  const admin = process.env.ADMIN_WRITE_TOKEN;
-  if (!admin) return false;
-  const auth = req.headers.get('authorization') || '';
-  return auth === `Bearer ${admin}`;
-}
-
-async function handleWrite(
-  req: NextRequest,
-  options: { requireAdmin: boolean }
-) {
+export async function PUT(req: NextRequest) {
   try {
-    const adminAuthorized = hasAdminAuthorization(req);
-    if (options.requireAdmin) {
-      if (!adminAuthorized) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-    } else if (!adminAuthorized) {
-      if (process.env.ALLOW_DEV_WRITES !== 'true') {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-      }
+    const admin = process.env.ADMIN_WRITE_TOKEN;
+    const auth = req.headers.get('authorization') || '';
+    if (!admin || auth !== `Bearer ${admin}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     const payload = await req.json();
     const { id, model, temperature, max_tokens, description } = payload || {};
     if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 });
-
-    updateAgentConfig({ id, model, temperature, max_tokens, description });
+    const configPath = path.join(process.cwd(), 'agno/config.yaml');
+    let doc: any = {};
+    if (fs.existsSync(configPath)) doc = yaml.load(fs.readFileSync(configPath, 'utf8')) || {};
+    if (!doc.agents) doc.agents = {};
+    if (!doc.agents[id]) doc.agents[id] = {};
+    if (model !== undefined) doc.agents[id].model = model;
+    if (temperature !== undefined) doc.agents[id].temperature = temperature;
+    if (max_tokens !== undefined) doc.agents[id].max_tokens = max_tokens;
+    if (description !== undefined) doc.agents[id].description = description;
+    fs.writeFileSync(configPath, yaml.dump(doc, { noRefs: true }), 'utf8');
     return NextResponse.json({ ok: true, id });
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message || 'Failed to update agent' }, { status: 500 });
   }
-}
-
-export async function PUT(req: NextRequest) {
-  return handleWrite(req, { requireAdmin: true });
-}
-
-export async function POST(req: NextRequest) {
-  return handleWrite(req, { requireAdmin: false });
 }
 
 export async function OPTIONS() {

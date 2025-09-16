@@ -497,8 +497,8 @@ function PolicyEditor() {
   const save = async () => {
     try {
       setLoading(true);
-      const secureWrites = process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true';
-      const res = await fetch('/api/models/policy', { method: secureWrites ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ policy }) });
+      const url = process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true' ? '/api/models/policy' : '/api/models/policy/save';
+      const res = await fetch(url, { method: process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true' ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ policy }) });
       if (!res.ok) throw new Error('Failed');
       setMsg('Saved'); setTimeout(() => setMsg(''), 1500);
     } catch { setMsg('Failed'); } finally { setLoading(false); }
@@ -536,8 +536,8 @@ function AgentEditor({ agents, onSaved }: { agents: Array<{ id: string; name: st
       if (model) body.model = model;
       if (temperature) body.temperature = Number(temperature);
       if (maxTokens) body.max_tokens = Number(maxTokens);
-      const secureWrites = process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true';
-      const res = await fetch('/api/agents', { method: secureWrites ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const url = process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true' ? '/api/agents' : '/api/agents/save';
+      const res = await fetch(url, { method: process.env.NEXT_PUBLIC_ENABLE_SECURE_WRITES === 'true' ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!res.ok) throw new Error('Failed');
       onSaved();
       setModel(''); setTemperature(''); setMaxTokens('');

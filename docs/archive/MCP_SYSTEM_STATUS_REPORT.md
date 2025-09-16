@@ -53,19 +53,7 @@ done
 ## 🔗 Workbench-UI Integration
 
 ### Environment Variables (.env or .env.local)
-```env
-# MCP Server Configuration
-MCP_MEMORY_PORT=8081
-MCP_FILESYSTEM_PORT=8082
-MCP_GIT_PORT=8084
-MCP_VECTOR_PORT=8085
-
-# MCP Server URLs
-MCP_MEMORY_URL=http://localhost:8081
-MCP_FILESYSTEM_URL=http://localhost:8082
-MCP_GIT_URL=http://localhost:8084
-MCP_VECTOR_URL=http://localhost:8085
-```
+See [`docs/reference/MCP_PORTS.md`](../reference/MCP_PORTS.md) for canonical port assignments. Mirror those values in `.env.local` when running locally.
 
 ### Agno Framework Configuration
 The Agno framework in workbench-ui is configured to connect to these MCP servers:

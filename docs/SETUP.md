@@ -19,21 +19,14 @@ cd workbench-ui
 chmod +x scripts/setup.sh
 ./scripts/setup.sh
 
-# The setup script creates .env.local from the template.
+# Create local env file
+cp .env.example .env.local
 # Edit .env.local with API keys for Anthropic, OpenAI, Portkey, etc.
 
 # Start the dev server
 npm run dev
 # Visit http://localhost:3000
 ```
-
-## Environment Files & Precedence
-
-1. `.env.master` – canonical placeholder inventory shared with backend automation. Keep this file unchanged and use it as reference.
-2. `.env.example` – template that mirrors the fields the UI expects. `scripts/setup.sh` copies this file when bootstrapping a local checkout.
-3. `.env.local` – developer-local overrides (git ignored). After copying the template, the setup script appends a "Local development overrides" section with permissive defaults such as `ALLOW_DEV_WRITES=true` and demo admin credentials. Edit values below that marker to suit your workstation.
-
-To recreate `.env.local`, delete it and rerun `./scripts/setup.sh`. Any customisations you add after the overrides block will need to be re-applied manually.
 
 ## Manual Setup (If You Skip scripts/setup.sh)
 
